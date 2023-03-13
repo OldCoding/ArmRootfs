@@ -82,7 +82,6 @@ jobs:
 
     - name: FilePatch
       run: |
-        cp -f patch/rc.local openwrt/package/base-files/files/etc/rc.local
         cd openwrt
         sed -i "s/SNAPSHOT/Wing build $(TZ=UTC-8 date "+%Y.%m.%d")/g" package/default-settings/files/zzz-default-settings
         sed -i "/firewall\.user/d" package/default-settings/files/zzz-default-settings
