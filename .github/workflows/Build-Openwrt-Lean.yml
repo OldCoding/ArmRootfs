@@ -83,12 +83,19 @@ jobs:
     - name: FilePatch
       run: |
         cd openwrt
-        sed -i "s/SNAPSHOT/Wing build $(TZ=UTC-8 date "+%Y.%m.%d")/g" package/default-settings/files/zzz-default-settings
-        sed -i "/firewall\.user/d" package/default-settings/files/zzz-default-settings
+        sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/lean/default-settings/files/zzz-default-settings
+        sed -i "/firewall\.user/d" package/lean/default-settings/files/zzz-default-settings
         sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
+        sed -i '$a src-git helloworld https://github.com/fw876/helloworld' feeds.conf.default
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
+      
+    - name: FilePatch2
+      run: |
+        cd openwrt/feeds/luci/applications/luci-app-wrtbwmon
+        sed -i 's/ selected=\"selected\"//g' ./luasrc/view/wrtbwmon/wrtbwmon.htm && sed -i 's/\"1\"/\"1\" selected=\"selected\"/g' ./luasrc/view/wrtbwmon/wrtbwmon.htm
+        sed -i 's/interval: 5/interval: 1/g' ./htdocs/luci-static/wrtbwmon/wrtbwmon.js
 
     - name: Generate configuration file
       run: |
@@ -193,6 +200,8 @@ jobs:
         CONFIG_PACKAGE_luci-app-filetransfer=y
         CONFIG_PACKAGE_luci-app-nlbwmon=y
         CONFIG_PACKAGE_luci-app-firewall=y
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
         CONFIG_PACKAGE_luci-app-serverchan=y
         CONFIG_PACKAGE_luci-app-smartdns=y
         CONFIG_PACKAGE_luci-app-samba4=y
@@ -211,6 +220,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-passwall=y
         CONFIG_PACKAGE_luci-app-cpufreq=y
         CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_luci-app-sqm=y
         EOF
 
         # LuCI主题:
