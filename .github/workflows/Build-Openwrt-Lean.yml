@@ -69,6 +69,7 @@ jobs:
         git clone https://github.com/tty228/luci-app-serverchan
         git clone https://github.com/kongfl888/luci-app-adguardhome
         git clone https://github.com/pymumu/luci-app-smartdns
+        git clone https://github.com/lisaac/luci-app-dockerman
         svn export https://github.com/immortalwrt/packages/trunk/net/smartdns
         svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash
         git clone https://github.com/ophub/luci-app-amlogic
@@ -186,6 +187,7 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
         CONFIG_PACKAGE_luci-app-diskman=y
+        CONFIG_PACKAGE_luci-app-dockerman=y
         CONFIG_PACKAGE_luci-app-amlogic=y
         CONFIG_PACKAGE_luci-app-alist=y
         CONFIG_PACKAGE_luci-app-ddns=y
