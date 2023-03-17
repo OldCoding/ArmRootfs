@@ -1,4 +1,4 @@
-#
+.#
 # Copyright (c) 2019-2020 P3TERX <https://p3terx.com>
 #
 # This is free software, licensed under the MIT License.
@@ -31,6 +31,7 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
+  PRODUCT_NAME: openwrt_armvirt
 
 jobs:
   build:
