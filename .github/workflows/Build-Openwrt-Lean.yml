@@ -140,7 +140,7 @@ jobs:
         # 无论你想要对固件进行怎样的定制, 都需要且只需要修改 EOF 回环内的内容.
         # 
 
-        # 编译竞斗云固件:
+        # 编译ARM固件:
         cat >> .config <<EOF
         CONFIG_TARGET_armvirt=y
         CONFIG_TARGET_armvirt_64=y
@@ -173,32 +173,25 @@ jobs:
 
         # 镜像设置
         cat >> .config <<EOF
-        #
-        # Target Images
-        #
-        # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
+        CONFIG_TARGET_ROOTFS_INITRAMFS=y
+        CONFIG_TARGET_INITRAMFS_COMPRESSION_NONE=y
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_GZIP is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_BZIP2 is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZMA is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZO is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZ4 is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_ZSTD is not set
         CONFIG_EXTERNAL_CPIO=""
-        
-        #
-        # Root filesystem archives
-        #
+        # CONFIG_TARGET_INITRAMFS_FORCE is not set
         # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
         CONFIG_TARGET_ROOTFS_TARGZ=y
-        
-        #
-        # Root filesystem images
-        #
         # CONFIG_TARGET_ROOTFS_EXT4FS is not set
         # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
         CONFIG_TARGET_UBIFS_FREE_SPACE_FIXUP=y
         CONFIG_TARGET_UBIFS_JOURNAL_SIZE=""
         # CONFIG_TARGET_IMAGES_GZIP is not set
-
-        #
-        # Image Options
-        #
-        # CONFIG_TARGET_ROOTFS_PERSIST_VAR is not set
-        # end of Target Images
+        CONFIG_TARGET_ROOTFS_PARTSIZE=400
         EOF
 
         # LuCI插件选择:
