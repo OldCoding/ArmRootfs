@@ -73,6 +73,7 @@ jobs:
         git clone https://github.com/lisaac/luci-app-dockerman
         svn export https://github.com/immortalwrt/packages/trunk/net/smartdns
         svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash
+        svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser
         git clone https://github.com/ophub/luci-app-amlogic
         git clone https://github.com/sbwml/luci-app-alist
         git clone https://github.com/xiaorouji/openwrt-passwall
@@ -172,24 +173,32 @@ jobs:
 
         # 镜像设置
         cat >> .config <<EOF
-        CONFIG_TARGET_ROOTFS_INITRAMFS=y
-        CONFIG_TARGET_INITRAMFS_COMPRESSION_NONE=y
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_GZIP is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_BZIP2 is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZMA is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZO is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZ4 is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_ZSTD is not set
+        #
+        # Target Images
+        #
+        # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
         CONFIG_EXTERNAL_CPIO=""
-        # CONFIG_TARGET_INITRAMFS_FORCE is not set
+        
+        #
+        # Root filesystem archives
+        #
         # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
         CONFIG_TARGET_ROOTFS_TARGZ=y
+        
+        #
+        # Root filesystem images
+        #
         # CONFIG_TARGET_ROOTFS_EXT4FS is not set
         # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
         CONFIG_TARGET_UBIFS_FREE_SPACE_FIXUP=y
         CONFIG_TARGET_UBIFS_JOURNAL_SIZE=""
         # CONFIG_TARGET_IMAGES_GZIP is not set
+
+        #
+        # Image Options
+        #
+        # CONFIG_TARGET_ROOTFS_PERSIST_VAR is not set
+        # end of Target Images
         EOF
 
         # LuCI插件选择:
@@ -224,6 +233,11 @@ jobs:
         CONFIG_PACKAGE_luci-app-cpufreq=y
         CONFIG_PACKAGE_luci-app-adguardhome=y
         CONFIG_PACKAGE_luci-app-sqm=y
+        CONFIG_PACKAGE_luci-app-qbittorrent=y
+        CONFIG_PACKAGE_luci-app-aria2=y
+        CONFIG_PACKAGE_luci-app-transmission=y
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        CONFIG_PACKAGE_luci-app-kodexplorer=y
         EOF
 
         # LuCI主题:
@@ -276,11 +290,17 @@ jobs:
         CONFIG_PACKAGE_uuidgen=y
         EOF
 
-        # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
-        # cat >> .config <<EOF
-        # # CONFIG_TARGET_IMAGES_PAD is not set
-        # # CONFIG_VMDK_IMAGES is not set
-        # EOF
+        # 可选软件包
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_acpid=y
+        CONFIG_PACKAGE_kmod-brcmfmac=y
+        CONFIG_PACKAGE_kmod-brcmutil=y
+        CONFIG_PACKAGE_kmod-cfg80211=y
+        CONFIG_PACKAGE_kmod-mac80211=y
+        CONFIG_PACKAGE_hostapd-common=y
+        CONFIG_PACKAGE_wpa-cli=y
+        CONFIG_PACKAGE_wpad-basic=y
+        EOF
 
         # 
         # ========================固件定制部分结束========================
