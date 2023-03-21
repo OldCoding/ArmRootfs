@@ -42,9 +42,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Read sha256
-      if: env.PACKAGED_STATUS == 'success'
       run: |
         MD5=$(cat sha256sums)
+        echo $(cat sha256sums)
         echo "MD5=$MD5" >> $GITHUB_ENV
 
     - name: Upload OpenWrt Firmware to Release
