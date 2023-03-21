@@ -30,7 +30,6 @@ env:
   TZ: Asia/Shanghai
   FILE_NAME: ARMv8
   PRODUCT_NAME: ARMv8
-  MD5: 
 
 jobs:
   build:
@@ -44,8 +43,9 @@ jobs:
     - name: Read sha256
       run: |
         MD5=$(cat sha256sums)
-        echo $(cat sha256sums)
-        echo "MD5=$MD5" >> $GITHUB_ENV
+        S=$(IFS=</br>; echo "${MD5[*]}")
+        echo $S
+        echo "MD5=$S" >> $GITHUB_ENV
 
     - name: Upload OpenWrt Firmware to Release
       id: release
