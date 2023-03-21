@@ -44,7 +44,7 @@ jobs:
       run: |
         MD5=$(cat sha256sums | sed ':a;N;$!ba;s/\n/<br>/g')
         echo $MD5
-        echo "MD5=$S" >> $GITHUB_ENV
+        echo "MD5=$MD5" >> $GITHUB_ENV
 
     - name: Upload OpenWrt Firmware to Release
       id: release
