@@ -180,37 +180,103 @@ jobs:
         CONFIG_CPU_TYPE="cortex-a53"
         EOF
         
-        # USB2.0支持:
-        #cat >> .config <<EOF
-        #CONFIG_PACKAGE_kmod-usb-core=y
-        #CONFIG_PACKAGE_kmod-usb-dwc3=y
-        #CONFIG_PACKAGE_kmod-usb-dwc3-qcom=y
-        #CONFIG_PACKAGE_kmod-usb-storage=y
-        #CONFIG_PACKAGE_kmod-usb-storage-extras=y
-        #CONFIG_PACKAGE_kmod-usb-storage-uas=y
-        #CONFIG_PACKAGE_kmod-usb-xhci-hcd=y
-        #CONFIG_PACKAGE_kmod-usb3=y
-        #EOF
+        # USB支持:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_kmod-usb-core=y
+        CONFIG_PACKAGE_kmod-usb-dwc2=y
+        CONFIG_PACKAGE_kmod-usb-dwc3=y
+        CONFIG_PACKAGE_kmod-usb-ehci=y
+        CONFIG_PACKAGE_kmod-usb-storage=y
+        CONFIG_PACKAGE_kmod-usb-storage-extras=y
+        CONFIG_PACKAGE_kmod-usb-storage-uas=y
+        CONFIG_PACKAGE_kmod-usb-xhci-hcd=y
+        CONFIG_PACKAGE_kmod-usb-ohci=y
+        CONFIG_PACKAGE_kmod-usb2=y
+        CONFIG_PACKAGE_kmod-usb3=y
+        EOF
 
         # IPv6支持:
-        #cat >> .config <<EOF
-        #CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
-        #CONFIG_PACKAGE_ip6tables=y
-        #CONFIG_PACKAGE_ip6tables-extra=y
-        #CONFIG_PACKAGE_ip6tables-mod-nat=y
-        #CONFIG_PACKAGE_ipv6helper=y
-        #EOF
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
+        CONFIG_PACKAGE_ip6tables=y
+        CONFIG_PACKAGE_ip6tables-extra=y
+        CONFIG_PACKAGE_ip6tables-mod-nat=y
+        CONFIG_PACKAGE_ipv6helper=y
+        EOF
+
+        # 镜像设置
+        cat >> .config <<EOF
+        # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_NONE is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_GZIP is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_BZIP2 is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZMA is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZO is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZ4 is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ is not set
+        # CONFIG_TARGET_INITRAMFS_COMPRESSION_ZSTD is not set
+        CONFIG_EXTERNAL_CPIO=""
+        # CONFIG_TARGET_INITRAMFS_FORCE is not set
+        # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
+        CONFIG_TARGET_ROOTFS_TARGZ=y
+        # CONFIG_TARGET_ROOTFS_EXT4FS is not set
+        # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
+        CONFIG_TARGET_UBIFS_FREE_SPACE_FIXUP=y
+        CONFIG_TARGET_UBIFS_JOURNAL_SIZE=""
+        # CONFIG_TARGET_IMAGES_GZIP is not set
+        EOF
 
         # LuCI插件选择:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-qbittorrent=y
         EOF
+
+        # LuCI主题:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-theme-argon=y
+        CONFIG_PACKAGE_luci-theme-openwrt=y
+        EOF
+
+        # 必备软件包:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_perl-http-date=y
+        CONFIG_PACKAGE_perlbase-file=y
+        CONFIG_PACKAGE_perlbase-getopt=y
+        CONFIG_PACKAGE_perlbase-time=y
+        CONFIG_PACKAGE_perlbase-unicode=y
+        CONFIG_PACKAGE_perlbase-utf8=y
+        CONFIG_PACKAGE_blkid=y
+        CONFIG_PACKAGE_fdisk=y
+        CONFIG_PACKAGE_lsblk=y
+        CONFIG_PACKAGE_parted=y
+        CONFIG_PACKAGE_attr=y
+        CONFIG_PACKAGE_btrfs-progs=y
+        CONFIG_BTRFS_PROGS_ZSTD=y
+        CONFIG_PACKAGE_chattr=y
+        CONFIG_PACKAGE_dosfstools=y
+        CONFIG_PACKAGE_e2fsprogs=y
+        CONFIG_PACKAGE_f2fs-tools=y
+        CONFIG_PACKAGE_f2fsck=y
+        CONFIG_PACKAGE_lsattr=y
+        CONFIG_PACKAGE_mkf2fs=y
+        CONFIG_PACKAGE_xfs-fsck=y
+        CONFIG_PACKAGE_xfs-mkfs=y
+        CONFIG_PACKAGE_bsdtar=y
+        CONFIG_PACKAGE_bash=y
+        CONFIG_PACKAGE_gawk=y
+        CONFIG_PACKAGE_getopt=y
+        CONFIG_PACKAGE_losetup=y
+        CONFIG_PACKAGE_tar=y
+        CONFIG_PACKAGE_uuidgen=y
+        EOF
+
         # 
         # ========================固件定制部分结束========================
         # 
 
         sed -i 's/^[ \t]*//g' ./.config
         make defconfig
+        cp ./.config ./config.bak
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -242,6 +308,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
+        mv ./config.bak $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT ${PWD}
 
@@ -263,6 +330,7 @@ jobs:
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> ${GITHUB_OUTPUT}
+
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: env.UPLOAD_FIRMWARE == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
