@@ -67,7 +67,7 @@ jobs:
       run: |
         docker rmi `docker images -q`
         sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* moby* snap*
+        sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* moby* snap* aspnetcore*
         [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
         sudo -E apt update
         sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
@@ -97,39 +97,26 @@ jobs:
       run: |
         ls
         cd openwrt/package
-        #git clone https://github.com/tty228/luci-app-serverchan
-        #git clone https://github.com/kongfl888/luci-app-adguardhome
-        #git clone https://github.com/pymumu/luci-app-smartdns
-        #git clone https://github.com/lisaac/luci-app-dockerman
-        #svn export https://github.com/immortalwrt/packages/trunk/net/smartdns
-        #svn export https://github.com/vernesong/OpenClash/trunk/luci-app-openclash
-        #svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser
-        #git clone https://github.com/ophub/luci-app-amlogic
-        #git clone https://github.com/sbwml/luci-app-alist
-        #git clone https://github.com/xiaorouji/openwrt-passwall
-        #git clone -b luci https://github.com/xiaorouji/openwrt-passwall passwall1 && mv -n passwall1/luci-app-passwall  ./; rm -rf passwall1
-        #svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-diskman
+        git clone --depth 1 https://github.com/sbwml/luci-app-alist
+        git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot
+        git clone --depth 1 https://github.com/sirpdboy/netspeedtest
+        svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
+        svn export https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic
 
 
 
     - name: FilePatch
       run: |
-        #cd openwrt
-        #sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" package/lean/default-settings/files/zzz-default-settings
-        #sed -i "/firewall\.user/d" package/lean/default-settings/files/zzz-default-settings
-        #sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
-        #sed -i '$a src-git helloworld https://github.com/fw876/helloworld' feeds.conf.default
+        cd openwrt
+        sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
       
     - name: FilePatch2
       run: |
-        #cd openwrt/feeds/luci/applications/luci-app-wrtbwmon
-        #sed -i 's/ selected=\"selected\"//g' ./luasrc/view/wrtbwmon/wrtbwmon.htm && sed -i 's/\"1\"/\"1\" selected=\"selected\"/g' ./luasrc/view/wrtbwmon/wrtbwmon.htm
-        #sed -i 's/interval: 5/interval: 1/g' ./htdocs/luci-static/wrtbwmon/wrtbwmon.js
-        #rm -rf feeds/packages/lang/golang
-        #svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
+        rm -rf feeds/packages/lang/golang
+        svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
 
     - name: Generate configuration file
       run: |
@@ -228,7 +215,45 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-app-autoreboot=y
+        CONFIG_PACKAGE_luci-app-diskman=y
+        CONFIG_PACKAGE_luci-app-dockerman=y
+        CONFIG_PACKAGE_luci-app-amlogic=y
+        CONFIG_PACKAGE_luci-app-alist=y
+        CONFIG_PACKAGE_luci-app-ddns=y
+        CONFIG_PACKAGE_luci-app-filetransfer=y
+        CONFIG_PACKAGE_luci-app-nlbwmon=y
+        CONFIG_PACKAGE_luci-app-firewall=y
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
+        CONFIG_PACKAGE_luci-app-pushbot=y
+        CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_luci-app-samba4=y
+        CONFIG_PACKAGE_luci-app-hd-idle=y
+        CONFIG_PACKAGE_luci-app-ttyd=y
+        CONFIG_PACKAGE_luci-app-wol=y
+        CONFIG_PACKAGE_luci-app-wrtbwmon=y
+        CONFIG_PACKAGE_luci-app-ramfree=y
+        CONFIG_PACKAGE_luci-app-frpc=y
+        CONFIG_PACKAGE_luci-app-webadmin=y
+        CONFIG_PACKAGE_luci-app-usb-printer=y
+        CONFIG_PACKAGE_luci-app-upnp=y
+        CONFIG_PACKAGE_luci-app-vsftpd=y
+        CONFIG_PACKAGE_luci-app-vlmcsd=y
+        CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-zerotier=y
+        CONFIG_PACKAGE_luci-app-passwall=y
+        CONFIG_PACKAGE_luci-app-passwall2=y
+        CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_luci-app-ipsec-server=y
+        CONFIG_PACKAGE_luci-app-pptp-server=y
+        CONFIG_PACKAGE_luci-app-sqm=y
         CONFIG_PACKAGE_luci-app-qbittorrent=y
+        CONFIG_PACKAGE_luci-app-aria2=y
+        CONFIG_PACKAGE_luci-app-transmission=y
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        CONFIG_PACKAGE_luci-app-kodexplorer=y
+        CONFIG_PACKAGE_luci-app-openclash=y
         EOF
 
         # LuCI主题:
@@ -239,6 +264,7 @@ jobs:
 
         # 必备软件包:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_perl=y
         CONFIG_PACKAGE_perl-http-date=y
         CONFIG_PACKAGE_perlbase-file=y
         CONFIG_PACKAGE_perlbase-getopt=y
@@ -269,6 +295,18 @@ jobs:
         CONFIG_PACKAGE_tar=y
         CONFIG_PACKAGE_uuidgen=y
         EOF
+
+        # 可选软件包
+        #cat >> .config <<EOF
+        #CONFIG_PACKAGE_acpid=y
+        #CONFIG_PACKAGE_kmod-brcmfmac=y
+        #CONFIG_PACKAGE_kmod-brcmutil=y
+        #CONFIG_PACKAGE_kmod-cfg80211=y
+        #CONFIG_PACKAGE_kmod-mac80211=y
+        #CONFIG_PACKAGE_hostapd-common=y
+        #CONFIG_PACKAGE_wpa-cli=y
+        #CONFIG_PACKAGE_wpad-basic=y
+        #EOF
 
         # 
         # ========================固件定制部分结束========================
