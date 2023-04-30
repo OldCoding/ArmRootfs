@@ -41,7 +41,6 @@ jobs:
       uses: actions/checkout@main
 
     - name: Package Armvirt as OpenWrt
-      if: steps.organize.outputs.status == 'success' && !cancelled()
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: https://github.com/OldCoding/ArmRootfs/releases/download/openwrt_armvirt-test/immortalwrt-armvirt-64-default-rootfs.tar.gz
