@@ -58,6 +58,7 @@ jobs:
       run: |
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
         MD5=$(md5sum * | sed ':a;N;$!ba;s/\n/<br>/g')
+        echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "MD5=$MD5" >> $GITHUB_ENV
 
     - name: Upload artifact to Actions
