@@ -109,6 +109,13 @@ jobs:
       run: |
         cd openwrt
         sed -i 's/192.168.1.1/192.168.10.1/g' package/base-files/files/bin/config_generate
+        mkdir -p package/luci-app-openclash/files/etc/openclash/core && cd package/luci-app-openclash/files/etc/openclash/core
+        curl -sL -m 30 --retry 2 https://raw.githubusercontent.com/vernesong/OpenClash/core/master/dev/clash-linux-amd64.tar.gz -o /tmp/clash.tar.gz
+        tar zxvf /tmp/clash.tar.gz -C /tmp >/dev/null 2>&1
+        chmod +x /tmp/clash >/dev/null 2>&1
+        mkdir -p ./package/luci-app-openclash/files/etc/openclash/core
+        mv /tmp/clash ./package/luci-app-openclash/files/etc/openclash/core/clash >/dev/null 2>&1
+        rm -rf /tmp/clash.tar.gz >/dev/null 2>&1
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
@@ -295,9 +302,9 @@ jobs:
 
         # 可选软件包
         cat >> .config <<EOF
-        # CONFIG_PACKAGE_autocore is not set
-        # CONFIG_PACKAGE_automount is not set
-        # CONFIG_PACKAGE_autosamba is not set
+        CONFIG_PACKAGE_autocore=y
+        CONFIG_PACKAGE_automount=y
+        CONFIG_PACKAGE_autosamba=y
         CONFIG_PACKAGE_default-settings-chn=y
         # CONFIG_PACKAGE_acpid is not set
         # CONFIG_PACKAGE_kmod-brcmfmac is not set
@@ -315,7 +322,7 @@ jobs:
 
         sed -i 's/^[ \t]*//g' ./.config
         make defconfig
-        cp ./.config ./config.bak
+        cp ./.config ./im-config.bak
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -347,7 +354,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
-        mv ./config.bak $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
+        mv ./im-config.bak $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT ${PWD}
 
