@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-21.02
+  REPO_BRANCH: master
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: true
@@ -301,11 +301,11 @@ jobs:
         EOF
 
         # 可选软件包
-        cat >> .config <<EOF
-        CONFIG_PACKAGE_autocore=y
-        CONFIG_PACKAGE_automount=y
-        CONFIG_PACKAGE_autosamba=y
-        CONFIG_PACKAGE_default-settings-chn=y
+        #cat >> .config <<EOF
+        #CONFIG_PACKAGE_autocore=y
+        #CONFIG_PACKAGE_automount=y
+        #CONFIG_PACKAGE_autosamba=y
+        #CONFIG_PACKAGE_default-settings-chn=y
         # CONFIG_PACKAGE_acpid is not set
         # CONFIG_PACKAGE_kmod-brcmfmac is not set
         # CONFIG_PACKAGE_kmod-brcmutil is not set
@@ -314,7 +314,7 @@ jobs:
         # CONFIG_PACKAGE_hostapd-common is not set
         # CONFIG_PACKAGE_wpa-cli is not set
         # CONFIG_PACKAGE_wpad-basic is not set
-        EOF
+        #EOF
 
         # 
         # ========================固件定制部分结束========================
