@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: master
+  REPO_BRANCH: 21.02
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: true
@@ -228,38 +228,38 @@ jobs:
         EOF
 
         # LuCI插件选择:
-        #cat >> .config <<EOF
-        #CONFIG_PACKAGE_luci-app-diskman=y
-        #CONFIG_PACKAGE_luci-app-dockerman=y
-        #CONFIG_PACKAGE_luci-app-amlogic=y
-        #CONFIG_PACKAGE_luci-app-alist=y
-        #CONFIG_PACKAGE_luci-app-ddns=y
-        #CONFIG_PACKAGE_luci-app-filetransfer=y
-        #CONFIG_PACKAGE_luci-app-ssr-plus=y
-        #CONFIG_PACKAGE_luci-app-pushbot=y
-        #CONFIG_PACKAGE_luci-app-smartdns=y
-        #CONFIG_PACKAGE_luci-app-samba4=y
-        #CONFIG_PACKAGE_luci-app-ttyd=y
-        #CONFIG_PACKAGE_luci-app-ramfree=y
-        #CONFIG_PACKAGE_luci-app-frpc=y
-        #CONFIG_PACKAGE_luci-app-webadmin=y
-        #CONFIG_PACKAGE_luci-app-usb-printer=y
-        #CONFIG_PACKAGE_luci-app-upnp=y
-        #CONFIG_PACKAGE_luci-app-vsftpd=y
-        #CONFIG_PACKAGE_luci-app-vlmcsd=y
-        #CONFIG_PACKAGE_luci-app-netspeedtest=y
-        #CONFIG_PACKAGE_luci-app-zerotier=y
-        #CONFIG_PACKAGE_luci-app-passwall=y
-        #CONFIG_PACKAGE_luci-app-passwall2=y
-        #CONFIG_PACKAGE_luci-app-adguardhome=y
-        #CONFIG_PACKAGE_luci-app-sqm=y
-        #CONFIG_PACKAGE_luci-app-qbittorrent=y
-        #CONFIG_PACKAGE_luci-app-aria2=y
-        #CONFIG_PACKAGE_luci-app-transmission=y
-        #CONFIG_PACKAGE_luci-app-filebrowser=y
-        #CONFIG_PACKAGE_luci-app-kodexplorer=y
-        #CONFIG_PACKAGE_luci-app-openclash=y
-        #EOF
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-app-diskman=y
+        CONFIG_PACKAGE_luci-app-dockerman=y
+        CONFIG_PACKAGE_luci-app-amlogic=y
+        CONFIG_PACKAGE_luci-app-alist=y
+        CONFIG_PACKAGE_luci-app-ddns=y
+        CONFIG_PACKAGE_luci-app-filetransfer=y
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-pushbot=y
+        CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_luci-app-samba4=y
+        CONFIG_PACKAGE_luci-app-ttyd=y
+        CONFIG_PACKAGE_luci-app-ramfree=y
+        CONFIG_PACKAGE_luci-app-frpc=y
+        CONFIG_PACKAGE_luci-app-webadmin=y
+        CONFIG_PACKAGE_luci-app-usb-printer=y
+        CONFIG_PACKAGE_luci-app-upnp=y
+        CONFIG_PACKAGE_luci-app-vsftpd=y
+        CONFIG_PACKAGE_luci-app-vlmcsd=y
+        CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-zerotier=y
+        CONFIG_PACKAGE_luci-app-passwall=y
+        CONFIG_PACKAGE_luci-app-passwall2=y
+        CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_luci-app-sqm=y
+        CONFIG_PACKAGE_luci-app-qbittorrent=y
+        CONFIG_PACKAGE_luci-app-aria2=y
+        CONFIG_PACKAGE_luci-app-transmission=y
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        CONFIG_PACKAGE_luci-app-kodexplorer=y
+        CONFIG_PACKAGE_luci-app-openclash=y
+        EOF
 
         # LuCI主题:
         cat >> .config <<EOF
