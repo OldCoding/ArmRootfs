@@ -201,31 +201,8 @@ jobs:
 
         # 镜像设置
         cat >> .config <<EOF
-        #
-        # Target Images
-        #
-        # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
         CONFIG_EXTERNAL_CPIO=""
-
-        #
-        # Root filesystem archives
-        #
-        # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
         CONFIG_TARGET_ROOTFS_TARGZ=y
-        #
-        # Root filesystem images
-        #
-        # CONFIG_TARGET_ROOTFS_EXT4FS is not set
-        # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
-        CONFIG_TARGET_UBIFS_FREE_SPACE_FIXUP=y
-        CONFIG_TARGET_UBIFS_JOURNAL_SIZE=""
-        # CONFIG_TARGET_IMAGES_GZIP is not set
-        #
-        # Image Options
-        #
-        # CONFIG_TARGET_ROOTFS_PERSIST_VAR is not set
-        # end of Target Images
-        # CONFIG_EXPERIMENTAL is not set
         EOF
 
         # LuCI插件选择:
@@ -242,7 +219,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-samba4=y
         CONFIG_PACKAGE_luci-app-ttyd=y
         CONFIG_PACKAGE_luci-app-ramfree=y
-        CONFIG_PACKAGE_luci-app-frpc=y
         CONFIG_PACKAGE_luci-app-webadmin=y
         CONFIG_PACKAGE_luci-app-usb-printer=y
         CONFIG_PACKAGE_luci-app-upnp=y
