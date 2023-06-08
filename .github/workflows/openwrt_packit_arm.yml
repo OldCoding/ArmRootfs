@@ -43,7 +43,7 @@ jobs:
     - name: Package Armvirt as OpenWrt
       uses: ophub/amlogic-s9xxx-openwrt@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-im/openwrt-armvirt-64-generic-rootfs.tar.gz
+        openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-im/openwrt-armvirt-64-generic-rootfs.tar.gz
         openwrt_board: s905x3
         openwrt_kernel: 5.15.1_6.1.1
         auto_kernel: true
