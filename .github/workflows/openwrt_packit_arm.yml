@@ -42,14 +42,14 @@ jobs:
 
     - name: Package Armvirt as OpenWrt
       uses: ophub/amlogic-s9xxx-openwrt@main
-      env:
+      with:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-im/openwrt-armvirt-64-generic-rootfs.tar.gz
         openwrt_board: s905x3
         openwrt_kernel: 5.15.1_6.1.1
         auto_kernel: true
         kernel_repo: ophub/kernel
         kernel_usage: stable
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Calculate MD5
       run: |
