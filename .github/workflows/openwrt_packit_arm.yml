@@ -48,7 +48,7 @@ jobs:
         openwrt_kernel: 5.15.1_6.1.1
         auto_kernel: true
         kernel_repo: ophub/kernel
-        kernel_usage: stable
+        kernel_usage: flippy
         gh_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Calculate MD5
