@@ -44,7 +44,7 @@ jobs:
       uses: ophub/amlogic-s9xxx-openwrt@main
       with:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armvirt-64-generic-rootfs.tar.gz
-        openwrt_board: s905x3
+        openwrt_board: s905x3_s905d
         openwrt_kernel: 5.15.1_6.1.1
         auto_kernel: true
         kernel_repo: ophub/kernel
