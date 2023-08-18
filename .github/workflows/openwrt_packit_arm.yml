@@ -41,15 +41,18 @@ jobs:
       uses: actions/checkout@main
 
     - name: Package Armvirt as OpenWrt
-      uses: ophub/amlogic-s9xxx-openwrt@main
-      with:
-        openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armvirt-64-generic-rootfs.tar.gz
-        openwrt_board: s905x3_s905d
-        openwrt_kernel: 5.15.1_6.1.1
-        auto_kernel: true
-        kernel_repo: ophub/kernel
-        kernel_usage: flippy
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      uses: ophub/flippy-openwrt-actions@main
+      env:
+        OPENWRT_ARMVIRT: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armvirt-64-generic-rootfs.tar.gz
+        PACKAGE_SOC: s905x3
+        WHOAMI: Wing
+        KERNEL_AUTO_LATEST: true
+        OPENWRT_VER: ${{ env.VER }}
+        DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
+        DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
+        GZIP_IMGS: .gz
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Calculate MD5
       run: |
