@@ -28,7 +28,7 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
-  PRODUCT_NAME: ARMv8-le
+  PRODUCT_NAME: ARMv8-im
 
 
 jobs:
