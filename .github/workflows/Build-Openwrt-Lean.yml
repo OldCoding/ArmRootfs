@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build OpenWrt Lean
+name: Build ARMv8 lede
 
 on:
   repository_dispatch:
@@ -18,20 +18,17 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-  #watch:
-  #  types: [started]
+  watch:
+    types: [started]
     
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  UPLOAD_BIN_DIR: true
-  UPLOAD_FIRMWARE: true
-  UPLOAD_COWTRANSFER: true
-  UPLOAD_WETRANSFER: true
+  UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
-  PRODUCT_NAME: openwrt_armvirt
+  PRODUCT_NAME: ARMv8-le
 
 
 jobs:
@@ -47,7 +44,7 @@ jobs:
       run: |
         echo "警告⚠"
         echo "若分配的服务器性能不足，务必及时取消，重新运行！"
-        echo "CPU性能：8370C > 8171M > 8272CL > E5系列"
+        echo "CPU性能：7763 > 8370C > 8171M > 8272CL > E5系列"
         echo -e "-------------- ------------CPU信息------------------------------------------\n"
         echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
         echo "-------------------------------内存信息-------------------------------------------"
@@ -92,6 +89,12 @@ jobs:
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "VER=$VER" >> $GITHUB_ENV
 
+    - name: Cache
+      uses: klever1988/cachewrtbuild@main
+      with:
+        ccache: 'true'
+        prefix: ${{ github.workspace }}/openwrt
+
     - name: Update packages
       env:
         SCKEY: ${{ secrets.ACTIONS_TRIGGER_PAT }}
@@ -100,56 +103,43 @@ jobs:
         git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot
         git clone --depth 1 https://github.com/gngpp/luci-theme-design
         git clone --depth 1 https://github.com/sbwml/luci-app-alist
-        git clone --depth 1 https://github.com/fw876/helloworld
         git clone --depth 1 https://github.com/sirpdboy/netspeedtest
         git clone --depth 1 https://github.com/lxl6125/openwrt-qbittorrent-enhanced
         git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-app-argon-config
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages
-        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash
-        svn export https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall
-        svn export https://github.com/xiaorouji/openwrt-passwall2/trunk/luci-app-passwall2
+        #git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages
+        #svn export https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall
+        #svn export https://github.com/xiaorouji/openwrt-passwall2/trunk/luci-app-passwall2
         svn export https://github.com/kiddin9/openwrt-packages/trunk/luci-app-diskman
         svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
         svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser
         svn export https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic
         svn export https://github.com/gngpp/nas-xunlei/trunk/openwrt
 
-
-
     - name: File Patch Before
       run: |
         cd openwrt/package
         sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
         sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
-        sed -i "s|amlogic_firmware_repo.*|amlogic_firmware_repo 'https://github.com/OldCoding/openwrt_packit_arm'|g" luci-app-amlogic/root/etc/config/amlogic
-        sed -i "s|ARMv8|${{ env.PRODUCT_NAME }}|g" luci-app-amlogic/root/etc/config/amlogic
+        sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/OldCoding/openwrt_packit_arm|g" luci-app-amlogic/root/etc/config/amlogic
+        sed -i "s|s9xxx_lede|${{ env.PRODUCT_NAME }}|g" luci-app-amlogic/root/etc/config/amlogic
         sed -i "s|amlogic_kernel_path.*|amlogic_kernel_path 'https://github.com/ophub/kernel'|g" luci-app-amlogic/root/etc/config/amlogic
         chmod 755 ./luci-app-adguardhome/root/etc/init.d/AdGuardHome
-        DIR=$PWD && cd ./luci-app-openclash/root/etc/openclash
-        CORE_VER=https://github.com/vernesong/OpenClash/raw/core/dev/core_version
-        CORE_TUN=https://github.com/vernesong/OpenClash/raw/core/dev/premium/clash-linux-arm64
-        CORE_DEV=https://github.com/vernesong/OpenClash/raw/core/dev/dev/clash-linux-arm64.tar.gz
-        CORE_MATE=https://github.com/vernesong/OpenClash/raw/core/dev/meta/clash-linux-arm64.tar.gz
-        TUN_VER=$(curl -sfL $CORE_VER | sed -n "2{s/\r$//;p;q}")
-        curl -sfL -o ./Country.mmdb https://github.com/alecthw/mmdb_china_ip_list/raw/release/lite/Country.mmdb
-        curl -sfL -o ./GeoSite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat
-        curl -sfL -o ./GeoIP.dat https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat
-        mkdir ./core && cd ./core
-        curl -sfL -o ./tun.gz "$CORE_TUN"-"$TUN_VER".gz && gzip -d ./tun.gz && mv ./tun ./clash_tun
-        curl -sfL -o ./meta.tar.gz "$CORE_MATE" && tar -zxf ./meta.tar.gz && mv ./clash ./clash_meta
-        curl -sfL -o ./dev.tar.gz "$CORE_DEV" && tar -zxf ./dev.tar.gz
-        chmod +x ./clash* ; rm -rf ./*.gz
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
       
     - name: File Patch After
       run: |
-        cd openwrt && ls
+        cd openwrt
+        find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+        find ./ | grep Makefile | grep mosdns | xargs rm -f
+        git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
+        git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
         rm -rf feeds/packages/lang/golang
         git clone https://github.com/sbwml/packages_lang_golang -b 20.x feeds/packages/lang/golang
         rm -rf feeds/luci/themes/luci-theme-argon
         git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
+        svn export https://github.com/fw876/helloworld/branches/main package/helloworld
         cd feeds/luci/applications/luci-app-wrtbwmon
         sed -i 's/ selected=\"selected\"//g' ./luasrc/view/wrtbwmon/wrtbwmon.htm && sed -i 's/\"1\"/\"1\" selected=\"selected\"/g' ./luasrc/view/wrtbwmon/wrtbwmon.htm
         sed -i 's/interval: 5/interval: 1/g' ./htdocs/luci-static/wrtbwmon/wrtbwmon.js
@@ -206,12 +196,15 @@ jobs:
         # USB2.0支持:
         cat >> .config <<EOF
         CONFIG_PACKAGE_kmod-usb-core=y
+        CONFIG_PACKAGE_kmod-usb-dwc2=y
         CONFIG_PACKAGE_kmod-usb-dwc3=y
-        CONFIG_PACKAGE_kmod-usb-dwc3-qcom=y
+        CONFIG_PACKAGE_kmod-usb-ehci=y
         CONFIG_PACKAGE_kmod-usb-storage=y
         CONFIG_PACKAGE_kmod-usb-storage-extras=y
         CONFIG_PACKAGE_kmod-usb-storage-uas=y
         CONFIG_PACKAGE_kmod-usb-xhci-hcd=y
+        CONFIG_PACKAGE_kmod-usb-ohci=y
+        CONFIG_PACKAGE_kmod-usb2=y
         CONFIG_PACKAGE_kmod-usb3=y
         EOF
 
@@ -248,62 +241,46 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-autoreboot=y
+        CONFIG_PACKAGE_luci-app-amlogic=y
+        CONFIG_PACKAGE_luci-app-adguardhome=y
         CONFIG_PACKAGE_luci-app-diskman=y
         CONFIG_PACKAGE_luci-app-dockerman=y
-        CONFIG_PACKAGE_luci-app-amlogic=y
-        CONFIG_PACKAGE_luci-app-alist=y
         CONFIG_PACKAGE_luci-app-ddns=y
         CONFIG_PACKAGE_luci-app-filetransfer=y
-        CONFIG_PACKAGE_luci-app-nlbwmon=y
         CONFIG_PACKAGE_luci-app-firewall=y
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        CONFIG_PACKAGE_luci-app-hd-idle=y
+        CONFIG_PACKAGE_luci-app-mosdns=y
         CONFIG_PACKAGE_luci-app-ssr-plus=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
-        CONFIG_PACKAGE_luci-app-serverchan=y
+        CONFIG_PACKAGE_luci-app-pushbot=y
         CONFIG_PACKAGE_luci-app-smartdns=y
-        CONFIG_PACKAGE_luci-app-samba4=y
-        CONFIG_PACKAGE_luci-app-hd-idle=y
-        CONFIG_PACKAGE_luci-app-ttyd=y
-        CONFIG_PACKAGE_luci-app-wol=y
-        CONFIG_PACKAGE_luci-app-wrtbwmon=y
-        CONFIG_PACKAGE_luci-app-ramfree=y
-        CONFIG_PACKAGE_luci-app-frpc=y
-        CONFIG_PACKAGE_luci-app-webadmin=y
         CONFIG_PACKAGE_luci-app-usb-printer=y
         CONFIG_PACKAGE_luci-app-upnp=y
-        CONFIG_PACKAGE_luci-app-vsftpd=y
-        CONFIG_PACKAGE_luci-app-vlmcsd=y
         CONFIG_PACKAGE_luci-app-zerotier=y
-        CONFIG_PACKAGE_luci-app-passwall=y
-        CONFIG_PACKAGE_luci-app-cpufreq=y
-        CONFIG_PACKAGE_luci-app-adguardhome=y
-        CONFIG_PACKAGE_luci-app-sqm=y
-        CONFIG_PACKAGE_luci-app-qbittorrent=y
-        CONFIG_PACKAGE_luci-app-aria2=y
-        CONFIG_PACKAGE_luci-app-transmission=y
-        CONFIG_PACKAGE_luci-app-filebrowser=y
-        CONFIG_PACKAGE_luci-app-kodexplorer=y
         EOF
 
         # LuCI主题:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-theme-argon=y
-        CONFIG_PACKAGE_luci-theme-bootstrap=y
-        CONFIG_PACKAGE_luci-theme-material=y
+        CONFIG_PACKAGE_luci-app-argon-config=y
+        CONFIG_PACKAGE_luci-theme-design=y
         EOF
 
         # 常用软件包:
         cat >> .config <<EOF
         CONFIG_PACKAGE_autocore-arm=y
         CONFIG_PACKAGE_autosamba=y
-        CONFIG_PACKAGE_e2fsprogs=y
         CONFIG_PACKAGE_automount=y
         CONFIG_PACKAGE_block-mount=y
+        CONFIG_PACKAGE_libarchive=y
+        CONFIG_PACKAGE_lsof=y
         # CONFIG_PACKAGE_luci-app-unblockmusic is not set
         EOF
 
         # 必备软件包:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_perl=y
         CONFIG_PACKAGE_perl-http-date=y
         CONFIG_PACKAGE_perlbase-file=y
         CONFIG_PACKAGE_perlbase-getopt=y
@@ -345,7 +322,28 @@ jobs:
         CONFIG_PACKAGE_hostapd-common=y
         CONFIG_PACKAGE_wpa-cli=y
         CONFIG_PACKAGE_wpad-basic=y
-        # CONFIG_PACKAGE_cgroupfs-mount is not set
+        CONFIG_PACKAGE_p54-usb-firmware=y
+        CONFIG_PACKAGE_r8152-firmware=y
+        CONFIG_PACKAGE_r8169-firmware=y
+        CONFIG_PACKAGE_rs9113-firmware=y
+        CONFIG_PACKAGE_rt2800-pci-firmware=y
+        CONFIG_PACKAGE_rt2800-usb-firmware=y
+        CONFIG_PACKAGE_rt73-usb-firmware=y
+        CONFIG_PACKAGE_rtl8188eu-firmware=y
+        CONFIG_PACKAGE_rtl8192ce-firmware=y
+        CONFIG_PACKAGE_rtl8192cu-firmware=y
+        CONFIG_PACKAGE_rtl8192de-firmware=y
+        CONFIG_PACKAGE_rtl8192eu-firmware=y
+        CONFIG_PACKAGE_rtl8192se-firmware=y
+        CONFIG_PACKAGE_rtl8723au-firmware=y
+        CONFIG_PACKAGE_rtl8723bu-firmware=y
+        CONFIG_PACKAGE_rtl8761a-firmware=y
+        CONFIG_PACKAGE_rtl8761b-firmware=y
+        CONFIG_PACKAGE_rtl8761bu-firmware=y
+        CONFIG_PACKAGE_rtl8821ae-firmware=y
+        CONFIG_PACKAGE_rtl8822be-firmware=y
+        CONFIG_PACKAGE_rtl8822ce-firmware=y
+        CONFIG_PACKAGE_wireless-regdb=y
         EOF
 
         # 
@@ -354,13 +352,6 @@ jobs:
 
         sed -i 's/^[ \t]*//g' ./.config
         make defconfig
-
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
 
     - name: Download package
       id: package
@@ -405,7 +396,7 @@ jobs:
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
-        PACKAGE_SOC: s905x3
+        PACKAGE_SOC: s905d_s905x3
         WHOAMI: Wing
         KERNEL_AUTO_LATEST: true
         OPENWRT_VER: ${{ env.VER }}
