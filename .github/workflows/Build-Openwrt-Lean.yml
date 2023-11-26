@@ -89,6 +89,20 @@ jobs:
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "VER=$VER" >> $GITHUB_ENV
 
+    - name: File Patch Before
+      run: |
+        cd openwrt/package
+        sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
+        sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
+        sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/OldCoding/openwrt_packit_arm|g" luci-app-amlogic/root/etc/config/amlogic
+        sed -i "s|s9xxx_lede|${{ env.PRODUCT_NAME }}|g" luci-app-amlogic/root/etc/config/amlogic
+        sed -i "s|amlogic_kernel_path.*|amlogic_kernel_path 'https://github.com/ophub/kernel'|g" luci-app-amlogic/root/etc/config/amlogic
+        chmod 755 ./luci-app-adguardhome/root/etc/init.d/AdGuardHome
+        
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
+
     - name: Update packages
       env:
         SCKEY: ${{ secrets.ACTIONS_TRIGGER_PAT }}
@@ -109,20 +123,6 @@ jobs:
         svn export https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic
         svn export https://github.com/gngpp/nas-xunlei/trunk/openwrt
 
-    - name: File Patch Before
-      run: |
-        cd openwrt/package
-        sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
-        sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
-        sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/OldCoding/openwrt_packit_arm|g" luci-app-amlogic/root/etc/config/amlogic
-        sed -i "s|s9xxx_lede|${{ env.PRODUCT_NAME }}|g" luci-app-amlogic/root/etc/config/amlogic
-        sed -i "s|amlogic_kernel_path.*|amlogic_kernel_path 'https://github.com/ophub/kernel'|g" luci-app-amlogic/root/etc/config/amlogic
-        chmod 755 ./luci-app-adguardhome/root/etc/init.d/AdGuardHome
-        
-
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
-      
     - name: File Patch After
       run: |
         cd openwrt
