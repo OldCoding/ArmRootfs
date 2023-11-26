@@ -107,7 +107,6 @@ jobs:
         svn export https://github.com/sirpdboy/sirpdboy-package/trunk/luci-app-adguardhome
         svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser
         svn export https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic
-        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash
         svn export https://github.com/gngpp/nas-xunlei/trunk/openwrt
 
     - name: File Patch Before
@@ -145,6 +144,7 @@ jobs:
         rm -rf feeds/luci/themes/luci-theme-argon
         git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
         svn export https://github.com/fw876/helloworld/branches/main package/helloworld
+        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash package/luci-app-openclash
         cd feeds/luci/applications/luci-app-wrtbwmon
         sed -i 's/ selected=\"selected\"//g' ./luasrc/view/wrtbwmon/wrtbwmon.htm && sed -i 's/\"1\"/\"1\" selected=\"selected\"/g' ./luasrc/view/wrtbwmon/wrtbwmon.htm
         sed -i 's/interval: 5/interval: 1/g' ./htdocs/luci-static/wrtbwmon/wrtbwmon.js
