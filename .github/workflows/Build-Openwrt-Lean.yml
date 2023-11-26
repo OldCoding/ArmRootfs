@@ -118,6 +118,20 @@ jobs:
         sed -i "s|s9xxx_lede|${{ env.PRODUCT_NAME }}|g" luci-app-amlogic/root/etc/config/amlogic
         sed -i "s|amlogic_kernel_path.*|amlogic_kernel_path 'https://github.com/ophub/kernel'|g" luci-app-amlogic/root/etc/config/amlogic
         chmod 755 ./luci-app-adguardhome/root/etc/init.d/AdGuardHome
+        
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
+      
+    - name: File Patch After
+      run: |
+        cd openwrt
+        rm -rf feeds/packages/lang/golang
+        git clone https://github.com/sbwml/packages_lang_golang -b 20.x feeds/packages/lang/golang
+        rm -rf feeds/luci/themes/luci-theme-argon
+        git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
+        svn export https://github.com/fw876/helloworld/branches/main package/helloworld
+        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash package/luci-app-openclash
         DIR=$PWD && cd ./luci-app-openclash/root/etc/openclash
         CORE_VER=https://github.com/vernesong/OpenClash/raw/core/dev/core_version
         CORE_TUN=https://github.com/vernesong/OpenClash/raw/core/dev/premium/clash-linux-arm64
@@ -132,19 +146,6 @@ jobs:
         curl -sfL -o ./meta.tar.gz "$CORE_MATE" && tar -zxf ./meta.tar.gz && mv ./clash ./clash_meta
         curl -sfL -o ./dev.tar.gz "$CORE_DEV" && tar -zxf ./dev.tar.gz
         chmod +x ./clash* ; rm -rf ./*.gz
-
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
-      
-    - name: File Patch After
-      run: |
-        cd openwrt
-        rm -rf feeds/packages/lang/golang
-        git clone https://github.com/sbwml/packages_lang_golang -b 20.x feeds/packages/lang/golang
-        rm -rf feeds/luci/themes/luci-theme-argon
-        git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
-        svn export https://github.com/fw876/helloworld/branches/main package/helloworld
-        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash package/luci-app-openclash
         cd feeds/luci/applications/luci-app-wrtbwmon
         sed -i 's/ selected=\"selected\"//g' ./luasrc/view/wrtbwmon/wrtbwmon.htm && sed -i 's/\"1\"/\"1\" selected=\"selected\"/g' ./luasrc/view/wrtbwmon/wrtbwmon.htm
         sed -i 's/interval: 5/interval: 1/g' ./htdocs/luci-static/wrtbwmon/wrtbwmon.js
