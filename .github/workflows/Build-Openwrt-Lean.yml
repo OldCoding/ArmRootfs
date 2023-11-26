@@ -132,7 +132,7 @@ jobs:
         git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
         svn export https://github.com/fw876/helloworld/branches/main package/helloworld
         svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash package/luci-app-openclash
-        DIR=$PWD && cd ./luci-app-openclash/root/etc/openclash
+        DIR=$PWD && cd ./package/luci-app-openclash/root/etc/openclash
         CORE_VER=https://github.com/vernesong/OpenClash/raw/core/dev/core_version
         CORE_TUN=https://github.com/vernesong/OpenClash/raw/core/dev/premium/clash-linux-arm64
         CORE_DEV=https://github.com/vernesong/OpenClash/raw/core/dev/dev/clash-linux-arm64.tar.gz
