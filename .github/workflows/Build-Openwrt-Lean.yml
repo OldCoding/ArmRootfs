@@ -114,6 +114,8 @@ jobs:
         svn export https://github.com/Lienol/openwrt-package/trunk/luci-app-filebrowser
         svn export https://github.com/ophub/luci-app-amlogic/trunk/luci-app-amlogic
         svn export https://github.com/gngpp/nas-xunlei/trunk/openwrt
+        svn export https://github.com/fw876/helloworld/branches/main
+        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash
 
     - name: File Patch After
       run: |
@@ -122,8 +124,6 @@ jobs:
         git clone https://github.com/sbwml/packages_lang_golang -b 21.x feeds/packages/lang/golang
         rm -rf feeds/luci/themes/luci-theme-argon
         git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
-        svn export https://github.com/fw876/helloworld/branches/main package/helloworld
-        svn export https://github.com/vernesong/OpenClash/branches/dev/luci-app-openclash package/luci-app-openclash
         cd package
         sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
         sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
