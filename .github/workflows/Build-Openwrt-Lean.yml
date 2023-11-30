@@ -407,7 +407,9 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
+        ls
         rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+        ls
         df -hT ${PWD}
 
     - name: Organize files
