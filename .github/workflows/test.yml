@@ -160,7 +160,6 @@ jobs:
         find dl -size -1024c -exec rm -f {} \;
 
     - name: Clean up server space
-      if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
         ls . | grep -v "^bin$" | xargs
