@@ -162,8 +162,9 @@ jobs:
     - name: Clean up server space
       run: |
         cd openwrt/
-        ls .
+        shopt -s extglob
+        ls . | grep -v "^bin$" | xargs
         #rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         rm -rf !(package)
-        ls .
+        ls . | grep -v "^bin$" | xargs
         df -hT ${PWD}
