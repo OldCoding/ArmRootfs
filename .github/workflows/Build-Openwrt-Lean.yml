@@ -407,7 +407,7 @@ jobs:
       run: |
         cd openwrt/
         ls . | grep -v "^bin$" | xargs
-        rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
+        rm -rf $(ls . | grep -v "^bin$" | xargs)
         df -hT ${PWD}
 
     - name: Organize files
