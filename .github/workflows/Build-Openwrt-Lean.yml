@@ -102,6 +102,7 @@ jobs:
     - name: Generate configuration file
       run: |
         cd openwrt
+        ls
         rm -f ./.config*
         touch ./.config
 
@@ -210,6 +211,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-hd-idle=y
         CONFIG_PACKAGE_luci-app-mosdns=y
         CONFIG_PACKAGE_luci-app-nlbwmon=y
+        CONFIG_PACKAGE_luci-app-serverchan=y
         CONFIG_PACKAGE_luci-app-ssr-plus=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
         CONFIG_PACKAGE_luci-app-pushbot=y
@@ -302,28 +304,12 @@ jobs:
         CONFIG_PACKAGE_kmod-mac80211=y
         CONFIG_PACKAGE_hostapd-common=y
         CONFIG_PACKAGE_wpa-cli=y
-        CONFIG_PACKAGE_wpad-basic=y
         CONFIG_PACKAGE_p54-usb-firmware=y
         CONFIG_PACKAGE_r8152-firmware=y
-        CONFIG_PACKAGE_r8169-firmware=y
         CONFIG_PACKAGE_rs9113-firmware=y
-        CONFIG_PACKAGE_rt2800-pci-firmware=y
         CONFIG_PACKAGE_rt2800-usb-firmware=y
         CONFIG_PACKAGE_rt73-usb-firmware=y
-        CONFIG_PACKAGE_rtl8188eu-firmware=y
-        CONFIG_PACKAGE_rtl8192ce-firmware=y
         CONFIG_PACKAGE_rtl8192cu-firmware=y
-        CONFIG_PACKAGE_rtl8192de-firmware=y
-        CONFIG_PACKAGE_rtl8192eu-firmware=y
-        CONFIG_PACKAGE_rtl8192se-firmware=y
-        CONFIG_PACKAGE_rtl8723au-firmware=y
-        CONFIG_PACKAGE_rtl8723bu-firmware=y
-        CONFIG_PACKAGE_rtl8761a-firmware=y
-        CONFIG_PACKAGE_rtl8761b-firmware=y
-        CONFIG_PACKAGE_rtl8761bu-firmware=y
-        CONFIG_PACKAGE_rtl8821ae-firmware=y
-        CONFIG_PACKAGE_rtl8822be-firmware=y
-        CONFIG_PACKAGE_rtl8822ce-firmware=y
         CONFIG_PACKAGE_wireless-regdb=y
         EOF
 
@@ -341,6 +327,9 @@ jobs:
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+        rm -rf $GITHUB_WORKSPACE/.git
+        rm -rf $GITHUB_WORKSPACE/opt
+        df -Th
 
     - name: Compile the firmware
       id: compile
@@ -364,21 +353,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
-        #shopt -s extglob
-        #rm -rf !(bin)
-        echo "删除config\n" && rm -rf config
-        echo "删除dl\n" && rm -rf dl
-        echo "删除feeds\n" && rm -rf feeds
-        echo "删除include\n" && rm -rf include
-        echo "删除key-build\n" && rm -rf key-build
-        echo "删除package\n" && rm -rf package
-        echo "删除scripts\n" && rm -rf scripts
-        echo "删除staging_dir\n" && rm -rf staging_dir
-        echo "删除target\n" && rm -rf target
-        echo "删除tmp\n" && rm -rf tmp
-        echo "删除toolchain\n" && rm -rf toolchain
-        echo "删除tools\n" && rm -rf tools
-        echo "删除build_dir\n" && rm -rf build_dir
+        sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT ${PWD}
 
     - name: Organize files
@@ -451,7 +426,7 @@ jobs:
         keep_minimum_runs: 60
 
     - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.3.2
+      uses: dev-drprasad/delete-older-releases@master
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
         repo: OldCoding/ArmRootfs
