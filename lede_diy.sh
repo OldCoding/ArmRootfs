@@ -52,14 +52,15 @@ rm -rf feeds/luci/themes/luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
 find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+# 石像鬼
+mv /package/gargoyle/gargoyle-build.sh ./
+chmod +x gargoyle-build.sh && gargoyle-build.sh
 # 个性化设置
 cd package
 sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
 sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
 sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/OldCoding/openwrt_packit_arm|g" luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|s9xxx_lede|ARMv8-le|g" luci-app-amlogic/root/etc/config/amlogic
-# 石像鬼
-chmod +x gargoyle/gargoyle-build.sh && gargoyle/gargoyle-build.sh
 # 更新passwall规则
 curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt
 # 修复AdGuardHome权限
