@@ -53,7 +53,7 @@ git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luc
 find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 # 石像鬼
-mv /package/gargoyle/gargoyle-build.sh ./
+mv ./package/gargoyle/gargoyle-build.sh ./
 chmod +x gargoyle-build.sh && gargoyle-build.sh
 # 个性化设置
 cd package
