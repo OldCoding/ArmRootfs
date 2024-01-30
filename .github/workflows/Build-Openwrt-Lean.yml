@@ -324,7 +324,6 @@ jobs:
     - name: Gargoyle Patch
       run: |
         cd openwrt 
-        git clone --depth 1 https://github.com/Twinzo1/gargoyle-in-openwrt package/gargoyle
         mv ./package/gargoyle/gargoyle-build.sh ./
         chmod +x ./gargoyle-build.sh && sh ./gargoyle-build.sh
 
