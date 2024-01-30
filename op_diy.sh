@@ -47,6 +47,7 @@ svn_export "master" "applications/luci-app-vsftpd" "package/luci-app-vsftpd" "ht
 svn_export "master" "applications/luci-app-vlmcsd" "package/luci-app-vlmcsd" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-zerotier" "package/luci-app-zerotier" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-kodexplorer" "package/luci-app-kodexplorer" "https://github.com/immortalwrt/luci"
+svn_export "master" "applications/luci-app-filebrowser" "package/luci-app-filebrowser" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-qbittorrent" "package/luci-app-qbittorrent" "https://github.com/immortalwrt/luci"
 svn_export "master" "net/qBittorrent-Enhanced-Edition" "package/qBittorrent-Enhanced-Edition" "https://github.com/immortalwrt/packages"
 
