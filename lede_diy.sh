@@ -54,7 +54,7 @@ find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 # 石像鬼
 mv ./package/gargoyle/gargoyle-build.sh ./
-chmod +x gargoyle-build.sh && gargoyle-build.sh
+chmod +x ./argoyle-build.sh && sh ./gargoyle-build.sh
 # 个性化设置
 cd package
 sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
