@@ -27,6 +27,7 @@ git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages packa
 git clone -b openwrt-18.06 --depth 1 https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
 git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
 git clone --depth 1 https://github.com/kenzok78/luci-app-adguardhome package/luci-app-adguardhome
+git clone --depth 1 https://github.com/Twinzo1/gargoyle-in-openwrt package/gargoyle
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
 svn_export "master" "luci-app-diskman" "package/luci-app-diskman" "https://github.com/kiddin9/openwrt-packages"
