@@ -18,6 +18,8 @@ git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtes
 git clone --depth 1 https://github.com/sbwml/luci-app-alist package/luci-app-alist
 git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
 git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
+git clone --depth 1 -b lede https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns
+git clone --depth 1 https://github.com/pymumu/openwrt-smartdns package/smartdns
 git clone --depth 1 -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush package/luci-app-serverchan
 git clone --depth 1 -b main https://github.com/gngpp/luci-theme-design package/luci-theme-design
 git clone --depth 1 https://github.com/sbwml/luci-app-xunlei packageluci-app-xunlei
