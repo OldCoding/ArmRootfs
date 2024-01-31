@@ -338,21 +338,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
         cd openwrt/
-        #shopt -s extglob
-        #rm -rf !(bin)
-        echo "删除config\n" && rm -rf config
-        echo "删除dl\n" && rm -rf dl
-        echo "删除feeds\n" && rm -rf feeds
-        echo "删除include\n" && rm -rf include
-        echo "删除key-build\n" && rm -rf key-build
-        echo "删除package\n" && rm -rf package
-        echo "删除scripts\n" && rm -rf scripts
-        echo "删除staging_dir\n" && rm -rf staging_dir
-        echo "删除target\n" && rm -rf target
-        echo "删除tmp\n" && rm -rf tmp
-        echo "删除toolchain\n" && rm -rf toolchain
-        echo "删除tools\n" && rm -rf tools
-        echo "删除build_dir\n" && rm -rf build_dir
+        sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT ${PWD}
 
     - name: Organize files
