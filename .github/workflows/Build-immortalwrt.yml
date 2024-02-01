@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-18.06
+  REPO_BRANCH: openwrt-18.06-k5.4
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   DIY_SH: immo_diy.sh
