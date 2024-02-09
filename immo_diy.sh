@@ -1,6 +1,7 @@
 #!/bin/bash
 svn_export() {
 	# 参数1是分支名, 参数2是子目录, 参数3是目标目录, 参数4仓库地址
+ 	echo -e "clone $4/$2 to $3"
 	TMP_DIR="$(mktemp -d)" || exit 1
  	ORI_DIR="$PWD"
 	[ -d "$3" ] || mkdir -p "$3"
@@ -10,53 +11,49 @@ svn_export() {
 	cp -af . "$TGT_DIR/" && cd "$ORI_DIR"
 	rm -rf "$TMP_DIR"
 }
-find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
+
+#find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
 find ./ | grep Makefile | grep mosdns | xargs rm -f
 
 git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot
-git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
-git clone --depth 1 https://github.com/sbwml/luci-app-alist package/luci-app-alist
-git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
-git clone --depth 1 -b 18.06 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
-git clone --depth 1 -b lede https://github.com/pymumu/luci-app-smartdns package/luci-app-smartdns
-git clone --depth 1 https://github.com/pymumu/openwrt-smartdns package/smartdns
-git clone --depth 1 -b openwrt-18.06 https://github.com/tty228/luci-app-wechatpush package/luci-app-serverchan
-git clone --depth 1 -b main https://github.com/gngpp/luci-theme-design package/luci-theme-design
-git clone --depth 1 https://github.com/sbwml/luci-app-xunlei packageluci-app-xunlei
-git clone --depth 1 -b v5 https://github.com/sbwml/luci-app-mosdns package/luci-app-mosdns
-git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
+git clone --depth 1 https://github.com/sbwml/luci-app-xunlei  package/luci-app-xunlei
+git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
 git clone --depth 1 https://github.com/kenzok78/luci-app-adguardhome package/luci-app-adguardhome
-git clone --depth 1 https://github.com/lisaac/luci-app-dockerman package/luci-app-dockerman
-git clone --depth 1 -b openwrt-luci18 https://github.com/ilxp/gargoyle-qos-openwrt.git package/gargoyle-qos-openwrt
-git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
+#git clone --depth 1 https://github.com/wangqn/luci-app-filebrowser package/luci-app-filebrowser
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
+svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
+svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
+svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
+svn_export "master" "luci-app-netspeedtest" "package/luci-app-netspeedtest" "https://github.com/sirpdboy/netspeedtest"
+svn_export "master" "homebox" "package/homebox" "https://github.com/sirpdboy/netspeedtest"
 
 # 调整菜单位置
-#sed -i "s|services|nas|g" feeds/luci/applications/luci-app-alist/root/usr/share/luci/menu.d/luci-app-alist.json
-#sed -i "s|services|nas|g" feeds/luci/applications/luci-app-filebrowser/root/usr/share/luci/menu.d/luci-app-filebrowser.json
-#sed -i "s|services|nas|g" feeds/luci/applications/luci-app-transmission/root/usr/share/luci/menu.d/luci-app-transmission.json
-#sed -i "s|services|nas|g" feeds/luci/applications/luci-app-qbittorrent/root/usr/share/luci/menu.d/luci-app-qbittorrent.json
-#sed -i "s|services|network|g" feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
+sed -i "s|services|nas|g" feeds/luci/applications/luci-app-alist/root/usr/share/luci/menu.d/luci-app-alist.json
+sed -i "s|services|nas|g" feeds/luci/applications/luci-app-filebrowser/root/usr/share/luci/menu.d/luci-app-filebrowser.json
+sed -i "s|services|nas|g" feeds/luci/applications/luci-app-transmission/root/usr/share/luci/menu.d/luci-app-transmission.json
+sed -i "s|services|nas|g" feeds/luci/applications/luci-app-qbittorrent/root/usr/share/luci/menu.d/luci-app-qbittorrent.json
+sed -i "s|services|network|g" feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
 # 微信推送&全能推送
 sed -i "s|qidian|bilibili|g" package/luci-app-pushbot/root/usr/bin/pushbot/pushbot
-sed -i "s|qidian|bilibili|g" package/luci-app-serverchan/root/usr/share/serverchan/serverchan
+sed -i "s|qidian|bilibili|g" feeds/luci/applications/luci-app-wechatpush/root/usr/share/wechatpush/wechatpush
 # 依赖和冲突
 rm -rf ./feeds/packages/lang/golang
 git clone https://github.com/sbwml/packages_lang_golang -b 21.x feeds/packages/lang/golang
 rm -rf ./feeds/luci/applications/luci-app-openclash
-rm -rf ./feeds/luci/applications/luci-app-smartdns
-rm -rf ./feeds/luci/applications/luci-app-passwall
-rm -rf ./feeds/luci/applications/luci-app-serverchan
-rm -rf ./feeds/luci/applications/luci-app-dockerman
-rm -rf ./feeds/packages/net/smartdns
+#rm -rf ./feeds/luci/applications/luci-app-filebrowser
+#rm -rf ./feeds/packages/utils/filebrowser
 cd package
 # 个性化设置
 sed -i "s|amlogic_firmware_repo.*|amlogic_firmware_repo 'https://github.com/OldCoding/openwrt_packit_arm'|g" luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|ARMv8|ARMv8-im|g" luci-app-amlogic/root/etc/config/amlogic
+rm -rf luci-app-netspeedtest/po/zh_Hans
+# 汉化
+curl -sfL -o ./convert_translation.sh https://github.com/kenzok8/small-package/raw/main/.github/diy/convert_translation.sh
+chmod +x ./convert_translation.sh && bash ./convert_translation.sh
 # OpenClash
 cd ./luci-app-openclash/root/etc/openclash
 CORE_VER=https://github.com/vernesong/OpenClash/raw/core/dev/core_version
