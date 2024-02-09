@@ -27,11 +27,10 @@ git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages packa
 git clone -b openwrt-18.06 --depth 1 https://github.com/tty228/luci-app-wechatpush feeds/luci/applications/luci-app-serverchan
 git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
 git clone --depth 1 https://github.com/kenzok78/luci-app-adguardhome package/luci-app-adguardhome
-git clone --depth 1 -b openwrt-luci18 https://github.com/ilxp/gargoyle-qos-openwrt package/gargoyle-qos-openwrt
+git clone --depth 1 https://github.com/wangqn/luci-app-filebrowser package/luci-app-filebrowser
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
 svn_export "master" "luci-app-diskman" "package/luci-app-diskman" "https://github.com/kiddin9/openwrt-packages"
-svn_export "main" "luci-app-filebrowser" "package/luci-app-filebrowser" "https://github.com/Lienol/openwrt-package"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
 svn_export "main" "openwrt/luci-app-thunder" "package/luci-app-thunder" "https://github.com/gngpp/nas-xunlei"
 svn_export "main" "openwrt/thunder" "package/thunder" "https://github.com/gngpp/nas-xunlei"
@@ -60,8 +59,6 @@ sed -i "s|https.*/amlogic-s9xxx-openwrt|https://github.com/OldCoding/openwrt_pac
 sed -i "s|s9xxx_lede|ARMv8-le|g" luci-app-amlogic/root/etc/config/amlogic
 # 更新passwall规则
 curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt
-# 修复AdGuardHome权限
-chmod 755 ./luci-app-adguardhome/root/etc/init.d/AdGuardHome
 # OpenClash
 cd ./luci-app-openclash/root/etc/openclash
 CORE_VER=https://github.com/vernesong/OpenClash/raw/core/dev/core_version
