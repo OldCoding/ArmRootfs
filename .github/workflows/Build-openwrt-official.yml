@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build ARMv8 openwrt
+name: Build ARMv8 openwrt official
 
 on:
   repository_dispatch:
@@ -45,7 +45,7 @@ jobs:
       run: |
         echo "警告⚠"
         echo "若分配的服务器性能不足，务必及时取消，重新运行！"
-        echo "CPU性能：7760 > 8370C > 8171M > 8272CL > E5系列"
+        echo "CPU性能：7763 > 8370C > 8171M > 8272CL > E5系列"
         echo -e "-------------- ------------CPU信息------------------------------------------\n"
         echo -e "CPU核心及版本信息：$(cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c) \n"
         echo "-------------------------------内存信息-------------------------------------------"
@@ -83,10 +83,12 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        cd openwrt
-        useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H<br/>")
-        echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
-        echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
+        sudo mkdir -p -m 777 /mnt/openwrt
+        sudo mkdir -p -m 777 /mnt/openwrt/dl /mnt/openwrt/feeds /mnt/openwrt/staging_dir /mnt/openwrt/build_dir
+        ln -s /mnt/openwrt/dl ./openwrt/dl
+        ln -s /mnt/openwrt/feeds ./openwrt/feeds
+        ln -s /mnt/openwrt/staging_dir ./openwrt/staging_dir
+        ln -s /mnt/openwrt/build_dir ./openwrt/build_dir
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
 
@@ -240,7 +242,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-ipsec-server=y
         CONFIG_PACKAGE_luci-app-pptp-server=y
         CONFIG_PACKAGE_luci-app-sqm=y
-        CONFIG_PACKAGE_luci-app-qos-gargoyle=y
         CONFIG_PACKAGE_luci-app-qbittorrent=y
         CONFIG_PACKAGE_luci-app-aria2=y
         CONFIG_PACKAGE_luci-app-transmission=y
@@ -254,7 +255,6 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-app-argon-config=y
-        CONFIG_PACKAGE_luci-theme-design=y
         EOF
 
         # 必备软件包:
@@ -351,9 +351,11 @@ jobs:
     - name: Clean up server space
       if: steps.compile.outputs.status == 'success' && !cancelled()
       run: |
-        cd openwrt/
+        df -hT
+        cd openwrt
+        echo "开始清理空间"
         sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
-        df -hT ${PWD}
+        df -hT
 
     - name: Organize files
       id: organize
