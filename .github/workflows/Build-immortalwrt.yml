@@ -103,7 +103,7 @@ jobs:
       run: |
         chmod +x $DIY_SH
         cd openwrt
-        $GITHUB_WORKSPACE/$DIY_SH
+        # $GITHUB_WORKSPACE/$DIY_SH
 
     - name: Generate configuration file
       run: |
