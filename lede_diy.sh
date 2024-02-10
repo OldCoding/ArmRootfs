@@ -45,6 +45,7 @@ sed -i "s|qidian|bilibili|g" feeds/luci/applications/luci-app-pushbot/root/usr/b
 sed -i "s|qidian|bilibili|g" feeds/luci/applications/luci-app-serverchan/root/usr/share/serverchan/serverchan
 # xfsprogs修复
 sed -i 's/-DHAVE_MAP_SYNC/-DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/' feeds/packages/utils/xfsprogs/Makefile
+sed -i 's/rblibtorrent/libtorrent-rasterbar/' package/openwrt-qbittorrent-enhanced/qBittorrent-Enhanced-Edition/Makefile
 cat utils/xfsprogs/Makefile
 # 替换argon主题
 rm -rf feeds/luci/themes/luci-theme-argon
