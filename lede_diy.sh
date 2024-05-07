@@ -1,6 +1,7 @@
 #!/bin/bash
 svn_export() {
 	# 参数1是分支名, 参数2是子目录, 参数3是目标目录, 参数4仓库地址
+ 	echo -e "clone $4/$2 to $3"
 	TMP_DIR="$(mktemp -d)" || exit 1
  	ORI_DIR="$PWD"
 	[ -d "$3" ] || mkdir -p "$3"
@@ -13,9 +14,14 @@ svn_export() {
 
 
 # 删除冲突软件和依赖
-rm -rf feeds/packages/lang/golang 
-rm -rf feeds/luci/applications/luci-app-pushbot feeds/luci/applications/luci-app-serverchan
-git clone https://github.com/sbwml/packages_lang_golang -b 21.x feeds/packages/lang/golang
+#rm -rf feeds/packages/lang/golang 
+rm -rf feeds/luci/applications/luci-app-pushbot 
+rm -rf feeds/luci/applications/luci-app-serverchan
+rm -rf feeds/luci/applications/luci-app-mosdns
+rm -rf feeds/packages/net/mosdns
+rm -rf feeds/packages/utils/v2dat
+rm -rf feeds/packages/net/v2ray-geodata
+#git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
 # 下载插件
 git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot feeds/luci/applications/luci-app-pushbot
 git clone --depth 1 https://github.com/gngpp/luci-theme-design package/luci-theme-design
@@ -28,12 +34,16 @@ git clone -b openwrt-18.06 --depth 1 https://github.com/tty228/luci-app-wechatpu
 git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
 git clone --depth 1 https://github.com/chenmozhijin/luci-app-adguardhome package/luci-app-adguardhome
 git clone --depth 1 https://github.com/wangqn/luci-app-filebrowser package/luci-app-filebrowser
+git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
 svn_export "master" "luci-app-diskman" "package/luci-app-diskman" "https://github.com/kiddin9/openwrt-packages"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
-svn_export "main" "openwrt/luci-app-thunder" "package/luci-app-thunder" "https://github.com/gngpp/nas-xunlei"
-svn_export "main" "openwrt/thunder" "package/thunder" "https://github.com/gngpp/nas-xunlei"
+#svn_export "main" "openwrt/luci-app-thunder" "package/luci-app-thunder" "https://github.com/gngpp/nas-xunlei"
+#svn_export "main" "openwrt/thunder" "package/thunder" "https://github.com/gngpp/nas-xunlei"
+svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
+svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
+svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
 
 # 编译 po2lmo (如果有po2lmo可跳过)
@@ -45,13 +55,10 @@ sed -i "s|qidian|bilibili|g" feeds/luci/applications/luci-app-pushbot/root/usr/b
 sed -i "s|qidian|bilibili|g" feeds/luci/applications/luci-app-serverchan/root/usr/share/serverchan/serverchan
 # xfsprogs修复
 sed -i 's/-DHAVE_MAP_SYNC/-DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/' feeds/packages/utils/xfsprogs/Makefile
-sed -i 's/rblibtorrent/libtorrent-rasterbar/' package/openwrt-qbittorrent-enhanced/qBittorrent-Enhanced-Edition/Makefile
-cat utils/xfsprogs/Makefile
+cat feeds/packages/utils/xfsprogs/Makefile
 # 替换argon主题
 rm -rf feeds/luci/themes/luci-theme-argon
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git ./feeds/luci/themes/luci-theme-argon
-find ./ | grep Makefile | grep v2ray-geodata | xargs rm -f
-git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 # 个性化设置
 cd package
 sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
