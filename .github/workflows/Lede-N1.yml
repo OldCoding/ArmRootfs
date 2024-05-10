@@ -149,7 +149,7 @@ jobs:
         CONFIG_TARGET_amlogic=y
         CONFIG_TARGET_amlogic_mesongx=y
         CONFIG_TARGET_amlogic_mesongx_DEVICE_phicomm_n1=y
-        CONFIG_TARGET_ROOTFS_PARTSIZE=950
+        CONFIG_TARGET_ROOTFS_PARTSIZE=900
         EOF
         
         # USB2.0支持:
@@ -192,7 +192,7 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
         CONFIG_PACKAGE_luci-app-alist=y
-        CONFIG_PACKAGE_luci-app-amlogic=y
+        # CONFIG_PACKAGE_luci-app-amlogic is not set
         CONFIG_PACKAGE_luci-app-adguardhome=y
         CONFIG_PACKAGE_luci-app-diskman=y
         CONFIG_PACKAGE_luci-app-dockerman=y
