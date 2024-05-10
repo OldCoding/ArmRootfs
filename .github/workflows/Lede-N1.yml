@@ -150,6 +150,7 @@ jobs:
         CONFIG_TARGET_amlogic_mesongx=y
         CONFIG_TARGET_amlogic_mesongx_DEVICE_phicomm_n1=y
         CONFIG_TARGET_ROOTFS_PARTSIZE=900
+        CONFIG_LINUX_6_1=y
         EOF
         
         # USB2.0支持:
