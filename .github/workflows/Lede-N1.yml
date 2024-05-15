@@ -195,6 +195,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-alist=y
         # CONFIG_PACKAGE_luci-app-amlogic is not set
         CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_luci-app-cpufreq=y
         CONFIG_PACKAGE_luci-app-diskman=y
         CONFIG_PACKAGE_luci-app-dockerman=y
         CONFIG_PACKAGE_luci-app-ddns=y
