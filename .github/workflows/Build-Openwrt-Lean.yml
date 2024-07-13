@@ -172,6 +172,19 @@ jobs:
         CONFIG_PACKAGE_ipv6helper=y
         EOF
 
+        # DDNS
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_ddns-scripts=y
+        CONFIG_PACKAGE_ddns-scripts_aliyun=y
+        CONFIG_PACKAGE_ddns-scripts_cloudflare.com-v4=y
+        CONFIG_PACKAGE_ddns-scripts_dnspod=y
+        CONFIG_PACKAGE_ddns-scripts_freedns_42_pl=y
+        CONFIG_PACKAGE_ddns-scripts_godaddy.com-v1=y
+        CONFIG_PACKAGE_ddns-scripts_no-ip_com=y
+        CONFIG_PACKAGE_ddns-scripts_nsupdate=y
+        CONFIG_PACKAGE_ddns-scripts_route53-v1=y
+        EOF
+
         # 镜像设置
         cat >> .config <<EOF
         # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
@@ -209,6 +222,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-filebrowser=y
         CONFIG_PACKAGE_luci-app-hd-idle=y
         CONFIG_PACKAGE_luci-app-mosdns=y
+        CONFIG_PACKAGE_luci-app-minidlna=y
         CONFIG_PACKAGE_luci-app-nlbwmon=y
         CONFIG_PACKAGE_luci-app-serverchan=y
         CONFIG_PACKAGE_luci-app-ssr-plus=y
@@ -221,13 +235,16 @@ jobs:
         CONFIG_PACKAGE_luci-app-wol=y
         CONFIG_PACKAGE_luci-app-wrtbwmon=y
         CONFIG_PACKAGE_luci-app-ramfree=y
+        CONFIG_PACKAGE_luci-app-rclone=y
         CONFIG_PACKAGE_luci-app-usb-printer=y
         CONFIG_PACKAGE_luci-app-upnp=y
         CONFIG_PACKAGE_luci-app-vsftpd=y
         CONFIG_PACKAGE_luci-app-v2ray-server=y
         CONFIG_PACKAGE_luci-app-vlmcsd=y
         CONFIG_PACKAGE_luci-app-webadmin=y
+        CONFIG_PACKAGE_luci-app-watchcat=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-unblockneteasemusic=y
         CONFIG_PACKAGE_luci-app-passwall=y
         CONFIG_PACKAGE_luci-app-passwall2=y
         CONFIG_PACKAGE_luci-app-ipsec-server=y
@@ -238,7 +255,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-transmission=y
         CONFIG_PACKAGE_luci-app-kodexplorer=y
         CONFIG_PACKAGE_luci-app-openclash=y
-        CONFIG_PACKAGE_luci-app-xunlei=y
+        CONFIG_PACKAGE_luci-app-thunder=y
         CONFIG_PACKAGE_luci-app-zerotier=y
         EOF
 
@@ -292,6 +309,30 @@ jobs:
         CONFIG_PACKAGE_losetup=y
         CONFIG_PACKAGE_tar=y
         CONFIG_PACKAGE_uuidgen=y
+        EOF
+
+        # 无线驱动
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_kmod-ath=y
+        CONFIG_ATH_USER_REGD=y
+        CONFIG_PACKAGE_ATH_DFS=y
+        CONFIG_PACKAGE_kmod-ath6kl=y
+        CONFIG_PACKAGE_kmod-ath6kl-usb=y
+        CONFIG_PACKAGE_kmod-brcmfmac=y
+        CONFIG_BRCMFMAC_SDIO=y
+        CONFIG_PACKAGE_kmod-brcmutil=y
+        CONFIG_PACKAGE_kmod-carl9170=y
+        CONFIG_PACKAGE_kmod-cfg80211=y
+        CONFIG_PACKAGE_kmod-mac80211=y
+        CONFIG_PACKAGE_MAC80211_MESH=y
+        CONFIG_PACKAGE_kmod-mt7601u=y
+        CONFIG_PACKAGE_kmod-rsi91x=y
+        CONFIG_PACKAGE_kmod-rsi91x-usb=y
+        CONFIG_PACKAGE_kmod-rtl8192c-common=y
+        CONFIG_PACKAGE_kmod-rtl8192cu=y
+        CONFIG_PACKAGE_kmod-rtl8723bs=y
+        CONFIG_PACKAGE_kmod-rtlwifi=y
+        CONFIG_PACKAGE_kmod-rtlwifi-usb=y
         EOF
 
         # 可选软件包
@@ -354,6 +395,7 @@ jobs:
       run: |
         df -hT
         cd openwrt
+        cp -f .config bin/config
         echo "开始清理空间"
         sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT
@@ -369,25 +411,38 @@ jobs:
         rm -rf packages
         echo "status=success" >> ${GITHUB_OUTPUT}
 
+#    - name: Package Armvirt as OpenWrt
+#      if: steps.organize.outputs.status == 'success' && !cancelled()
+#      uses: ophub/flippy-openwrt-actions@main
+#      env:
+#        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
+#        PACKAGE_SOC: s905d_s905x3
+#        WHOAMI: Wing
+#        KERNEL_AUTO_LATEST: true
+#        KERNEL_VERSION_NAME: 5.15.y_6.1.y_6.6.y
+#        OPENWRT_VER: ${{ env.VER }}
+#        DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
+#        DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
+#        GZIP_IMGS: .gz
+#        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Package Armvirt as OpenWrt
       if: steps.organize.outputs.status == 'success' && !cancelled()
-      uses: ophub/flippy-openwrt-actions@main
-      env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
-        PACKAGE_SOC: s905d_s905x3
-        WHOAMI: Wing
-        KERNEL_AUTO_LATEST: true
-        OPENWRT_VER: ${{ env.VER }}
-        DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
-        DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
-        GZIP_IMGS: .gz
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: ophub/amlogic-s9xxx-openwrt@main
+      with:
+        openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
+        kernel_usage: flippy
+        openwrt_board: s905x3_s905d
+        openwrt_kernel: 6.1.y_6.6.y
+        auto_kernel: true
+        builder_name: Wing
 
     - name: Calculate MD5
       run: |
         cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
+        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
-        MD5=$(md5sum * | sed ':a;N;$!ba;s/\n/<br>/g')
+        MD5=$(md5sum *.gz | sed ':a;N;$!ba;s/\n/<br>/g')
         echo "MD5=$MD5" >> $GITHUB_ENV
 
     - name: Upload artifact to Actions
@@ -431,7 +486,7 @@ jobs:
       uses: dev-drprasad/delete-older-releases@master
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       with:
-        repo: OldCoding/ArmRootfs
+        repo: OldCoding/openwrt_packit_arm
         keep_latest: 30
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
