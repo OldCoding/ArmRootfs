@@ -61,7 +61,11 @@ svn_export "main" "general/golang" "feeds/packages/lang/golang" "https://github.
 #pushd package/luci-app-openclash/tools/po2lmo
 #make && sudo make install
 #popd
-#
+
+# 安装插件
+./scripts/feeds update -l
+./scripts/feeds install -a
+
 # 调整菜单位置
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-aria2/root/usr/share/luci/menu.d/luci-app-aria2.json
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json
