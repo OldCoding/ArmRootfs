@@ -57,7 +57,7 @@ svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdn
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
 svn_export "main" "general/golang" "feeds/packages/lang/golang" "https://github.com/breakings/OpenWrt"
 
-rm -rf ./package/emortal/autocore
+rm -rf ./package/lean/autocore
 
 git clone --depth 1 https://github.com/sbwml/autocore-arm package/emortal/autocore
 
