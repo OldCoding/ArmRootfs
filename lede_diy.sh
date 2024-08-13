@@ -59,7 +59,7 @@ svn_export "main" "general/golang" "feeds/packages/lang/golang" "https://github.
 
 rm -rf ./package/lean/autocore
 
-git clone --depth 1 https://github.com/sbwml/autocore-arm package/emortal/autocore
+git clone --depth 1 https://github.com/sbwml/autocore-arm package/lean/autocore
 
 # 编译 po2lmo (如果有po2lmo可跳过)
 #pushd package/luci-app-openclash/tools/po2lmo
