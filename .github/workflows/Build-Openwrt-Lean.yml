@@ -339,6 +339,7 @@ jobs:
 
         # 可选软件包
         cat >> .config <<EOF
+        CONFIG_PACKAGE_ariang=y
         CONFIG_PACKAGE_acpid=y
         CONFIG_PACKAGE_bind-host=y
         CONFIG_PACKAGE_kmod-brcmfmac=y
