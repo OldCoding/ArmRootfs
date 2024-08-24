@@ -47,7 +47,7 @@ svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.
 svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
+svn_export "master" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
 svn_export "main" "general/golang" "feeds/packages/lang/golang" "https://github.com/breakings/OpenWrt"
 
 # 编译 po2lmo (如果有po2lmo可跳过)
@@ -70,10 +70,10 @@ sed -i "s|s9xxx_lede|ARMv8-le|g" luci-app-amlogic/root/etc/config/amlogic
 curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt
 # OpenClash
 cd ./luci-app-openclash/root/etc/openclash
-CORE_VER=https://github.com/vernesong/OpenClash/raw/core/dev/core_version
-CORE_TUN=https://github.com/vernesong/OpenClash/raw/core/dev/premium/clash-linux-arm64
-CORE_DEV=https://github.com/vernesong/OpenClash/raw/core/dev/dev/clash-linux-arm64.tar.gz
-CORE_MATE=https://github.com/vernesong/OpenClash/raw/core/dev/meta/clash-linux-arm64.tar.gz
+CORE_VER=https://github.com/vernesong/OpenClash/raw/core/master/core_version
+CORE_TUN=https://github.com/vernesong/OpenClash/raw/core/master/premium/clash-linux-arm64
+CORE_DEV=https://github.com/vernesong/OpenClash/raw/core/master/dev/clash-linux-arm64.tar.gz
+CORE_MATE=https://github.com/vernesong/OpenClash/raw/core/master/meta/clash-linux-arm64.tar.gz
 TUN_VER=$(curl -sfL $CORE_VER | sed -n "2{s/\r$//;p;q}")
 curl -sfL -o ./Country.mmdb https://github.com/alecthw/mmdb_china_ip_list/raw/release/Country.mmdb
 curl -sfL -o ./GeoSite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat
