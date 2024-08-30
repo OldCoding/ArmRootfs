@@ -41,10 +41,11 @@ jobs:
     - name: Package Armvirt as OpenWrt
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-im/openwrt-armvirt-64-generic-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-op/openwrt-armvirt-64-generic-rootfs.tar.gz
         PACKAGE_SOC: all
         WHOAMI: Wing
         KERNEL_AUTO_LATEST: true
+        KERNEL_REPO_URL: ophub/kernel
         OPENWRT_VER: ${{ env.VER }}
         DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
         DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
@@ -81,7 +82,6 @@ jobs:
           - 默认密码：password
           - 当前使用版本:【编译前的最后一次[➦主源码](${{ env.REPO_URL }})更新记录】
           - 固件请使用晶晨宝盒刷入
-          ${{ env.useVersionInfo }}
           - 下载后请仔细校验MD5，如不正确请重新下载
           `md5sum`
           > ${{ env.MD5 }}
