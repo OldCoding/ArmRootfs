@@ -90,7 +90,10 @@ jobs:
         echo "VER=$VER" >> $GITHUB_ENV
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
+      run: |
+       cd openwrt 
+       sed -i ':a;N;$!ba;s/\/luci/\/luci.git;openwrt-23.05/g' feeds.conf.default
+       ./scripts/feeds update -a && ./scripts/feeds install -a
 
     - name: File Diy Patch
       run: |
@@ -101,7 +104,6 @@ jobs:
     - name: Generate configuration file
       run: |
         cd openwrt
-        ls
         rm -f ./.config*
         touch ./.config
 
@@ -183,6 +185,8 @@ jobs:
         CONFIG_PACKAGE_ddns-scripts_no-ip_com=y
         CONFIG_PACKAGE_ddns-scripts_nsupdate=y
         CONFIG_PACKAGE_ddns-scripts_route53-v1=y
+        CONFIG_PACKAGE_ddns-scripts_aliyun=y
+        CONFIG_PACKAGE_ddns-scripts_dnspod=y
         EOF
 
         # 镜像设置
@@ -224,7 +228,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-mosdns=y
         CONFIG_PACKAGE_luci-app-minidlna=y
         CONFIG_PACKAGE_luci-app-nlbwmon=y
-        CONFIG_PACKAGE_luci-app-serverchan=y
         CONFIG_PACKAGE_luci-app-ssr-plus=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
         CONFIG_PACKAGE_luci-app-pushbot=y
@@ -242,6 +245,7 @@ jobs:
         CONFIG_PACKAGE_luci-app-v2ray-server=y
         CONFIG_PACKAGE_luci-app-vlmcsd=y
         CONFIG_PACKAGE_luci-app-webadmin=y
+        CONFIG_PACKAGE_luci-app-wechatpush=y
         CONFIG_PACKAGE_luci-app-watchcat=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
         CONFIG_PACKAGE_luci-app-unblockneteasemusic=y
@@ -250,12 +254,13 @@ jobs:
         CONFIG_PACKAGE_luci-app-ipsec-server=y
         CONFIG_PACKAGE_luci-app-pptp-server=y
         CONFIG_PACKAGE_luci-app-sqm=y
-        CONFIG_PACKAGE_luci-app-qbittorrent-ee=y
+        CONFIG_PACKAGE_luci-app-qbittorrent=y
         CONFIG_PACKAGE_luci-app-aria2=y
         CONFIG_PACKAGE_luci-app-transmission=y
+        CONFIG_PACKAGE_transmission-daemon=y
+        CONFIG_PACKAGE_transmission-web-control=y
         CONFIG_PACKAGE_luci-app-kodexplorer=y
         CONFIG_PACKAGE_luci-app-openclash=y
-        CONFIG_PACKAGE_luci-app-thunder=y
         CONFIG_PACKAGE_luci-app-zerotier=y
         EOF
 
@@ -263,7 +268,6 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-app-argon-config=y
-        CONFIG_PACKAGE_luci-theme-design=y
         EOF
 
         # 常用软件包:
@@ -275,6 +279,7 @@ jobs:
         CONFIG_PACKAGE_libarchive=y
         CONFIG_PACKAGE_lsof=y
         # CONFIG_PACKAGE_luci-app-unblockmusic is not set
+        # CONFIG_PACKAGE_coremark is not set
         EOF
 
         # 必备软件包:
@@ -337,13 +342,16 @@ jobs:
 
         # 可选软件包
         cat >> .config <<EOF
+        CONFIG_PACKAGE_ariang=y
         CONFIG_PACKAGE_acpid=y
+        CONFIG_PACKAGE_samba4-utils=y
         CONFIG_PACKAGE_bind-host=y
         CONFIG_PACKAGE_kmod-brcmfmac=y
         CONFIG_PACKAGE_kmod-brcmutil=y
         CONFIG_PACKAGE_kmod-cfg80211=y
         CONFIG_PACKAGE_kmod-mac80211=y
         CONFIG_PACKAGE_hostapd-common=y
+        CONFIG_PACKAGE_libopenssl-legacy=y
         CONFIG_PACKAGE_wpa-cli=y
         CONFIG_PACKAGE_p54-usb-firmware=y
         CONFIG_PACKAGE_r8152-firmware=y
@@ -419,7 +427,7 @@ jobs:
         PACKAGE_SOC: s905d_s905x3
         WHOAMI: Wing
         KERNEL_AUTO_LATEST: true
-        KERNEL_VERSION_NAME: 5.15.y_6.1.y_6.6.y
+        KERNEL_REPO_URL: OldCoding/openwrt_packit_arm
         OPENWRT_VER: ${{ env.VER }}
         DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
         DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
@@ -440,7 +448,8 @@ jobs:
     - name: Calculate MD5
       run: |
         cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
-        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}
+        #cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/*rootfs.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
+        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config.txt
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
         MD5=$(md5sum *.gz | sed ':a;N;$!ba;s/\n/<br>/g')
         echo "MD5=$MD5" >> $GITHUB_ENV
