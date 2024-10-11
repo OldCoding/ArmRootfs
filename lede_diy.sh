@@ -121,7 +121,7 @@ git clone --depth 1 https://github.com/sbwml/autocore-arm package/lean/autocore
 # 安装插件
 ./scripts/feeds update -l
 ./scripts/feeds install -a
-
+set -x
 # 调整菜单位置
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-aria2/root/usr/share/luci/menu.d/luci-app-aria2.json
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json
