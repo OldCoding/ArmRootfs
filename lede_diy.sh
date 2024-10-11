@@ -46,6 +46,7 @@ rm -rf feeds/packages/libs/tiff
 rm -rf feeds/packages/libs/libdht
 rm -rf feeds/packages/libs/libutp
 rm -rf feeds/packages/libs/libb64
+rm -rf feeds/packages/libs/tiff
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
 #git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
@@ -91,6 +92,7 @@ svn_export "master" "libs/tiff" "feeds/packages/libs/tiff" "https://github.com/i
 svn_export "master" "libs/libdht" "feeds/packages/libs/libdht" "https://github.com/immortalwrt/packages"
 svn_export "master" "libs/libutp" "feeds/packages/libs/libutp" "https://github.com/immortalwrt/packages"
 svn_export "master" "libs/libb64" "feeds/packages/libs/libb64" "https://github.com/immortalwrt/packages"
+svn_export "master" "libs/tiff" "feeds/packages/libs/tiff" "https://github.com/immortalwrt/packages"
 svn_export "master" "net/wget" "feeds/packages/net/wget" "https://github.com/immortalwrt/packages"
 svn_export "master" "utils/docker-compose" "feeds/packages/utils/docker-compose" "https://github.com/immortalwrt/packages"
 svn_export "master" "utils/docker" "feeds/packages/utils/docker" "https://github.com/immortalwrt/packages"
