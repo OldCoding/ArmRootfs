@@ -46,7 +46,6 @@ rm -rf feeds/packages/libs/tiff
 rm -rf feeds/packages/libs/libdht
 rm -rf feeds/packages/libs/libutp
 rm -rf feeds/packages/libs/libb64
-rm -rf feeds/packages/libs/tiff
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
 #git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
@@ -92,7 +91,6 @@ svn_export "master" "libs/tiff" "feeds/packages/libs/tiff" "https://github.com/i
 svn_export "master" "libs/libdht" "feeds/packages/libs/libdht" "https://github.com/immortalwrt/packages"
 svn_export "master" "libs/libutp" "feeds/packages/libs/libutp" "https://github.com/immortalwrt/packages"
 svn_export "master" "libs/libb64" "feeds/packages/libs/libb64" "https://github.com/immortalwrt/packages"
-svn_export "master" "libs/tiff" "feeds/packages/libs/tiff" "https://github.com/immortalwrt/packages"
 svn_export "master" "net/wget" "feeds/packages/net/wget" "https://github.com/immortalwrt/packages"
 svn_export "master" "utils/docker-compose" "feeds/packages/utils/docker-compose" "https://github.com/immortalwrt/packages"
 svn_export "master" "utils/docker" "feeds/packages/utils/docker" "https://github.com/immortalwrt/packages"
@@ -121,7 +119,7 @@ git clone --depth 1 https://github.com/sbwml/autocore-arm package/lean/autocore
 # 安装插件
 ./scripts/feeds update -l
 ./scripts/feeds install -a
-set -x
+
 # 调整菜单位置
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-aria2/root/usr/share/luci/menu.d/luci-app-aria2.json
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json
@@ -142,9 +140,9 @@ sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
 sed -i "s|breakings|OldCoding|g" luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|OpenWrt|openwrt_packit_arm|g" luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|s9xxx_lede|ARMv8-le|g" luci-app-amlogic/root/etc/config/amlogic
-sed -i "s/openwrt_luci/openwrt_core/g" lean/default-settings/files/zzz-default-settings
-sed -i "s/snapshots/armvirt\\\/64/g"  lean/default-settings/files/zzz-default-settings
-sed -i "s/releases\\\/18.06.9/armsr\\\/armv8/g"  lean/default-settings/files/zzz-default-settings
+sed -i "s|openwrt_luci|openwrt_core|g" lean/default-settings/files/zzz-default-settings
+sed -i "s|snapshots|armvirt\\\/64|g"  lean/default-settings/files/zzz-default-settings
+sed -i "s|releases\\\/18.06.9|armsr\\\/armv8|g"  lean/default-settings/files/zzz-default-settings
 # 汉化
 curl -sfL -o ./convert_translation.sh https://github.com/kenzok8/small-package/raw/main/.github/diy/convert_translation.sh
 chmod +x ./convert_translation.sh && bash ./convert_translation.sh
