@@ -26,6 +26,8 @@ rm -rf feeds/luci/applications/luci-app-ddns
 rm -rf feeds/luci/applications/luci-app-transmission
 rm -rf feeds/luci/applications/luci-app-zerotier
 rm -rf feeds/luci/applications/luci-app-filebrowser
+rm -rf feeds/luci/applications/luci-app-openclash
+rm -rf feeds/luci/applications/luci-app-alist
 rm -rf feeds/packages/net/transmission-web-control
 rm -rf feeds/packages/net/transmission
 rm -rf feeds/packages/net/zerotier
