@@ -47,6 +47,7 @@ rm -rf feeds/packages/net/wget
 rm -rf feeds/packages/utils/ttyd
 rm -rf feeds/packages/utils/runc
 rm -rf feeds/packages/utils/containerd
+rm -rf feeds/packages/utils/coremark
 rm -rf feeds/packages/libs/tiff
 rm -rf feeds/packages/libs/libdht
 rm -rf feeds/packages/libs/libutp
@@ -124,7 +125,7 @@ git clone --depth 1 https://github.com/sbwml/autocore-arm package/lean/autocore
 #popd
 
 # 安装插件
-./scripts/feeds update -l
+./scripts/feeds update -i
 ./scripts/feeds install -a
 
 # 调整菜单位置
@@ -140,7 +141,6 @@ sed -i "s|services|network|g" feeds/luci/applications/luci-app-nlbwmon/root/usr/
 # 微信推送&全能推送
 sed -i "s|qidian|bilibili|g" feeds/luci/applications/luci-app-pushbot/root/usr/bin/pushbot/pushbot
 # 个性化设置
-sed -i "s/ech/\#ech/g" feeds/packages/utils/coremark/coremark
 cd package
 sed -i "s/OpenWrt /Wing build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" lean/default-settings/files/zzz-default-settings
 sed -i "/firewall\.user/d" lean/default-settings/files/zzz-default-settings
