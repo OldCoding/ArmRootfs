@@ -32,6 +32,7 @@ rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/packages/net/transmission-web-control
 rm -rf feeds/packages/net/transmission
 rm -rf feeds/packages/net/zerotier
+rm -rf feeds/packages/net/alist
 rm -rf feeds/applications/luci-app-aria2
 rm -rf feeds/packages/libs/libtorrent-rasterbar
 rm -rf feeds/packages/net/mosdns
