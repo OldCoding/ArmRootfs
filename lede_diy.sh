@@ -54,13 +54,12 @@ rm -rf feeds/packages/libs/libutp
 rm -rf feeds/packages/libs/libb64
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
-#git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
+
 # 下载插件
 git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot feeds/luci/applications/luci-app-pushbot
 git clone --depth 1 https://github.com/danchexiaoyang/luci-app-kodexplorer package/luci-app-kodexplorer
 git clone --depth 1 https://github.com/sbwml/luci-app-alist package/luci-app-alist
 git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
-#git clone --depth 1 https://github.com/lxl6125/openwrt-qbittorrent-enhanced package/openwrt-qbittorrent-enhanced
 git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/tty228/luci-app-wechatpush package/luci-app-wechatpush
@@ -108,7 +107,6 @@ svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https:
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/immortalwrt/packages"
 svn_export "master" "lang/php8" "feeds/packages/lang/php8" "https://github.com/immortalwrt/packages"
 svn_export "master" "utils/ttyd" "feeds/packages/utils/ttyd" "https://github.com/immortalwrt/packages"
-#svn_export "main" "luci-app-kodexplorer" "package/luci-app-kodexplorer" "https://github.com/kenzok8/small-package"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
 svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
