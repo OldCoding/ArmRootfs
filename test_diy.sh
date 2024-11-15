@@ -14,13 +14,13 @@ svn_export() {
 
 git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
 
-
-latest_ver=$(wget-ssl --no-check-certificate -t 2 -T 20 -O - https://api.github.com/repos/XGHeaven/homebox/releases/latest 2>/dev/null|grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g' 2>/dev/null)
+homever=
+latest_ver=$(wget-ssl --no-check-certificate -t 2 -T 20 -O - https://api.github.com/repos/XGHeaven/homebox/releases/latest 2>/dev/null|grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
 echo -e "$latest_ver"
 sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=$latest_ver/" package/netspeedtest/homebox/Makefile
 
 echo "*********"
-echo -e "$(cat package/netspeedtest/homebox/Makefile | grep PKG_VERSION) \n"
+echo -e "$(cat package/netspeedtest/homebox/Makefile) \n"
 echo "*********"
 
 # 汉化
