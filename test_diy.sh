@@ -32,6 +32,10 @@ git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtes
 latest_ver="$(wget-ssl --no-check-certificate -t 2 -T 20 -O - https://api.github.com/repos/XGHeaven/homebox/releases/latest 2>/dev/null|grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g' 2>/dev/null)"
 sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver}/" package/netspeedtest/homebox/Makefile
 
+echo "*********"
+echo -e "$(cat package/netspeedtest/homebox/Makefile | grep PKG_VERSION) \n"
+echo "*********"
+
 # 汉化
 curl -sfL -o ./convert_translation.sh https://github.com/kenzok8/small-package/raw/main/.github/diy/convert_translation.sh
 chmod +x ./convert_translation.sh && bash ./convert_translation.sh
