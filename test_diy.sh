@@ -15,9 +15,9 @@ svn_export() {
 git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
 
 homever=
-latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g'|:2)
-echo -e "$latest_ver"
-sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=$latest_ver/" package/netspeedtest/homebox/Makefile
+latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
+echo -e "${latest_ver:1}"
+sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:1}/" package/netspeedtest/homebox/Makefile
 
 echo "*********"
 echo -e "$(cat package/netspeedtest/homebox/Makefile) \n"
