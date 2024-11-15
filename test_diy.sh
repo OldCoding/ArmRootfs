@@ -12,25 +12,11 @@ svn_export() {
 	rm -rf "$TMP_DIR"
 }
 
-# 删除冲突软件和依赖
-curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
-
-
-# 下载插件
-
 git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
 
-# 编译 po2lmo (如果有po2lmo可跳过)
-#pushd package/luci-app-openclash/tools/po2lmo
-#make && sudo make install
-#popd
-
-# 安装插件
-./scripts/feeds update -i
-./scripts/feeds install -a
 
 latest_ver=$(wget-ssl --no-check-certificate -t 2 -T 20 -O - https://api.github.com/repos/XGHeaven/homebox/releases/latest 2>/dev/null|grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g' 2>/dev/null)
-echo $latest_ver
+echo -e "$latest_ver"
 sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=$latest_ver/" package/netspeedtest/homebox/Makefile
 
 echo "*********"
