@@ -201,73 +201,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-netspeedtest=y
         EOF
 
-        # 常用软件包:
-        cat >> .config <<EOF
-        CONFIG_PACKAGE_autocore-arm=y
-        CONFIG_PACKAGE_autosamba=y
-        CONFIG_PACKAGE_automount=y
-        CONFIG_PACKAGE_block-mount=y
-        CONFIG_PACKAGE_libarchive=y
-        CONFIG_PACKAGE_lsof=y
-        # CONFIG_PACKAGE_luci-app-unblockmusic is not set
-        EOF
-
-        # 必备软件包:
-        cat >> .config <<EOF
-        CONFIG_PACKAGE_perl=y
-        CONFIG_PACKAGE_perl-http-date=y
-        CONFIG_PACKAGE_perlbase-file=y
-        CONFIG_PACKAGE_perlbase-getopt=y
-        CONFIG_PACKAGE_perlbase-time=y
-        CONFIG_PACKAGE_perlbase-unicode=y
-        CONFIG_PACKAGE_perlbase-utf8=y
-        CONFIG_PACKAGE_blkid=y
-        CONFIG_PACKAGE_fdisk=y
-        CONFIG_PACKAGE_lsblk=y
-        CONFIG_PACKAGE_parted=y
-        CONFIG_PACKAGE_attr=y
-        CONFIG_PACKAGE_btrfs-progs=y
-        CONFIG_BTRFS_PROGS_ZSTD=y
-        CONFIG_PACKAGE_chattr=y
-        CONFIG_PACKAGE_dosfstools=y
-        CONFIG_PACKAGE_e2fsprogs=y
-        CONFIG_PACKAGE_f2fs-tools=y
-        CONFIG_PACKAGE_f2fsck=y
-        CONFIG_PACKAGE_lsattr=y
-        CONFIG_PACKAGE_mkf2fs=y
-        CONFIG_PACKAGE_xfs-fsck=y
-        CONFIG_PACKAGE_xfs-mkfs=y
-        CONFIG_PACKAGE_bsdtar=y
-        CONFIG_PACKAGE_bash=y
-        CONFIG_PACKAGE_gawk=y
-        CONFIG_PACKAGE_getopt=y
-        CONFIG_PACKAGE_losetup=y
-        CONFIG_PACKAGE_tar=y
-        CONFIG_PACKAGE_uuidgen=y
-        EOF
-
-        # 可选软件包
-        cat >> .config <<EOF
-        CONFIG_PACKAGE_ariang=y
-        CONFIG_PACKAGE_acpid=y
-        CONFIG_PACKAGE_samba4-utils=y
-        CONFIG_PACKAGE_bind-host=y
-        CONFIG_PACKAGE_kmod-brcmfmac=y
-        CONFIG_PACKAGE_kmod-brcmutil=y
-        CONFIG_PACKAGE_kmod-cfg80211=y
-        CONFIG_PACKAGE_kmod-mac80211=y
-        CONFIG_PACKAGE_hostapd-common=y
-        CONFIG_PACKAGE_libopenssl-legacy=y
-        CONFIG_PACKAGE_wpa-cli=y
-        CONFIG_PACKAGE_p54-usb-firmware=y
-        CONFIG_PACKAGE_r8152-firmware=y
-        CONFIG_PACKAGE_rs9113-firmware=y
-        CONFIG_PACKAGE_rt2800-usb-firmware=y
-        CONFIG_PACKAGE_rt73-usb-firmware=y
-        CONFIG_PACKAGE_rtl8192cu-firmware=y
-        CONFIG_PACKAGE_wireless-regdb=y
-        EOF
-
         # 
         # ========================固件定制部分结束========================
         # 
@@ -291,7 +224,8 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        make -j$(nproc)
+        #make -j$(nproc)
+        make package/netspeedtest/luci-app-netspeedtest/compile V=99
         echo "status=success" >> ${GITHUB_OUTPUT}
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
@@ -302,7 +236,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "1 thread compile debug"
-        make -j1 V=s
+        #make -j1 V=s
 
     - name: Clean up server space
       if: steps.compile.outputs.status == 'success' && !cancelled()
