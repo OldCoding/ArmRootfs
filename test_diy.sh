@@ -23,6 +23,5 @@ echo "*********"
 echo -e "$(cat package/netspeedtest/homebox/Makefile) \n"
 echo "*********"
 
-# 汉化
-curl -sfL -o ./convert_translation.sh https://github.com/kenzok8/small-package/raw/main/.github/diy/convert_translation.sh
-chmod +x ./convert_translation.sh && bash ./convert_translation.sh
+./scripts/feeds update -i
+./scripts/feeds install -a
