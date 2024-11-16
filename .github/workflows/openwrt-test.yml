@@ -23,13 +23,13 @@ on:
     
 env:
   REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: master
+  REPO_BRANCH: main
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   DIY_SH: test_diy.sh
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
-  PRODUCT_NAME: ARMv8-le
+  PRODUCT_NAME: ARMv8-op
 
 
 jobs:
@@ -77,20 +77,20 @@ jobs:
 
     - name: Clone source code
       working-directory: /mnt
+      if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
       run: |
         df -hT $PWD
-        git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /mnt/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H<br/>")
-        VER=$(grep -E "='R.+" ./package/lean/default-settings/files/zzz-default-settings | cut -f2 -d"'")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
-        echo "VER=$VER" >> $GITHUB_ENV
+        echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
 
     - name: Update feeds
-      run:  cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
+      run: cd openwrt && ./scripts/feeds update -a
 
     - name: File Diy Patch
       run: |
@@ -137,11 +137,12 @@ jobs:
         # 无论你想要对固件进行怎样的定制, 都需要且只需要修改 EOF 回环内的内容.
         # 
 
+
         # 编译ARM固件:
         cat >> .config <<EOF
-        CONFIG_TARGET_armvirt=y
-        CONFIG_TARGET_armvirt_64=y
-        CONFIG_TARGET_armvirt_64_DEVICE_generic=y
+        CONFIG_TARGET_armsr=y
+        CONFIG_TARGET_armsr_armv8=y
+        CONFIG_TARGET_armsr_armv8_DEVICE_generic=y
         CONFIG_TARGET_ARCH_PACKAGES="aarch64_generic"
         CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe -mcpu=generic"
         CONFIG_CPU_TYPE="generic"
@@ -164,40 +165,46 @@ jobs:
 
         # IPv6支持:
         cat >> .config <<EOF
+        # CONFIG_PACKAGE_dnsmasq is not set
+        # CONFIG_PACKAGE_dnsmasq-dhcpv6 is not set
+        CONFIG_PACKAGE_dnsmasq-full=y
         CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
-        CONFIG_PACKAGE_ip6tables=y
         CONFIG_PACKAGE_ip6tables-extra=y
         CONFIG_PACKAGE_ip6tables-mod-nat=y
         CONFIG_PACKAGE_ipv6helper=y
         EOF
 
-
-
         # 镜像设置
         cat >> .config <<EOF
+        #
+        # Target Images
+        #
         # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_NONE is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_GZIP is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_BZIP2 is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZMA is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZO is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_LZ4 is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ is not set
-        # CONFIG_TARGET_INITRAMFS_COMPRESSION_ZSTD is not set
         CONFIG_EXTERNAL_CPIO=""
-        # CONFIG_TARGET_INITRAMFS_FORCE is not set
+
+        #
+        # Root filesystem archives
+        #
         # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
         CONFIG_TARGET_ROOTFS_TARGZ=y
+        #
+        # Root filesystem images
+        #
         # CONFIG_TARGET_ROOTFS_EXT4FS is not set
         # CONFIG_TARGET_ROOTFS_SQUASHFS is not set
         CONFIG_TARGET_UBIFS_FREE_SPACE_FIXUP=y
         CONFIG_TARGET_UBIFS_JOURNAL_SIZE=""
         # CONFIG_TARGET_IMAGES_GZIP is not set
+        #
+        # Image Options
+        #
+        # CONFIG_TARGET_ROOTFS_PERSIST_VAR is not set
+        # end of Target Images
+        # CONFIG_EXPERIMENTAL is not set
         EOF
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-turboacc=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
         EOF
 
@@ -224,8 +231,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        #make -j$(nproc)
-        make package/netspeedtest/luci-app-netspeedtest/compile V=99
+        make -j$(nproc)
         echo "status=success" >> ${GITHUB_OUTPUT}
         grep '^CONFIG_TARGET.*DEVICE.*=y' .config | sed -r 's/.*DEVICE_(.*)=y/\1/' > DEVICE_NAME
         [ -s DEVICE_NAME ] && echo "DEVICE_NAME=_$(cat DEVICE_NAME)" >> $GITHUB_ENV
@@ -236,7 +242,7 @@ jobs:
       run: |
         cd openwrt
         echo -e "1 thread compile debug"
-        #make -j1 V=s
+        make -j1 V=s
 
     - name: Clean up server space
       if: steps.compile.outputs.status == 'success' && !cancelled()
