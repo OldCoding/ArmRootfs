@@ -13,6 +13,7 @@ svn_export() {
 }
 
 rm -rf feeds/luci/applications/luci-app-passwall
+rm -rf feeds/packages/net/v2ray-geodata
 
 #git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
