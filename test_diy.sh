@@ -24,5 +24,5 @@ svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://git
 #sed -i "s/\$(PKG_VERSION)/${latest_ver:1}/" package/netspeedtest/homebox/Makefile
 #sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:14}/" package/netspeedtest/homebox/Makefile
 
-./scripts/feeds update -i
-./scripts/feeds install -a
+#./scripts/feeds update -i
+#./scripts/feeds install -a
