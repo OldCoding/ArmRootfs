@@ -205,7 +205,8 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-passwall=y
+        CONFIG_PACKAGE_luci-app-passwall2=y
         EOF
 
         # 
