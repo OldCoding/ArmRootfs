@@ -16,9 +16,9 @@ svn_export() {
 #rm -rf feeds/packages/net/v2ray-geodata
 
 #git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
-git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
-svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
+#git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
+#svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
+#svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
 
 #latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
 #sed -i "s/\$(PKG_VERSION)/${latest_ver:1}/" package/netspeedtest/homebox/Makefile
@@ -26,3 +26,7 @@ svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://git
 
 #./scripts/feeds update -i
 #./scripts/feeds install -a
+
+sed -i '1isrc-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main' feeds.conf.default
+sed -i '2isrc-git passwall https://github.com/xiaorouji/openwrt-passwall.git;main' feeds.conf.default
+sed -i '3isrc-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main' feeds.conf.default
