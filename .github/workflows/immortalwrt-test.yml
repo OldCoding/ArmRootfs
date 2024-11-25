@@ -89,14 +89,14 @@ jobs:
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
 
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
-
     - name: File Diy Patch
       run: |
         chmod +x $DIY_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_SH
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
 
     - name: Generate configuration file
       run: |
