@@ -24,6 +24,7 @@ git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtes
 latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
 sed -i "s/\$(PKG_VERSION)/${latest_ver:1}/" package/netspeedtest/homebox/Makefile
 sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:14}/" package/netspeedtest/homebox/Makefile
+sed -i "s/server/homebox/" package/netspeedtest/homebox/Makefile
 
 #./scripts/feeds update -i
 #./scripts/feeds install -a
