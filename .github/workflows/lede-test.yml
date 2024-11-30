@@ -65,8 +65,8 @@ jobs:
         #sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
         #sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap* aspnetcore*
         [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        sudo -E apt update
-        sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
         sudo -E apt-get -qq install libfuse-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
@@ -199,6 +199,47 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-turboacc=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_FEED_passwall_packages=y
+        CONFIG_FEED_passwall=y
+        CONFIG_FEED_passwall2=y
+        CONFIG_PACKAGE_luci-app-passwall=y
+        CONFIG_PACKAGE_luci-app-passwall_Iptables_Transparent_Proxy=y
+        CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
+        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
+        CONFIG_PACKAGE_luci-app-passwall2=y
+        CONFIG_PACKAGE_luci-app-passwall2_Iptables_Transparent_Proxy=y
+        CONFIG_PACKAGE_luci-app-passwall2_Nftables_Transparent_Proxy=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Haproxy=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Hysteria=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_NaiveProxy=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Client=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Server=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Client=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Server=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_ShadowsocksR_Libev_Client=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_ShadowsocksR_Libev_Server=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Simple_Obfs=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_SingBox=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_tuic_client=y
+        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_V2ray_Plugin=y
+        CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
+        CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
         EOF
 
         # 常用软件包:
