@@ -27,3 +27,6 @@ sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:14}/" package/netspeedtest/h
 
 #./scripts/feeds update -i
 #./scripts/feeds install -a
+echo "*****************"
+cat package/netspeedtest/homebox/Makefile
+echo "*****************"
