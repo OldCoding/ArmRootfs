@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: main
+  REPO_BRANCH: openwrt-24.10
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   DIY_SH: test_diy.sh

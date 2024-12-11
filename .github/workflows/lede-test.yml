@@ -198,7 +198,6 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-turboacc=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
         CONFIG_FEED_passwall_packages=y
         CONFIG_FEED_passwall=y

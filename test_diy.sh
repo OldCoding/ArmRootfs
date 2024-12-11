@@ -15,16 +15,18 @@ svn_export() {
 rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf feeds/packages/net/v2ray-geodata
 
-git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
 git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
+svn_export "master" "luci-app-netspeedtest" "package/luci-app-netspeedtest" "https://github.com/sirpdboy/netspeedtest"
+svn_export "master" "homebox" "package/homebox" "https://github.com/sirpdboy/netspeedtest"
 
+latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
+sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=$latest_ver/" package/homebox/Makefile
+sed -i 's/server/homebox/g' package/homebox/Makefile
 
-#latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
-#sed -i "s/\$(PKG_VERSION)/${latest_ver:1}/" package/netspeedtest/homebox/Makefile
-#sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:14}/" package/netspeedtest/homebox/Makefile
-#sed -i 's/server/homebox/g' package/netspeedtest/homebox/Makefile
-
+echo "*************************"
+cat package/homebox/Makefile
+echo "*************************"
 #./scripts/feeds update -i
 #./scripts/feeds install -a
