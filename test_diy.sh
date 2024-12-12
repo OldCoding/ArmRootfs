@@ -22,7 +22,7 @@ svn_export "master" "luci-app-netspeedtest" "package/luci-app-netspeedtest" "htt
 svn_export "master" "homebox" "package/homebox" "https://github.com/sirpdboy/netspeedtest"
 
 latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
-sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=$latest_ver/" package/homebox/Makefile
+sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:1}/" package/homebox/Makefile
 sed -i 's/server/homebox/g' package/homebox/Makefile
 
 echo "*************************"
