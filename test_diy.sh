@@ -23,8 +23,8 @@ svn_export "master" "homebox" "package/homebox" "https://github.com/sirpdboy/net
 
 #latest_ver=$(curl -sfL https://api.github.com/repos/XGHeaven/homebox/releases/latest |grep -E 'tag_name'|head -n1|cut -d '"' -f4|sed 's/\./\\\./g')
 #sed -i "s/PKG_VERSION:=.*/PKG_VERSION:=${latest_ver:1}/" package/homebox/Makefile
-#sed -i 's/server/homebox/g' package/homebox/Makefile
-cp -f $GITHUB_WORKSPACE/Makefile.txt package/homebox/Makefile
+sed -i 's/2023102203/2024101306/g' package/homebox/Makefile
+#cp -f $GITHUB_WORKSPACE/Makefile.txt package/homebox/Makefile
 
 echo "*************************"
 cat package/homebox/Makefile
