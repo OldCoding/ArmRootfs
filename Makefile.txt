@@ -51,8 +51,6 @@ endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_DATA) $(TOOLCHAIN_DIR)/lib/libm.so $(1)/usr/lib/libm.so.6
-	$(INSTALL_DATA) $(TOOLCHAIN_DIR)/lib/libc.so $(1)/usr/lib/libc.so.6
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/homebox-linux-$(H_ARCH) $(1)/usr/bin/homebox
 endef
 
