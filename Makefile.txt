@@ -34,7 +34,7 @@ define Package/$(PKG_NAME)
   CATEGORY:=Network
   TITLE:=A Toolbox for Home Local Networks
   URL:=https://github.com/XGHeaven/homebox
-  DEPENDS:=@(i386||x86_64||arm||aarch64||mipsel||mips) +libc
+  DEPENDS:=@(i386||x86_64||arm||aarch64||mipsel||mips) +libpcap
 endef
 
 define Package/$(PKG_NAME)/description
