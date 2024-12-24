@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: openwrt-24.10
+  REPO_BRANCH: main
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   DIY_SH: test_diy.sh
@@ -95,9 +95,13 @@ jobs:
 
     - name: File Diy Patch
       run: |
-        chmod +x $DIY_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_SH
+        #chmod +x $DIY_SH
+        #cd openwrt
+        #$GITHUB_WORKSPACE/$DIY_SH
+        rm -rf feeds/packages/net/v2ray-geodata
+        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
+        svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
+        svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
 
     - name: Generate configuration file
       run: |
