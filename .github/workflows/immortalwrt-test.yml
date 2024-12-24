@@ -99,7 +99,7 @@ jobs:
     - name: File Diy Patch
       run: |
         #chmod +x $DIY_SH
-        #cd openwrt
+        cd openwrt
         #$GITHUB_WORKSPACE/$DIY_SH
         rm -rf feeds/luci/applications/luci-app-passwall
         rm -rf feeds/packages/net/v2ray-geodata
