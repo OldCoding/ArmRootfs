@@ -104,8 +104,8 @@ jobs:
         rm -rf feeds/luci/applications/luci-app-passwall
         rm -rf feeds/packages/net/v2ray-geodata
         git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-        svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/xiaorouji/openwrt-passwall"
-        svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/xiaorouji/openwrt-passwall2"
+        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall
+        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2
 
     - name: Generate configuration file
       run: |
