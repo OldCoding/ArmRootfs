@@ -100,8 +100,8 @@ jobs:
         #$GITHUB_WORKSPACE/$DIY_SH
         rm -rf feeds/packages/net/v2ray-geodata
         git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2
+        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
+        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2 package/openwrt-passwall2
 
     - name: Generate configuration file
       run: |
