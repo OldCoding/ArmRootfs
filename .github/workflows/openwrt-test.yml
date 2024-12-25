@@ -104,6 +104,7 @@ jobs:
         git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
         git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
         git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2 package/openwrt-passwall2
+        curl -sfL https://github.com/sbwml/openwrt_helloworld/raw/refs/heads/v5/hysteria/Makefile > package/openwrt-passwall-packages/hysteria/Makefile
 
     - name: Generate configuration file
       run: |
