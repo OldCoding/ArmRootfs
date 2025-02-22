@@ -89,6 +89,7 @@ jobs:
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
         echo "VER=$VER" >> $GITHUB_ENV
+        echo "KERNEL_VER=$(cat $GITHUB_WORKSPACE/KernelVersion)" >> $GITHUB_ENV
 
     - name: Update feeds
       run:  cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
