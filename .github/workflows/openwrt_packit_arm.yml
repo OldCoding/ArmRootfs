@@ -42,7 +42,7 @@ jobs:
       uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMSR: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
-        PACKAGE_SOC: all
+        PACKAGE_SOC: s905d_s905x3
         WHOAMI: Wing
         KERNEL_AUTO_LATEST: true
         KERNEL_REPO_URL: OldCoding/openwrt_packit_arm
