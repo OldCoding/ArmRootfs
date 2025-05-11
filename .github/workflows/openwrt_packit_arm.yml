@@ -51,7 +51,7 @@ jobs:
         #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Package OpenWrt Firmware
-      uses: unifreq/openwrt_packit@master
+      uses: OldCoding/openwrt_packit@master
       env:
         OPENWRT_ARMSR: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
