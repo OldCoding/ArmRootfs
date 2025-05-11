@@ -20,7 +20,7 @@ on:
         default: 'false'
     
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
@@ -41,14 +41,11 @@ jobs:
     - name: Package Armvirt as OpenWrt
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-op/openwrt-armvirt-64-generic-rootfs.tar.gz
+        OPENWRT_ARMVIRT: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: all
         WHOAMI: Wing
         KERNEL_AUTO_LATEST: true
         KERNEL_REPO_URL: ophub/kernel
-        OPENWRT_VER: ${{ env.VER }}
-        DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
-        DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
