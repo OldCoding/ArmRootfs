@@ -50,10 +50,19 @@ jobs:
         #GZIP_IMGS: .gz
         #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo chmod 777 /mnt
+        df -Th
+      
     - name: File Diy Patch
+      working-directory: /mnt
       run: |
         chmod +x $GITHUB_WORKSPACE/test_diy.sh
         $GITHUB_WORKSPACE/test_diy.sh
+        
 
     - name: Package Armvirt as OpenWrt
       uses: unifreq/openwrt_packit@master
