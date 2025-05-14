@@ -49,22 +49,12 @@ jobs:
         #KERNEL_VERSION_NAME: 6.1.y_6.6.y_6.12.y
         #GZIP_IMGS: .gz
         #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
-      run: |
-        sudo chmod 777 /mnt
-        df -Th
       
     - name: File Diy Patch
-      working-directory: /mnt
       run: |
-        ln -sf /mnt $GITHUB_WORKSPACE
         chmod +x $GITHUB_WORKSPACE/test_diy.sh
         $GITHUB_WORKSPACE/test_diy.sh
         
-
     - name: Package Armvirt as OpenWrt
       uses: unifreq/openwrt_packit@master
       env:
@@ -76,8 +66,8 @@ jobs:
         KERNEL_VERSION_NAME: 6.1.y_6.6.y_6.12.y
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SCRIPT_S905D: $GITHUB_WORKSPACE/openwrt_packit/mk_s905d_n1.sh
-        SCRIPT_S905X3: $GITHUB_WORKSPACE/openwrt_packit/mk_s905x3_multi.sh
+        SCRIPT_S905D: /mnt/openwrt_packit/mk_s905d_n1.sh
+        SCRIPT_S905X3: /mnt/openwrt_packit/mk_s905x3_multi.sh
 
     - name: Calculate MD5
       run: |
