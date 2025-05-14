@@ -13,5 +13,5 @@ svn_export() {
 }
 
 # 打包脚本修改
-cd /mnt && git clone --depth 1 https://github.com/unifreq/openwrt_packit
+sudo chmod 777 /mnt && cd /mnt && git clone --depth 1 https://github.com/unifreq/openwrt_packit
 sed -i '/write_release_info/d' /mnt/openwrt_packit/mk_*.sh
