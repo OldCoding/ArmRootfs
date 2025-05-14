@@ -57,7 +57,7 @@ jobs:
         $GITHUB_WORKSPACE/test_diy.sh
         
     - name: Package Armvirt as OpenWrt
-      uses: unifreq/openwrt_packit@master
+      uses: ophub/flippy-openwrt-actions@main
       env:
         OPENWRT_ARMSR: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
