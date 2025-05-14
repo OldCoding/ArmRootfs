@@ -50,8 +50,13 @@ jobs:
         #GZIP_IMGS: .gz
         #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: File Diy Patch
+      run: |
+        chmod +x $DIY_SH
+        $GITHUB_WORKSPACE/test_diy.sh
+
     - name: Package Armvirt as OpenWrt
-      uses: OldCoding/openwrt_packit@master
+      uses: unifreq/openwrt_packit@master
       env:
         OPENWRT_ARMSR: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         PACKAGE_SOC: s905d_s905x3
@@ -61,6 +66,8 @@ jobs:
         KERNEL_VERSION_NAME: 6.1.y_6.6.y_6.12.y
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SCRIPT_S905D: $GITHUB_WORKSPACE/openwrt_packit/mk_s905d_n1.sh
+        SCRIPT_S905X3: $GITHUB_WORKSPACE/openwrt_packit/mk_s905x3_multi.sh
 
     - name: Calculate MD5
       run: |
