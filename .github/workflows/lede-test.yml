@@ -199,48 +199,6 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-netspeedtest=y
-        CONFIG_FEED_passwall_packages=y
-        CONFIG_FEED_passwall=y
-        CONFIG_FEED_passwall2=y
-        CONFIG_PACKAGE_luci-app-passwall=y
-        CONFIG_PACKAGE_luci-app-passwall_Iptables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
-        CONFIG_PACKAGE_luci-app-passwall2=y
-        CONFIG_PACKAGE_luci-app-passwall2_Iptables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_Nftables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Haproxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Hysteria=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_NaiveProxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Server=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Server=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_ShadowsocksR_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_ShadowsocksR_Libev_Server=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Simple_Obfs=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_SingBox=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_tuic_client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_V2ray_Plugin=y
-        CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
-        CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
         EOF
 
         # 常用软件包:
@@ -352,6 +310,7 @@ jobs:
         df -hT
         cd openwrt
         cp -f .config bin/config
+        cp -f 10_system.js bin/10_system.txt
         echo "开始清理空间"
         sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT
@@ -398,6 +357,7 @@ jobs:
         cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
         #cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/*rootfs.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
         cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config.txt
+        cp $GITHUB_WORKSPACE/openwrt/bin/10_system.txt ${{ env.PACKAGED_OUTPUTPATH }}/10_system.txt
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
         MD5=$(md5sum *.gz | sed ':a;N;$!ba;s/\n/<br>/g')
         echo "MD5=$MD5" >> $GITHUB_ENV

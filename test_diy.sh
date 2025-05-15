@@ -18,3 +18,4 @@ sed -i "s|snapshots|armvirt\\\/64|g"  package/lean/default-settings/files/zzz-de
 sed -i "s|releases\\\/18.06.9|armsr\\\/armv8|g"  package/lean/default-settings/files/zzz-default-settings
 sed -i "/openwrt_release/d" package/lean/default-settings/files/zzz-default-settings
 sed -i "s|99-default-settings|99-default-settings-chinese|g" package/lean/default-settings/Makefile
+cp ./feeds/luci/modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js ./
