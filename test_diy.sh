@@ -12,6 +12,9 @@ svn_export() {
 	rm -rf "$TMP_DIR"
 }
 
-# 打包脚本修改
-sudo chmod 777 /mnt && cd /mnt && git clone --depth 1 https://github.com/unifreq/openwrt_packit
-sed -i '/write_release_info/d' /mnt/openwrt_packit/mk_*.sh
+sed -i "s/(\(luciversion || ''\))/(\1) + (' \/ Wing build $(TZ=UTC-8 date "+%Y.%m.%d")')/g" $(find ./feeds/luci/modules/luci-mod-status/ -type f -name "10_system.js")
+sed -i "s|openwrt_luci|openwrt_core|g" package/lean/default-settings/files/zzz-default-settings
+sed -i "s|snapshots|armvirt\\\/64|g"  package/lean/default-settings/files/zzz-default-settings
+sed -i "s|releases\\\/18.06.9|armsr\\\/armv8|g"  package/lean/default-settings/files/zzz-default-settings
+sed -i "/openwrt_release/d" package/lean/default-settings/files/zzz-default-settings
+sed -i "s|99-default-settings|99-default-settings-chinese|g" package/lean/default-settings/Makefile
