@@ -26,7 +26,7 @@ env:
   REPO_BRANCH: master
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
-  DIY_SH: lede_diy.sh
+  DIY_SH: test_diy.sh
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
   PRODUCT_NAME: ARMv8-le
