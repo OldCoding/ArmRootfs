@@ -147,8 +147,8 @@ git clone --depth 1 https://github.com/sbwml/autocore-arm package/lean/autocore
 #popd
 
 # 安装插件
-#./scripts/feeds update -i
-#./scripts/feeds install -a
+./scripts/feeds update -i
+./scripts/feeds install -a
 
 # 调整菜单位置
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-aria2/root/usr/share/luci/menu.d/luci-app-aria2.json
