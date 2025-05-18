@@ -197,4 +197,4 @@ curl -sfL -o ./meta.tar.gz "$CORE_MATE" && tar -zxf ./meta.tar.gz && mv ./clash 
 #curl -sfL -o ./dev.tar.gz "$CORE_DEV" && tar -zxf ./dev.tar.gz
 chmod +x ./clash* ; rm -rf ./*.gz
 echo “--------------------------------------”
-find ./ -type f -name "10_system.js"
+echo $(find ./ -type f -name "10_system.js")
