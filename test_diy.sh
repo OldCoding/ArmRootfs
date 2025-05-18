@@ -139,10 +139,6 @@ svn_export "master" "homebox" "package/homebox" "https://github.com/sirpdboy/net
 svn_export "main" "lucky" "package/lucky" "https://github.com/gdy666/luci-app-lucky"
 svn_export "main" "luci-app-lucky" "package/luci-app-lucky" "https://github.com/gdy666/luci-app-lucky"
 
-rm -rf ./package/lean/autocore
-
-git clone --depth 1 https://github.com/sbwml/autocore-arm package/lean/autocore
-
 # 编译 po2lmo (如果有po2lmo可跳过)
 #pushd package/luci-app-openclash/tools/po2lmo
 #make && sudo make install
@@ -196,6 +192,3 @@ mkdir ./core && cd ./core
 curl -sfL -o ./meta.tar.gz "$CORE_MATE" && tar -zxf ./meta.tar.gz && mv ./clash ./clash_meta
 #curl -sfL -o ./dev.tar.gz "$CORE_DEV" && tar -zxf ./dev.tar.gz
 chmod +x ./clash* ; rm -rf ./*.gz
-cd ..
-echo “--------------------------------------”
-echo -e $(find ./feeds/ -type f -name "10_system.js")
