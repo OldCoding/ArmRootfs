@@ -196,5 +196,6 @@ mkdir ./core && cd ./core
 curl -sfL -o ./meta.tar.gz "$CORE_MATE" && tar -zxf ./meta.tar.gz && mv ./clash ./clash_meta
 #curl -sfL -o ./dev.tar.gz "$CORE_DEV" && tar -zxf ./dev.tar.gz
 chmod +x ./clash* ; rm -rf ./*.gz
+cd ..
 echo “--------------------------------------”
 echo $(find ./ -type f -name "10_system.js")
