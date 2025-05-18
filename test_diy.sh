@@ -198,4 +198,4 @@ curl -sfL -o ./meta.tar.gz "$CORE_MATE" && tar -zxf ./meta.tar.gz && mv ./clash 
 chmod +x ./clash* ; rm -rf ./*.gz
 cd ..
 echo “--------------------------------------”
-echo $(find ./ -type f -name "10_system.js")
+echo -e $(find ./feeds/ -type f -name "10_system.js")
