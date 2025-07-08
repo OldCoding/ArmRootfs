@@ -20,7 +20,7 @@ on:
         default: 'false'
     
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
@@ -41,7 +41,7 @@ jobs:
     #- name: Package Armvirt as OpenWrt
       #uses: ophub/flippy-openwrt-actions@main
       #env:
-        #OPENWRT_ARMSR: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-im/openwrt-armsr-armv8-generic-rootfs.tar.gz
+        #OPENWRT_ARMSR: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         #PACKAGE_SOC: s905d_s905x3
         #WHOAMI: Wing
         #KERNEL_AUTO_LATEST: true
@@ -53,8 +53,8 @@ jobs:
     - name: Package armsr-armv8 as OpenWrt
       uses: ophub/amlogic-s9xxx-openwrt@main
       with:
-        openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-im/openwrt-armsr-armv8-generic-rootfs.tar.gz
-        openwrt_board: wxy-oect
+        openwrt_path: https://github.com/OldCoding/ArmRootfs/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
+        openwrt_board: s905x3_s905d
         kernel_repo: OldCoding/openwrt_packit_arm
         openwrt_kernel: 6.1.y_5.15.y_6.12.y
         builder_name: Wing
