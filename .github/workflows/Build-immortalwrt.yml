@@ -26,6 +26,7 @@ env:
   REPO_BRANCH: master
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
+  SWAP: false
   DIY_SH: immo_diy.sh
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
@@ -61,32 +62,66 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        docker rmi `docker images -q`
-        sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap* aspnetcore*
-        [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        # docker rmi `docker images -q`
+        sudo swapoff -a
+        sudo rm -f /swapfile /mnt/swapfile
+        sudo docker image prune -a -f
+        sudo systemctl stop docker
+        sudo snap set system refresh.retain=2
+        sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android 2>/dev/null
+        sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
+        sudo -E apt -y purge azure-cli ghc* zulu* texlive* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+        [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt update
-        sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
+        sudo -E apt -y install $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
         sudo -E apt-get -qq install libfuse-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
-        sudo -E apt clean
+        sudo -E apt clean && sudo -E apt autoclean
         sudo timedatectl set-timezone "$TZ"
-        sudo chmod 777 /mnt
+        echo "status=success" >> ${GITHUB_OUTPUT}
+        df -Th
+
+    - name: Create Swap
+      if: env.SWAP == 'true'
+      run: |
+        sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=8192
+        sudo chmod 600 /mnt/swapfile
+        sudo mkswap /mnt/swapfile
+        sudo swapon /mnt/swapfile
+        free -h | grep -i swap
+
+    - name: Create simulated physical disk
+      run: |
+        mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+        root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+        sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+        sudo truncate -s "${root_size}"G /root.img
+        sudo losetup /dev/loop6 /mnt/mnt.img
+        sudo losetup /dev/loop7 /root.img
+        sudo pvcreate /dev/loop6
+        sudo pvcreate /dev/loop7
+        sudo vgcreate github /dev/loop6 /dev/loop7
+        sudo lvcreate -n runner -l 100%FREE github
+        sudo mkfs.xfs /dev/github/runner
+        sudo mkdir -p /workdir
+        sudo mount /dev/github/runner /workdir
+        sudo chown -R runner.runner /workdir
         df -Th
 
     - name: Clone source code
-      working-directory: /mnt
+      working-directory: /workdir
       if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
       run: |
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /mnt/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H<br/>")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+        echo "KERNEL_VER=$(cat $GITHUB_WORKSPACE/KernelVersion)" >> $GITHUB_ENV
         echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
 
     - name: Update feeds
@@ -228,11 +263,15 @@ jobs:
         # LuCI插件选择:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
+        CONFIG_PACKAGE_luci-app-amlogic=y
+        CONFIG_PACKAGE_luci-app-openlist2=y
+        CONFIG_PACKAGE_luci-app-commands=y
+        CONFIG_PACKAGE_luci-app-cifs-mount=y
         CONFIG_PACKAGE_luci-app-diskman=y
         CONFIG_PACKAGE_luci-app-dockerman=y
-        CONFIG_PACKAGE_luci-app-amlogic=y
-        CONFIG_PACKAGE_luci-app-alist=y
         CONFIG_PACKAGE_luci-app-ddns=y
+        CONFIG_PACKAGE_luci-app-easytier=y
+        CONFIG_PACKAGE_easytier=y
         CONFIG_PACKAGE_luci-app-nlbwmon=y
         CONFIG_PACKAGE_luci-app-firewall=y
         CONFIG_PACKAGE_luci-app-ssr-plus=y
@@ -242,6 +281,7 @@ jobs:
         # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Libev_Client is not set
         # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Libev_Server is not set
         CONFIG_PACKAGE_luci-app-pushbot=y
+        CONFIG_PACKAGE_luci-app-lucky=y
         CONFIG_PACKAGE_luci-app-minidlna=y
         CONFIG_PACKAGE_luci-app-smartdns=y
         CONFIG_PACKAGE_luci-app-socat=y
@@ -251,7 +291,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-ttyd=y
         CONFIG_PACKAGE_luci-app-wol=y
         CONFIG_PACKAGE_luci-app-ramfree=y
-        CONFIG_PACKAGE_luci-app-rclone=y
         CONFIG_PACKAGE_luci-app-frpc=y
         CONFIG_PACKAGE_luci-app-webadmin=y
         CONFIG_PACKAGE_luci-app-watchcat=y
@@ -260,8 +299,6 @@ jobs:
         CONFIG_PACKAGE_luci-app-upnp=y
         CONFIG_PACKAGE_luci-app-vsftpd=y
         CONFIG_PACKAGE_luci-app-vlmcsd=y
-        CONFIG_PACKAGE_luci-app-netspeedtest=y
-        # CONFIG_PACKAGE_luci-app-unblockneteasemusic is not set
         CONFIG_PACKAGE_luci-app-zerotier=y
         CONFIG_PACKAGE_luci-app-passwall=y
         CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
@@ -277,13 +314,11 @@ jobs:
         CONFIG_PACKAGE_luci-app-ipsec-server=y
         CONFIG_PACKAGE_luci-app-pptp-server=y
         CONFIG_PACKAGE_luci-app-sqm=y
-        # CONFIG_PACKAGE_luci-app-qbittorrent is not set
+        CONFIG_PACKAGE_luci-app-qbittorrent=y
+        CONFIG_PACKAGE_luci-app-netspeedtest=y
         CONFIG_PACKAGE_luci-app-aria2=y
-        # CONFIG_PACKAGE_luci-app-transmission is not set
-        # CONFIG_PACKAGE_transmission-daemon is not set
-        # CONFIG_PACKAGE_transmission-web-control is not set
         CONFIG_PACKAGE_luci-app-filebrowser=y
-        # CONFIG_PACKAGE_luci-app-kodexplorer is not set
+        CONFIG_PACKAGE_luci-app-kodexplorer=y
         CONFIG_PACKAGE_luci-app-openclash=y
         CONFIG_PACKAGE_luci-app-wrtbwmon=y
         EOF
@@ -292,6 +327,8 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-app-argon-config=y
+        # CONFIG_PACKAGE_luci-theme-design is not set
+        # CONFIG_PACKAGE_luci-app-design-config is not set
         EOF
 
         # 必备软件包:
@@ -332,18 +369,15 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_autocore-arm=y
         CONFIG_PACKAGE_automount=y
-        CONFIG_PACKAGE_autosamba=y
         CONFIG_PACKAGE_samba4-utils=y
+        CONFIG_PACKAGE_wsdd2=y
+        CONFIG_PACKAGE_htop=y
+        CONFIG_PACKAGE_libsensors=y
         CONFIG_PACKAGE_ariang=y
         CONFIG_PACKAGE_bind-host=y
         CONFIG_PACKAGE_default-settings-chn=y
         CONFIG_PACKAGE_kmod-ipt-fullconenat=y
         CONFIG_PACKAGE_libopenssl-legacy=y
-        CONFIG_PACKAGE_iptables-mod-socket=y
-        CONFIG_PACKAGE_iptables-mod-conntrack-extra=y
-        CONFIG_PACKAGE_iptables-mod-iprange=y
-        CONFIG_PACKAGE_iptables-mod-fullconenat=y
-        CONFIG_PACKAGE_ip6tables-mod-fullconenat=y
         CONFIG_PACKAGE_ca-certificates=y
         CONFIG_PACKAGE_lsof=y
         CONFIG_PACKAGE_acpid=y
@@ -351,8 +385,13 @@ jobs:
         CONFIG_PACKAGE_kmod-brcmutil=y
         CONFIG_PACKAGE_kmod-cfg80211=y
         CONFIG_PACKAGE_kmod-mac80211=y
+        CONFIG_PACKAGE_kmod-sched-red=y
         CONFIG_PACKAGE_hostapd-common=y
+        CONFIG_PACKAGE_smartmontools-drivedb=y
+        CONFIG_PACKAGE_pigz=y
         CONFIG_PACKAGE_wpa-cli=y
+        CONFIG_PACKAGE_wpad-basic=y
+        CONFIG_PACKAGE_iw=y
         EOF
 
         # 
@@ -407,7 +446,7 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/openwrt/bin/packages
         tar -zcvf Packages.tar.gz ./*
-        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
+        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         rm -rf packages
         echo "status=success" >> ${GITHUB_OUTPUT}
@@ -416,14 +455,13 @@ jobs:
       if: steps.organize.outputs.status == 'success' && !cancelled()
       uses: ophub/flippy-openwrt-actions@main
       env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
+        OPENWRT_ARMSR: openwrt/bin/targets/*/*/*.tar.gz
         PACKAGE_SOC: s905d_s905x3
+        KERNEL_VERSION_NAME: ${{ env.KERNEL_VER }}
         WHOAMI: Wing
         KERNEL_AUTO_LATEST: true
         KERNEL_REPO_URL: OldCoding/openwrt_packit_arm
         OPENWRT_VER: ${{ env.VER }}
-        DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
-        DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
         GZIP_IMGS: .gz
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -431,7 +469,7 @@ jobs:
 #      if: steps.organize.outputs.status == 'success' && !cancelled()
 #      uses: ophub/amlogic-s9xxx-openwrt@main
 #      with:
-#        openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
+#        openwrt_path: openwrt/bin/targets/*/*/*.tar.gz
 #        kernel_usage: flippy
 #        openwrt_board: s905x3_s905d
 #        openwrt_kernel: 6.1.y_6.6.y
@@ -440,9 +478,9 @@ jobs:
 
     - name: Calculate MD5
       run: |
-        cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
+        cp $GITHUB_WORKSPACE/openwrt/bin/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
         #cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/*rootfs.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
-        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config.txt
+        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config-immo.txt
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
         MD5=$(md5sum *.gz | sed ':a;N;$!ba;s/\n/<br>/g')
         echo "MD5=$MD5" >> $GITHUB_ENV
