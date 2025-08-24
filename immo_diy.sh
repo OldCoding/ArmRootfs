@@ -64,8 +64,8 @@ rm -rf package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 #curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash -x add_turboacc.sh
 
 # adguardhome
-VER=$(grep PKG_VERSION package/luci-app-adguardhome/Makefile | sed 's/-/\./g')
-sed -i "s/PKG_VERSION:=.*/$VER/g" package/luci-app-adguardhome/Makefile
+#VER=$(grep PKG_VERSION package/luci-app-adguardhome/Makefile | sed 's/-/\./g')
+#sed -i "s/PKG_VERSION:=.*/$VER/g" package/luci-app-adguardhome/Makefile
 
 # 调整菜单位置
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-qbittorrent/root/usr/share/luci/menu.d/luci-app-qbittorrent.json
