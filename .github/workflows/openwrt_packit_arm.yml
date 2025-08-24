@@ -57,8 +57,8 @@ jobs:
         openwrt_board: wxy-oect
         openwrt_kernel: 6.6.y_6.12.y
         auto_kernel: true
-        kernel_repo: OldCoding/openwrt_packit_arm
-        kernel_usage: stable
+        kernel_repo: ophub/kernel
+        kernel_usage: flippy
         builder_name: Wing
     
     #- name: Package Armvirt as OpenWrt
