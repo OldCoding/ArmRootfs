@@ -55,8 +55,8 @@ jobs:
       with:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         openwrt_board: wxy-oect
-        openwrt_kernel: 6.6.y_6.12.y
-        auto_kernel: true
+        openwrt_kernel: 6.6.102_6.12.43
+        auto_kernel: false
         kernel_repo: ophub/kernel
         kernel_usage: flippy
         builder_name: Wing
