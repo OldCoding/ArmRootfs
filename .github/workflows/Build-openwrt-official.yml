@@ -182,7 +182,57 @@ jobs:
         CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe -mcpu=generic"
         CONFIG_CPU_TYPE="generic"
         EOF
+        
+        # USB2.0支持:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_kmod-usb-core=y
+        CONFIG_PACKAGE_kmod-usb-dwc2=y
+        CONFIG_PACKAGE_kmod-usb-dwc3=y
+        CONFIG_PACKAGE_kmod-usb-ehci=y
+        CONFIG_PACKAGE_kmod-usb-storage=y
+        CONFIG_PACKAGE_kmod-usb-storage-extras=y
+        CONFIG_PACKAGE_kmod-usb-storage-uas=y
+        CONFIG_PACKAGE_kmod-usb-xhci-hcd=y
+        CONFIG_PACKAGE_kmod-usb-ohci=y
+        CONFIG_PACKAGE_kmod-usb2=y
+        CONFIG_PACKAGE_kmod-usb3=y
+        EOF
 
+        # IPv6支持:
+        cat >> .config <<EOF
+        # CONFIG_PACKAGE_dnsmasq is not set
+        # CONFIG_PACKAGE_dnsmasq-dhcpv6 is not set
+        CONFIG_PACKAGE_dnsmasq-full=y
+        CONFIG_PACKAGE_dnsmasq_full_dhcpv6=y
+        CONFIG_PACKAGE_ip6tables-extra=y
+        CONFIG_PACKAGE_ip6tables-mod-nat=y
+        CONFIG_PACKAGE_ipv6helper=y
+        EOF
+        
+        # DDNS
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_ddns-scripts=y
+        CONFIG_PACKAGE_ddns-scripts-cloudflare=y
+        CONFIG_PACKAGE_ddns-scripts-cnkuai=y
+        CONFIG_PACKAGE_ddns-scripts-digitalocean=y
+        CONFIG_PACKAGE_ddns-scripts-dnspod=y
+        CONFIG_PACKAGE_ddns-scripts-dnspod-com=y
+        CONFIG_PACKAGE_ddns-scripts-freedns=y
+        CONFIG_PACKAGE_ddns-scripts-gandi=y
+        CONFIG_PACKAGE_ddns-scripts-gcp=y
+        CONFIG_PACKAGE_ddns-scripts-godaddy=y
+        CONFIG_PACKAGE_ddns-scripts-luadns=y
+        CONFIG_PACKAGE_ddns-scripts-noip=y
+        CONFIG_PACKAGE_ddns-scripts-ns1=y
+        CONFIG_PACKAGE_ddns-scripts-nsupdate=y
+        CONFIG_PACKAGE_ddns-scripts-one=y
+        CONFIG_PACKAGE_ddns-scripts-pdns=y
+        CONFIG_PACKAGE_ddns-scripts-route53=y
+        CONFIG_PACKAGE_ddns-scripts-services=y
+        CONFIG_PACKAGE_ddns-scripts-transip=y
+        CONFIG_PACKAGE_ddns-scripts-utils=y
+        CONFIG_PACKAGE_ddns-scripts_aliyun=y
+        EOF
 
         # 镜像设置
         cat >> .config <<EOF
@@ -217,14 +267,42 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
         CONFIG_PACKAGE_luci-app-amlogic=y
+        CONFIG_PACKAGE_luci-app-openlist2=y
+        CONFIG_PACKAGE_luci-app-cifs-mount=y
+        CONFIG_PACKAGE_luci-app-commands=y
+        CONFIG_PACKAGE_luci-app-diskman=y
+        CONFIG_PACKAGE_luci-app-dockerman=y
+        CONFIG_PACKAGE_luci-app-ddns=y
         CONFIG_PACKAGE_luci-app-easytier=y
         CONFIG_PACKAGE_easytier=y
+        CONFIG_PACKAGE_luci-app-nlbwmon=y
+        CONFIG_PACKAGE_luci-app-firewall=y
         CONFIG_PACKAGE_luci-app-ssr-plus=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Rust_Client=y
         CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Rust_Server=y
         # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Libev_Client is not set
         # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Libev_Server is not set
+        CONFIG_PACKAGE_luci-app-pushbot=y
+        CONFIG_PACKAGE_luci-app-lucky=y
+        CONFIG_PACKAGE_luci-app-minidlna=y
+        CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_luci-app-socat=y
+        CONFIG_PACKAGE_luci-app-samba4=y
+        CONFIG_PACKAGE_luci-app-hd-idle=y
+        CONFIG_PACKAGE_luci-app-mosdns=y
+        CONFIG_PACKAGE_luci-app-ttyd=y
+        CONFIG_PACKAGE_luci-app-wol=y
+        CONFIG_PACKAGE_luci-app-ramfree=y
+        CONFIG_PACKAGE_luci-app-frpc=y
+        CONFIG_PACKAGE_luci-app-webadmin=y
+        CONFIG_PACKAGE_luci-app-watchcat=y
+        CONFIG_PACKAGE_luci-app-wechatpush=y
+        CONFIG_PACKAGE_luci-app-usb-printer=y
+        CONFIG_PACKAGE_luci-app-upnp=y
+        CONFIG_PACKAGE_luci-app-vsftpd=y
+        CONFIG_PACKAGE_luci-app-vlmcsd=y
+        CONFIG_PACKAGE_luci-app-zerotier=y
         CONFIG_PACKAGE_luci-app-passwall=y
         CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
         CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
@@ -235,8 +313,26 @@ jobs:
         CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Server=y
         # CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Client is not set
         # CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Server is not set
+        CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_luci-app-ipsec-server=y
+        CONFIG_PACKAGE_luci-app-pptp-server=y
+        CONFIG_PACKAGE_luci-app-sqm=y
+        CONFIG_PACKAGE_luci-app-qbittorrent=y
+        CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-aria2=y
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        CONFIG_PACKAGE_luci-app-kodexplorer=y
+        CONFIG_PACKAGE_luci-app-openclash=y
+        CONFIG_PACKAGE_luci-app-wrtbwmon=y
         EOF
 
+        # LuCI主题:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-theme-argon=y
+        CONFIG_PACKAGE_luci-app-argon-config=y
+        # CONFIG_PACKAGE_luci-theme-design is not set
+        # CONFIG_PACKAGE_luci-app-design-config is not set
+        EOF
 
         # 必备软件包:
         cat >> .config <<EOF
