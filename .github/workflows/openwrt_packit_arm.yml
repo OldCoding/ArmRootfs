@@ -26,7 +26,7 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
-  PRODUCT_NAME: Packit
+  PRODUCT_NAME: Packit-Lede
 
 
 jobs:
@@ -56,7 +56,7 @@ jobs:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         openwrt_board: wxy-oect
         kernel_repo: OldCoding/openwrt_packit_arm
-        openwrt_kernel: 6.1.y_5.15.y_6.12.y
+        openwrt_kernel: 6.12.y
         builder_name: Wing
     
     #- name: Package Armvirt as OpenWrt
