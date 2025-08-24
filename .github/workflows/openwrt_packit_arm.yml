@@ -57,6 +57,7 @@ jobs:
         openwrt_board: wxy-oect
         kernel_repo: OldCoding/openwrt_packit_arm
         kernel_usage: stable
+        auto_kernel: true
         openwrt_kernel: 6.12.y
         builder_name: Wing
     
