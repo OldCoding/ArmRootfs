@@ -51,7 +51,7 @@ jobs:
         #GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Package armsr-armv8 as OpenWrt
-      uses: ophub/amlogic-s9xxx-openwrt@main
+      uses: OldCoding/amlogic-s9xxx-openwrt@main
       with:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         openwrt_board: wxy-oect
