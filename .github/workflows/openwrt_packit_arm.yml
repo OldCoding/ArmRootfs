@@ -55,10 +55,10 @@ jobs:
       with:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
         openwrt_board: wxy-oect
-        openwrt_kernel: 6.6.102_6.12.43
+        openwrt_kernel: 6.12.y
         auto_kernel: false
-        kernel_repo: ophub/kernel
-        kernel_usage: flippy
+        kernel_repo: OldCoding/openwrt_packit_arm
+        kernel_usage: stable
         builder_name: Wing
     
     #- name: Package Armvirt as OpenWrt
