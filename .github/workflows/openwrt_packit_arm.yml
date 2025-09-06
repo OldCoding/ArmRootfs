@@ -54,7 +54,7 @@ jobs:
       uses: OldCoding/amlogic-s9xxx-openwrt@main
       with:
         openwrt_path: https://github.com/OldCoding/openwrt_packit_arm/releases/download/ARMv8-le/openwrt-armsr-armv8-generic-rootfs.tar.gz
-        openwrt_board: wxy-oect
+        openwrt_board: wxy-oect_wxy-oect-replaced 
         openwrt_kernel: 6.12.y
         auto_kernel: true
         kernel_repo: OldCoding/openwrt_packit_arm
