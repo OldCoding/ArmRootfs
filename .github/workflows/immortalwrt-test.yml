@@ -98,16 +98,9 @@ jobs:
 
     - name: File Diy Patch
       run: |
-        #chmod +x $DIY_SH
+        chmod +x $DIY_SH
         cd openwrt
-        #$GITHUB_WORKSPACE/$DIY_SH
-        rm -rf feeds/luci/applications/luci-app-passwall
-        rm -rf feeds/packages/net/v2ray-geodata
-        rm -rf feeds/packages/lang/golang
-        git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2 package/openwrt-passwall2
+        $GITHUB_WORKSPACE/$DIY_SH
 
     - name: Generate configuration file
       run: |
@@ -215,6 +208,7 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-amlogic=y
         CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_smartdns-ui=y
         EOF
 
         # LuCI主题:
