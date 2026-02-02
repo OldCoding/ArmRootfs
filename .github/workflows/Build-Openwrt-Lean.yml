@@ -73,7 +73,7 @@ jobs:
         sudo -E apt -y purge azure-cli ghc* zulu* texlive* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt update
-        sudo -E apt -y install $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
+        sudo -E apt -y install $(curl -fsSL https://ophub.org/ubuntu2204-make-openwrt-depends)
         sudo -E apt-get -qq install libfuse-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
@@ -116,7 +116,9 @@ jobs:
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
-        sed -i 's/openwrt-23.05/openwrt-24.10/g' feeds.conf.default # 切换luci分支
+        sed -i 's/openwrt-23.05/openwrt-25.12/g' feeds.conf.default # 切换luci分支
+        sed -i 's/24.10.3/25.12-SNAPSHOT/g' include/version.mk
+        sed -i 's/24.10.3/25.12-SNAPSHOT/g' package/base-files/image-config.in
         useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H<br/>")
         VER=$(grep -E "='R.+" ./package/lean/default-settings/files/zzz-default-settings | cut -f2 -d"'")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
@@ -312,8 +314,8 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-app-argon-config=y
-        # CONFIG_PACKAGE_luci-theme-design is not set
-        # CONFIG_PACKAGE_luci-app-design-config is not set
+        CONFIG_PACKAGE_luci-theme-design=y
+        CONFIG_PACKAGE_luci-app-design-config=y
         EOF
 
         # 常用软件包:

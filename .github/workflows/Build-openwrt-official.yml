@@ -23,7 +23,7 @@ on:
     
 env:
   REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: openwrt-24.10
+  REPO_BRANCH: openwrt-25.12
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   SWAP: false
@@ -73,7 +73,7 @@ jobs:
         sudo -E apt -y purge azure-cli ghc* zulu* texlive* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt update
-        sudo -E apt -y install $(curl -fsSL https://tinyurl.com/ubuntu2204-make-openwrt)
+        sudo -E apt -y install $(curl -fsSL https://ophub.org/ubuntu2204-make-openwrt-depends)
         sudo -E apt-get -qq install libfuse-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
