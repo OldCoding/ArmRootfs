@@ -93,8 +93,8 @@ jobs:
         sudo swapon /mnt/swapfile
         free -h | grep -i swap
 
-    #- name: Create simulated physical disk
-    #  run: |
+    - name: Create simulated physical disk
+      run: |
     #    mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
     #    root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
     #    sudo truncate -s "${mnt_size}"G /mnt/mnt.img
@@ -106,10 +106,10 @@ jobs:
     #    sudo vgcreate github /dev/loop6 /dev/loop7
     #    sudo lvcreate -n runner -l 100%FREE github
     #    sudo mkfs.xfs /dev/github/runner
-    #    sudo mkdir -p /workdir
+        sudo mkdir -p /workdir
     #    sudo mount /dev/github/runner /workdir
-    #    sudo chown -R runner.runner /workdir
-    #    df -Th
+        sudo chown -R runner.runner /workdir
+        df -Th
 
     - name: Clone source code
       working-directory: /workdir
