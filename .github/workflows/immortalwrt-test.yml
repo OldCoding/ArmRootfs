@@ -92,12 +92,11 @@ jobs:
         sudo mkswap /mnt/swapfile
         sudo swapon /mnt/swapfile
         free -h | grep -i swap
-        
+
     - name: Create simulated physical disk
       run: |
         sudo mkdir -p /workdir
         sudo chown runner:runner /workdir
-        ln -sf /workdir $GITHUB_WORKSPACE/openwrt
         df -Th
 
     - name: Clone source code
