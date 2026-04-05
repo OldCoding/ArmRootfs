@@ -15,7 +15,7 @@ svn_export() {
 #rm -rf package/libs/mbedtls
 
 # 依赖和冲突
-rm -rf feeds/packages/lang/golang
+#rm -rf feeds/packages/lang/golang
 rm -rf feeds/luci/applications/luci-app-cloudflared
 rm -rf feeds/luci/applications/luci-app-openclash
 rm -rf feeds/luci/applications/luci-app-filebrowser
