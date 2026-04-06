@@ -24,6 +24,7 @@ sed -i 's/download-ci-llvm=true/download-ci-llvm=false/g' feeds/packages/lang/ru
 # 删除冲突软件和依赖
 rm -rf feeds/packages/lang/golang 
 rm -rf feeds/luci/applications/luci-app-dockerman
+rm -rf feeds/luci/applications/luci-app-nlbwmon
 rm -rf feeds/packages/net/aria2
 rm -rf feeds/packages/utils/docker-compose
 rm -rf feeds/packages/utils/docker
@@ -39,7 +40,7 @@ git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/gola
 # 下载插件
 git clone --depth 1 https://github.com/zyqfork/luci-app-pushbot package/luci-app-pushbot
 git clone --depth 1 https://github.com/danchexiaoyang/luci-app-kodexplorer package/luci-app-kodexplorer
-git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist2
+git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist
 git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon package/luci-theme-argon
 git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/openwrt-passwall-packages
@@ -51,15 +52,15 @@ git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtes
 #git clone --depth 1 https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic package/luci-app-unblockneteasemusic
 #git clone --depth 1 https://github.com/hudra0/luci-app-qosmate package/luci-app-qosmate
 #git clone --depth 1 https://github.com/hudra0/qosmate package/qosmate
-git clone --depth 1 https://github.com/papagaye744/luci-theme-design feeds/luci/themes/luci-theme-design
-git clone --depth 1 https://github.com/kenzok78/luci-app-design-config package/luci-app-design-config
+git clone --depth 1 https://github.com/papagaye744/luci-theme-design package/luci-theme-design
 svn_export "master" "luci-app-tailscale-community" "package/luci-app-tailscale" "https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community"
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/Openwrt-Passwall/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/Openwrt-Passwall/openwrt-passwall2"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
 svn_export "master" "applications/luci-app-qbittorrent" "feeds/luci/applications/luci-app-qbittorrent" "https://github.com/immortalwrt/luci"
-svn_export "master" "applications/luci-app-dockerman" "feeds/luci/applications/luci-app-dockerman" "https://github.com/immortalwrt/luci"
+svn_export "openwrt-25.12" "applications/luci-app-dockerman" "feeds/luci/applications/luci-app-dockerman" "https://github.com/coolsnowwolf/luci"
+svn_export "openwrt-25.12" "collections/luci-lib-docker" "feeds/luci/collections/luci-lib-docker" "https://github.com/coolsnowwolf/luci"
 svn_export "master" "applications/luci-app-wechatpush" "feeds/luci/applications/luci-app-wechatpush" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-ramfree" "feeds/luci/applications/luci-app-ramfree" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-webadmin" "feeds/luci/applications/luci-app-webadmin" "https://github.com/immortalwrt/luci"
@@ -70,8 +71,8 @@ svn_export "master" "applications/luci-app-zerotier" "feeds/luci/applications/lu
 svn_export "master" "applications/luci-app-diskman" "feeds/luci/applications/luci-app-diskman" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-autoreboot" "feeds/luci/applications/luci-app-autoreboot" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-cifs-mount" "feeds/luci/applications/luci-app-cifs-mount" "https://github.com/immortalwrt/luci"
-svn_export "main" "wrtbwmon" "package/wrtbwmon" "https://github.com/gitbruc/openwrt-wrtbwmon"
-svn_export "main" "luci-app-wrtbwmon" "package/luci-app-wrtbwmon" "https://github.com/gitbruc/openwrt-wrtbwmon"
+svn_export "main" "luci-app-bandix" "package/luci-app-bandix" "https://github.com/timsaya/luci-app-bandix"
+svn_export "main" "openwrt-bandix" "package/openwrt-bandix" "https://github.com/timsaya/openwrt-bandix"
 svn_export "master" "net/rclone" "feeds/packages/net/rclone" "https://github.com/immortalwrt/packages"
 svn_export "master" "net/rclone-webui-react" "feeds/packages/net/rclone-webui-react" "https://github.com/immortalwrt/packages"
 svn_export "master" "net/rclone-ng" "feeds/packages/net/rclone-ng" "https://github.com/immortalwrt/packages"
@@ -88,19 +89,20 @@ svn_export "master" "utils/docker" "feeds/packages/utils/docker" "https://github
 svn_export "master" "utils/dockerd" "feeds/packages/utils/dockerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/coolsnowwolf/packages"
+svn_export "openwrt-24.10" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/openwrt/packages"
+
 svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "master" "package/emortal" "package/emortal" "https://github.com/immortalwrt/immortalwrt"
 svn_export "main" "lucky" "package/lucky" "https://github.com/gdy666/luci-app-lucky"
 svn_export "main" "luci-app-lucky" "package/luci-app-lucky" "https://github.com/gdy666/luci-app-lucky"
-svn_export "openwrt-23.05" "themes/luci-theme-design" "package/luci-theme-design" "https://github.com/coolsnowwolf/luci"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
 
-rm -rf package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
+sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
-mv ./package/openlist2/* ./package/ && rm -rf ./package/openlist2
+mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 
 #svn_export "master" "package/libs/mbedtls" "package/libs/mbedtls" "https://github.com/coolsnowwolf/lede"
@@ -108,7 +110,7 @@ mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 #svn_export "master" "package/libs/uclient" "package/libs/uclient" "https://github.com/coolsnowwolf/lede"
 
 # turboacc 补丁
-#curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash -x add_turboacc.sh
+#curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh 25.12
 
 # 安装插件
 ./scripts/feeds update -i
@@ -130,7 +132,6 @@ sed -i "s|services|nas|g" feeds/luci/applications/luci-app-aria2/root/usr/share/
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-hd-idle/root/usr/share/luci/menu.d/luci-app-hd-idle.json
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json
 sed -i "s|services|system|g" feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
-sed -i "s|services|network|g" feeds/luci/applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json
 sed -i "s|services|vpn|g" package/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale-community.json
 # 微信推送&全能推送
 sed -i "s|qidian|bilibili|g" package/luci-app-pushbot/root/usr/bin/pushbot/pushbot

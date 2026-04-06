@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build ARMv8 test openwrt
+name: Build ARMv8 openwrt test official
 
 on:
   repository_dispatch:
@@ -23,10 +23,11 @@ on:
     
 env:
   REPO_URL: https://github.com/openwrt/openwrt
-  REPO_BRANCH: main
+  REPO_BRANCH: openwrt-25.12
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
-  DIY_SH: test_diy.sh
+  SWAP: false
+  DIY_SH: op_diy.sh
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
   PRODUCT_NAME: ARMv8-op
@@ -61,50 +62,76 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
-        docker rmi `docker images -q`
-        #sudo -E rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        #sudo -E apt -y purge azure-cli* docker* ghc* zulu* llvm* firefox google* dotnet* powershell* openjdk* mysql* php* mongodb* dotnet* snap* aspnetcore*
-        [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-        sudo -E apt -y update
-        sudo -E apt -y install $(curl -fsSL https://is.gd/depends_ubuntu_2204)
-        sudo -E apt -y install clang llvm lld
+        # docker rmi `docker images -q`
+        # sudo swapoff -a
+        # sudo rm -f /swapfile /mnt/swapfile
+        # sudo docker image prune -a -f
+        # sudo systemctl stop docker
+        # sudo snap set system refresh.retain=2
+        # sudo rm -rf /usr/share/dotnet /etc/apt/sources.list.d /usr/local/lib/android 2>/dev/null
+        # sudo sed -i '/NVM_DIR/d;/skel/d' /root/{.bashrc,.profile}
+        # sudo -E apt -y purge azure-cli ghc* zulu* texlive* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
+        [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
+        sudo -E apt update
+        sudo -E apt -y install $(curl -fsSL https://ophub.org/ubuntu2204-make-openwrt-depends)
         sudo -E apt-get -qq install libfuse-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
-        sudo -E apt clean
+        sudo -E apt clean && sudo -E apt autoclean
         sudo timedatectl set-timezone "$TZ"
-        sudo chmod 777 /mnt
+        echo "status=success" >> ${GITHUB_OUTPUT}
+        df -Th
+
+    - name: Create Swap
+      if: env.SWAP == 'true'
+      run: |
+        sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=8192
+        sudo chmod 600 /mnt/swapfile
+        sudo mkswap /mnt/swapfile
+        sudo swapon /mnt/swapfile
+        free -h | grep -i swap
+
+    - name: Create simulated physical disk
+      run: |
+        mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+        root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+        sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+        sudo truncate -s "${root_size}"G /root.img
+        sudo losetup /dev/loop6 /mnt/mnt.img
+        sudo losetup /dev/loop7 /root.img
+        sudo pvcreate /dev/loop6
+        sudo pvcreate /dev/loop7
+        sudo vgcreate github /dev/loop6 /dev/loop7
+        sudo lvcreate -n runner -l 100%FREE github
+        sudo mkfs.xfs /dev/github/runner
+        sudo mkdir -p /workdir
+        sudo mount /dev/github/runner /workdir
+        sudo chown -R runner.runner /workdir
         df -Th
 
     - name: Clone source code
-      working-directory: /mnt
-      if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
+      working-directory: /workdir
       run: |
         df -hT $PWD
-        git clone $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /mnt/openwrt $GITHUB_WORKSPACE/openwrt
+        git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H<br/>")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
         echo "DATE=$(date "+%Y-%m-%d %H:%M:%S")" >> $GITHUB_ENV
         echo "DATE1=$(date "+%Y-%m-%d")" >> $GITHUB_ENV
+        echo "KERNEL_VER=$(cat $GITHUB_WORKSPACE/KernelVersion)" >> $GITHUB_ENV
         echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
+        sed -i 's|http.*org\/[a-z]*|https:\/\/github\.com\/openwrt|g' feeds.conf.default
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
     - name: File Diy Patch
       run: |
-        #chmod +x $DIY_SH
+        chmod +x $DIY_SH
         cd openwrt
-        #$GITHUB_WORKSPACE/$DIY_SH
-        rm -rf feeds/packages/net/v2ray-geodata
-        rm -rf feeds/packages/lang/golang
-        git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall-packages package/openwrt-passwall-packages
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall package/openwrt-passwall
-        git clone --depth 1 https://github.com/xiaorouji/openwrt-passwall2 package/openwrt-passwall2
-        curl -sfL https://github.com/sbwml/openwrt_helloworld/raw/refs/heads/v5/hysteria/Makefile > package/openwrt-passwall-packages/hysteria/Makefile
+        $GITHUB_WORKSPACE/$DIY_SH
 
     - name: Generate configuration file
       run: |
@@ -181,6 +208,15 @@ jobs:
         CONFIG_PACKAGE_ip6tables-mod-nat=y
         CONFIG_PACKAGE_ipv6helper=y
         EOF
+        
+        # DDNS
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_ddns-scripts=y
+        CONFIG_PACKAGE_ddns-scripts-cloudflare=y
+        CONFIG_PACKAGE_ddns-scripts-dnspod=y
+        CONFIG_PACKAGE_ddns-scripts-dnspod-com=y
+        CONFIG_PACKAGE_ddns-scripts_aliyun=y
+        EOF
 
         # 镜像设置
         cat >> .config <<EOF
@@ -213,48 +249,130 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-netspeedtest=y
-        CONFIG_FEED_passwall_packages=y
-        CONFIG_FEED_passwall=y
-        CONFIG_FEED_passwall2=y
+        CONFIG_PACKAGE_luci-app-autoreboot=y
+        CONFIG_PACKAGE_luci-app-amlogic=y
+        CONFIG_PACKAGE_luci-app-cloudflared=y
+        CONFIG_PACKAGE_luci-app-openlist2=y
+        CONFIG_PACKAGE_luci-app-cifs-mount=y
+        CONFIG_PACKAGE_luci-app-diskman=y
+        CONFIG_PACKAGE_luci-app-dockerman=y
+        CONFIG_PACKAGE_luci-app-ddns=y
+        CONFIG_PACKAGE_luci-app-easytier=y
+        CONFIG_PACKAGE_easytier=y
+        CONFIG_PACKAGE_luci-app-bandix=y
+        CONFIG_PACKAGE_luci-app-firewall=y
+        CONFIG_PACKAGE_luci-app-ssr-plus=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Rust_Client=y
+        CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Rust_Server=y
+        # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Libev_Client is not set
+        # CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Libev_Server is not set
+        CONFIG_PACKAGE_luci-app-pushbot=y
+        CONFIG_PACKAGE_luci-app-lucky=y
+        CONFIG_PACKAGE_luci-app-minidlna=y
+        CONFIG_PACKAGE_luci-app-smartdns=y
+        CONFIG_PACKAGE_smartdns-ui=y
+        CONFIG_PACKAGE_luci-app-socat=y
+        CONFIG_PACKAGE_luci-app-samba4=y
+        CONFIG_PACKAGE_luci-app-hd-idle=y
+        CONFIG_PACKAGE_luci-app-mosdns=y
+        CONFIG_PACKAGE_luci-app-ttyd=y
+        CONFIG_PACKAGE_luci-app-wol=y
+        CONFIG_PACKAGE_luci-app-ramfree=y
+        CONFIG_PACKAGE_luci-app-frpc=y
+        CONFIG_PACKAGE_luci-app-webadmin=y
+        CONFIG_PACKAGE_luci-app-watchcat=y
+        CONFIG_PACKAGE_luci-app-wechatpush=y
+        CONFIG_PACKAGE_luci-app-usb-printer=y
+        CONFIG_PACKAGE_luci-app-upnp=y
+        CONFIG_PACKAGE_luci-app-vsftpd=y
+        CONFIG_PACKAGE_luci-app-vlmcsd=y
+        CONFIG_PACKAGE_luci-app-zerotier=y
         CONFIG_PACKAGE_luci-app-passwall=y
-        CONFIG_PACKAGE_luci-app-passwall_Iptables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall_Nftables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server=y
         CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
         CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Server=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_SingBox=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_tuic_client=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Geodata=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
-        CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
+        # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client is not set
+        # CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server is not set
         CONFIG_PACKAGE_luci-app-passwall2=y
-        CONFIG_PACKAGE_luci-app-passwall2_Iptables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_Nftables_Transparent_Proxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Haproxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Hysteria=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_NaiveProxy=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Server=y
         CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Client=y
         CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Rust_Server=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_ShadowsocksR_Libev_Client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_ShadowsocksR_Libev_Server=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Simple_Obfs=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_SingBox=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_tuic_client=y
-        CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_V2ray_Plugin=y
-        CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y
-        CONFIG_PACKAGE_luci-i18n-passwall2-zh-cn=y
+        # CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Client is not set
+        # CONFIG_PACKAGE_luci-app-passwall2_INCLUDE_Shadowsocks_Libev_Server is not set
+        CONFIG_PACKAGE_luci-app-adguardhome=y
+        CONFIG_PACKAGE_luci-app-ipsec-server=y
+        CONFIG_PACKAGE_luci-app-pptp-server=y
+        CONFIG_PACKAGE_luci-app-sqm=y
+        CONFIG_PACKAGE_luci-app-turboacc=y
+        CONFIG_PACKAGE_luci-app-tailscale=y
+        CONFIG_PACKAGE_luci-app-qbittorrent=y
+        CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-aria2=y
+        CONFIG_PACKAGE_luci-app-filebrowser=y
+        CONFIG_PACKAGE_luci-app-kodexplorer=y
+        CONFIG_PACKAGE_luci-app-openclash=y
+        EOF
+
+        # LuCI主题:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-theme-argon=y
+        CONFIG_PACKAGE_luci-app-argon-config=y
+        CONFIG_PACKAGE_luci-theme-design=y
+        EOF
+
+        # 必备软件包:
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_perl=y
+        CONFIG_PACKAGE_perl-http-date=y
+        CONFIG_PACKAGE_perlbase-file=y
+        CONFIG_PACKAGE_perlbase-getopt=y
+        CONFIG_PACKAGE_perlbase-time=y
+        CONFIG_PACKAGE_perlbase-unicode=y
+        CONFIG_PACKAGE_perlbase-utf8=y
+        CONFIG_PACKAGE_blkid=y
+        CONFIG_PACKAGE_fdisk=y
+        CONFIG_PACKAGE_lsblk=y
+        CONFIG_PACKAGE_parted=y
+        CONFIG_PACKAGE_attr=y
+        CONFIG_PACKAGE_btrfs-progs=y
+        CONFIG_BTRFS_PROGS_ZSTD=y
+        CONFIG_PACKAGE_chattr=y
+        CONFIG_PACKAGE_dosfstools=y
+        CONFIG_PACKAGE_e2fsprogs=y
+        CONFIG_PACKAGE_f2fs-tools=y
+        CONFIG_PACKAGE_f2fsck=y
+        CONFIG_PACKAGE_lsattr=y
+        CONFIG_PACKAGE_mkf2fs=y
+        CONFIG_PACKAGE_xfs-fsck=y
+        CONFIG_PACKAGE_xfs-mkfs=y
+        CONFIG_PACKAGE_bsdtar=y
+        CONFIG_PACKAGE_bash=y
+        CONFIG_PACKAGE_gawk=y
+        CONFIG_PACKAGE_getopt=y
+        CONFIG_PACKAGE_losetup=y
+        CONFIG_PACKAGE_tar=y
+        CONFIG_PACKAGE_uuidgen=y
+        EOF
+
+        # 可选软件包
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_autocore-arm=y
+        CONFIG_PACKAGE_automount=y
+        CONFIG_PACKAGE_block-mount=y
+        CONFIG_PACKAGE_samba4-utils=y
+        CONFIG_PACKAGE_wsdd2=y
+        CONFIG_PACKAGE_htop=y
+        CONFIG_PACKAGE_libsensors=y
+        CONFIG_PACKAGE_ariang=y
+        CONFIG_PACKAGE_bind-host=y
+        CONFIG_PACKAGE_default-settings-chn=y
+        CONFIG_PACKAGE_ca-certificates=y
+        CONFIG_PACKAGE_lsof=y
+        CONFIG_PACKAGE_acpid=y
+        CONFIG_PACKAGE_hostapd-common=y
+        CONFIG_PACKAGE_kmod-sched-red=y
+        CONFIG_PACKAGE_smartmontools-drivedb=y
+        CONFIG_PACKAGE_pigz=y
+        CONFIG_PACKAGE_iw=y
         EOF
 
         # 
@@ -309,42 +427,42 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/openwrt/bin/packages
         tar -zcvf Packages.tar.gz ./*
-        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
+        cp Packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         rm -rf packages
         echo "status=success" >> ${GITHUB_OUTPUT}
 
-    - name: Package Armvirt as OpenWrt
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      uses: ophub/flippy-openwrt-actions@main
-      env:
-        OPENWRT_ARMVIRT: openwrt/bin/targets/*/*/*rootfs.tar.gz
-        PACKAGE_SOC: s905d_s905x3
-        WHOAMI: Wing
-        KERNEL_AUTO_LATEST: true
-        KERNEL_REPO_URL: OldCoding/openwrt_packit_arm
-        OPENWRT_VER: ${{ env.VER }}
-        DISTRIB_DESCRIPTION: Wing build $(TZ=UTC-8 date "+%Y.%m.%d")
-        DISTRIB_REVISION: \@ OpenWrt ${{ env.VER }}
-        GZIP_IMGS: .gz
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 #    - name: Package Armvirt as OpenWrt
 #      if: steps.organize.outputs.status == 'success' && !cancelled()
-#      uses: ophub/amlogic-s9xxx-openwrt@main
-#      with:
-#        openwrt_path: openwrt/bin/targets/*/*/*rootfs.tar.gz
-#        kernel_usage: flippy
-#        openwrt_board: s905x3_s905d
-#        openwrt_kernel: 6.1.y_6.6.y
-#        auto_kernel: true
-#        builder_name: Wing
+#      uses: ophub/flippy-openwrt-actions@main
+#      env:
+#        OPENWRT_ARMSR: openwrt/bin/targets/*/*/*.tar.gz
+#        PACKAGE_SOC: s905d_s905x3
+#        KERNEL_VERSION_NAME: ${{ env.KERNEL_VER }}
+#        WHOAMI: Wing
+#        KERNEL_AUTO_LATEST: true
+#        KERNEL_REPO_URL: OldCoding/openwrt_packit_arm
+#        OPENWRT_VER: ${{ env.VER }}
+#        GZIP_IMGS: .gz
+#        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Package Armvirt as OpenWrt
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      uses: OldCoding/amlogic-s9xxx-openwrt@main
+      with:
+        openwrt_path: openwrt/bin/targets/*/*/*.tar.gz
+        kernel_usage: stable
+        openwrt_board: s905x3_s905d_wxy-oect
+        kernel_repo: OldCoding/openwrt_packit_arm
+        openwrt_kernel: 6.12.y_6.18.y
+        auto_kernel: true
+        builder_name: Wing
 
     - name: Calculate MD5
       run: |
-        cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
+        cp $GITHUB_WORKSPACE/openwrt/bin/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
         #cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/*rootfs.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
-        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config.txt
+        cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config-op.txt
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
         MD5=$(md5sum *.gz | sed ':a;N;$!ba;s/\n/<br>/g')
         echo "MD5=$MD5" >> $GITHUB_ENV
@@ -385,12 +503,3 @@ jobs:
         repository: ${{ github.repository }}
         retain_days: 60
         keep_minimum_runs: 60
-
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@master
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      with:
-        repo: OldCoding/openwrt_packit_arm
-        keep_latest: 30
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
