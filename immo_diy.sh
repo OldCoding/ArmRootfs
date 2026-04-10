@@ -15,7 +15,7 @@ svn_export() {
 #rm -rf package/libs/mbedtls
 
 # 依赖和冲突
-#rm -rf feeds/packages/lang/golang
+rm -rf feeds/packages/lang/golang
 rm -rf feeds/luci/applications/luci-app-cloudflared
 rm -rf feeds/luci/applications/luci-app-openclash
 rm -rf feeds/luci/applications/luci-app-filebrowser
@@ -26,6 +26,7 @@ rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf feeds/packages/net/v2ray-geodata
 rm -rf feeds/packages/net/mosdns
 rm -rf feeds/packages/net/speedtest-cli
+rm -rf feeds/luci/applications/luci-app-dockerman
 rm -rf feeds/packages/utils/docker-compose
 rm -rf feeds/packages/utils/docker
 rm -rf feeds/packages/utils/dockerd
@@ -37,7 +38,7 @@ rm -rf feeds/luci/themes/luci-theme-design
 git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon feeds/luci/themes/luci-theme-argon
 git clone --depth 1 https://github.com/danchexiaoyang/luci-app-kodexplorer package/luci-app-kodexplorer
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
-#git clone --depth 1 https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
+git clone --depth 1 https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
 git clone --depth 1 https://github.com/zyqfork/luci-app-pushbot package/luci-app-pushbot
 git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
@@ -64,11 +65,14 @@ svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mos
 svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "main" "lucky" "package/lucky" "https://github.com/gdy666/luci-app-lucky"
 svn_export "main" "luci-app-lucky" "package/luci-app-lucky" "https://github.com/gdy666/luci-app-lucky"
+svn_export "openwrt-25.12" "applications/luci-app-dockerman" "feeds/luci/applications/luci-app-dockerman" "https://github.com/coolsnowwolf/luci"
+svn_export "openwrt-25.12" "collections/luci-lib-docker" "feeds/luci/collections/luci-lib-docker" "https://github.com/coolsnowwolf/luci"
 svn_export "master" "utils/docker-compose" "feeds/packages/utils/docker-compose" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/docker" "feeds/packages/utils/docker" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/dockerd" "feeds/packages/utils/dockerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/coolsnowwolf/packages"
+svn_export "openwrt-24.10" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/immortalwrt/packages"
 svn_export "master" "net/cloudflared" "feeds/packages/net/cloudflared" "https://github.com/openwrt/packages"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
@@ -77,6 +81,7 @@ sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
+mv ./package/netdata/luci-app-netdata ./package/ && rm -rf ./package/netdata
 
 # turboacc 补丁
 curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
@@ -86,7 +91,6 @@ curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.
 sed -i "s|services|nas|g" package/luci-app-openlist2/root/usr/share/luci/menu.d/luci-app-openlist2.json
 sed -i "s|services|nas|g" feeds/luci/applications/luci-app-qbittorrent/root/usr/share/luci/menu.d/luci-app-qbittorrent.json
 sed -i "s|services|vpn|g" package/luci-app-tailscale/root/usr/share/luci/menu.d/luci-app-tailscale-community.json
-sed -i "s|system|nas|g" package/luci-app-quickfile/root/usr/share/luci/menu.d/luci-app-quickfile.json
 # 微信推送&全能推送
 sed -i "s|qidian|bilibili|g" package/luci-app-pushbot/root/usr/bin/pushbot/pushbot
 # DNS劫持
