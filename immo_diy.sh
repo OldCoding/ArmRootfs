@@ -84,8 +84,7 @@ mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/netdata/luci-app-netdata ./package/ && rm -rf ./package/netdata
 
 # turboacc 补丁
-curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
-
+curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
 
 # 调整菜单位置
 sed -i "s|services|nas|g" package/luci-app-openlist2/root/usr/share/luci/menu.d/luci-app-openlist2.json
