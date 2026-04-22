@@ -35,7 +35,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-22.04
     if: github.event.repository.owner.id == github.event.sender.id
     
     steps:
@@ -73,9 +73,7 @@ jobs:
         # sudo -E apt -y purge azure-cli ghc* zulu* texlive* firefox google* dotnet* powershell openjdk* mongodb* moby* || true
         [[ -n "${AGENT_TOOLSDIRECTORY}" ]] && sudo rm -rf "${AGENT_TOOLSDIRECTORY}"
         sudo -E apt update
-        # 注意：此处移除了针对 22.04 的特定脚本，改用通用依赖
-        sudo -E apt -y install build-essential libncurses5-dev libncursesw5-dev \
-        zlib1g-dev gawk git gettext libssl-dev xsltproc rsync wget unzip python3
+        sudo -E apt -y install $(curl -fsSL https://ophub.org/ubuntu2204-make-openwrt-depends)
         sudo -E apt-get -qq install libfuse-dev
         sudo -E apt -y autoremove --purge
         sudo -E systemctl daemon-reload
@@ -95,8 +93,20 @@ jobs:
 
     - name: Create simulated physical disk
       run: |
+        mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+        root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+        sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+        sudo truncate -s "${root_size}"G /root.img
+        sudo losetup /dev/loop6 /mnt/mnt.img
+        sudo losetup /dev/loop7 /root.img
+        sudo pvcreate /dev/loop6
+        sudo pvcreate /dev/loop7
+        sudo vgcreate github /dev/loop6 /dev/loop7
+        sudo lvcreate -n runner -l 100%FREE github
+        sudo mkfs.xfs /dev/github/runner
         sudo mkdir -p /workdir
-        sudo chown runner:runner /workdir
+        sudo mount /dev/github/runner /workdir
+        sudo chown -R runner.runner /workdir
         df -Th
 
     - name: Clone source code
