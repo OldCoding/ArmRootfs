@@ -82,13 +82,43 @@ jobs:
         df -Th
 
 
+    - name: Create Swap
+      if: env.SWAP == 'true'
+      run: |
+        sudo dd if=/dev/zero of=/mnt/swapfile bs=1M count=8192
+        sudo chmod 600 /mnt/swapfile
+        sudo mkswap /mnt/swapfile
+        sudo swapon /mnt/swapfile
+        free -h | grep -i swap
+
+    - name: Create simulated physical disk
+      run: |
+        mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+        root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+        sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+        sudo truncate -s "${root_size}"G /root.img
+        sudo losetup /dev/loop6 /mnt/mnt.img
+        sudo losetup /dev/loop7 /root.img
+        sudo pvcreate /dev/loop6
+        sudo pvcreate /dev/loop7
+        sudo vgcreate github /dev/loop6 /dev/loop7
+        sudo lvcreate -n runner -l 100%FREE github
+        sudo mkfs.xfs /dev/github/runner
+        sudo mkdir -p /workdir
+        sudo mount /dev/github/runner /workdir
+        sudo chown -R runner.runner /workdir
+        df -Th
+
     - name: Clone source code
-      working-directory: /mnt
+      working-directory: /workdir
       run: |
         df -hT $PWD
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-        ln -sf /mnt/openwrt $GITHUB_WORKSPACE/openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
+        sed -i 's/openwrt-23.05/openwrt-25.12/g' feeds.conf.default # 切换luci分支
+        sed -i 's/24.10.3/25.12-SNAPSHOT/g' include/version.mk
+        sed -i 's/24.10.3/25.12-SNAPSHOT/g' package/base-files/image-config.in
         useVersionInfo=$(git show -s --date=short --format="Author: %an<br/>date: %cd<br/>commit: %s<br/>commit hash: %H<br/>")
         VER=$(grep -E "='R.+" ./package/lean/default-settings/files/zzz-default-settings | cut -f2 -d"'")
         echo "useVersionInfo=$useVersionInfo" >> $GITHUB_ENV
