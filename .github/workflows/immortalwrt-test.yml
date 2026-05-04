@@ -205,15 +205,6 @@ jobs:
         CONFIG_PACKAGE_ipv6helper=y
         EOF
 
-        # DDNS
-        cat >> .config <<EOF
-        CONFIG_PACKAGE_ddns-scripts=y
-        CONFIG_PACKAGE_ddns-scripts-cloudflare=y
-        CONFIG_PACKAGE_ddns-scripts-dnspod=y
-        CONFIG_PACKAGE_ddns-scripts-dnspod-com=y
-        CONFIG_PACKAGE_ddns-scripts_aliyun=y
-        EOF
-
         # 镜像设置
         cat >> .config <<EOF
         #
@@ -449,7 +440,7 @@ jobs:
     - name: Calculate MD5
       run: |
         cp $GITHUB_WORKSPACE/openwrt/bin/Packages.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
-        #cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/*rootfs.tar.gz ${{ env.PACKAGED_OUTPUTPATH }}
+        #cp $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/* ${{ env.PACKAGED_OUTPUTPATH }}
         cp $GITHUB_WORKSPACE/openwrt/bin/config ${{ env.PACKAGED_OUTPUTPATH }}/config-immo.txt
         cd ${{ env.PACKAGED_OUTPUTPATH }} && rm -rf sha256sums
         MD5=$(md5sum *.gz | sed ':a;N;$!ba;s/\n/<br>/g')
