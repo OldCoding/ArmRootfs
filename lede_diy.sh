@@ -74,7 +74,7 @@ curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
 
 # 下载插件
-#git clone --depth 1 https://github.com/sbwml/openwrt_helloworld package/openwrt_helloworld
+git clone --depth 1 https://github.com/sbwml/openwrt_helloworld package/openwrt_helloworld
 git clone --depth 1 https://github.com/zyqfork/luci-app-pushbot feeds/luci/applications/luci-app-pushbot
 git clone --depth 1 https://github.com/OldCoding/luci-app-kodexplorer package/luci-app-kodexplorer
 git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist
@@ -148,7 +148,7 @@ svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luc
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "openwrt-25.12" "net/ddns-go" "net/ddns-go" "https://github.com/immortalwrt/packages"
 
-rm -rf package/openwrt_helloworld/luci-app-openclash
+rm -rf package/openwrt-passwall-packages/shadowsocks-rust
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
