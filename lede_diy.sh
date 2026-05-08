@@ -69,7 +69,7 @@ rm -rf feeds/packages/libs/libutp
 rm -rf feeds/packages/libs/libb64
 rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/luci/themes/luci-theme-design
-rm -rf feeds/packages/net/{xray-core,v2ray-core,v2ray-geodata,sing-box}
+find ./feeds/packages/ -type d -regex '.*\(/chinadns-ng$\|/dns2socks$\|/dns2socks-rust$\|/dns2tcp$\|/dnsproxy$\|/geoview$\|/gn$\|/hysteria$\|/ipt2socks$\|/lua-neturl$\|/microsocks$\|/mihomo$\|/mosdns$\|/naiveproxy$\|/redsocks2$\|/shadow-tls$\|/shadowsocks-libev$\|/shadowsocks-rust$\|/shadowsocksr-libev$\|/simple-obfs$\|/sing-box$\|/tcping$\|/trojan-plus$\|/tuic-client$\|/v2ray-core$\|/v2ray-geodata$\|/v2ray-plugin$\|/v2raya$\|/xray-core$\|/xray-plugin$\)$' -exec rm -rf {} \;
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
 
@@ -81,7 +81,7 @@ git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist
 git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/tty228/luci-app-wechatpush package/luci-app-wechatpush
-#git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
+git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
 git clone --depth 1 https://github.com/sirpdboy/luci-app-adguardhome package/adguardhome
 git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon
