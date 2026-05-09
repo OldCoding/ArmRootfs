@@ -14,6 +14,7 @@ svn_export() {
 
 # 删除冲突软件和依赖
 rm -rf tools/libdeflate
+rm -rf package/feeds
 rm -rf package/lean/ddns-scripts_aliyun
 rm -rf package/lean/ddns-scripts_dnspod
 rm -rf feeds/packages/lang/golang
