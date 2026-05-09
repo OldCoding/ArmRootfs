@@ -69,7 +69,7 @@ rm -rf feeds/packages/libs/libutp
 rm -rf feeds/packages/libs/libb64
 rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/luci/themes/luci-theme-design
-find ./feeds/packages/ -type d -regex '.*\(/chinadns-ng$\|/dns2socks$\|/dns2socks-rust$\|/dns2tcp$\|/dnsproxy$\|/geoview$\|/gn$\|/hysteria$\|/ipt2socks$\|/lua-neturl$\|/microsocks$\|/mihomo$\|/mosdns$\|/naiveproxy$\|/redsocks2$\|/shadow-tls$\|/shadowsocks-libev$\|/shadowsocks-rust$\|/shadowsocksr-libev$\|/simple-obfs$\|/sing-box$\|/tcping$\|/trojan-plus$\|/tuic-client$\|/v2ray-core$\|/v2ray-geodata$\|/v2ray-plugin$\|/v2raya$\|/xray-core$\|/xray-plugin$\)$' -exec rm -rf {} \;
+#find ./feeds/packages/ -type d -regex '.*\(/chinadns-ng$\|/dns2socks$\|/dns2socks-rust$\|/dns2tcp$\|/dnsproxy$\|/geoview$\|/gn$\|/hysteria$\|/ipt2socks$\|/lua-neturl$\|/microsocks$\|/mihomo$\|/mosdns$\|/naiveproxy$\|/redsocks2$\|/shadow-tls$\|/shadowsocks-libev$\|/shadowsocks-rust$\|/shadowsocksr-libev$\|/simple-obfs$\|/sing-box$\|/tcping$\|/trojan-plus$\|/tuic-client$\|/v2ray-core$\|/v2ray-geodata$\|/v2ray-plugin$\|/v2raya$\|/xray-core$\|/xray-plugin$\)$' -exec rm -rf {} \;
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
 
@@ -96,7 +96,7 @@ git clone --depth 1 https://github.com/sbwml/packages_lang_golang feeds/packages
 svn_export "master" "luci-app-tailscale-community" "package/luci-app-tailscale" "https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community"
 svn_export "master" "tools/libdeflate" "tools/libdeflate" "https://github.com/immortalwrt/immortalwrt"
 svn_export "master" "libs/libdeflate" "feeds/packages/libs/libdeflate" "https://github.com/immortalwrt/packages"
-svn_export "main" "luci-app-passwall" "feeds/luci/applications/luci-app-passwall" "https://github.com/Openwrt-Passwall/openwrt-passwall"
+svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/Openwrt-Passwall/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/Openwrt-Passwall/openwrt-passwall2"
 svn_export "master" "applications/luci-app-diskman" "feeds/luci/applications/luci-app-diskman" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-smartdns" "feeds/luci/applications/luci-app-smartdns" "https://github.com/immortalwrt/luci"
