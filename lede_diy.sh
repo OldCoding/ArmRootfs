@@ -161,7 +161,7 @@ mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 
 # 安装插件
 #./scripts/feeds update -i
-./scripts/feeds install -a
+#./scripts/feeds install -a
 
 # 调整菜单位置
 sed -i "s|services|nas|g" package/luci-app-openlist2/root/usr/share/luci/menu.d/luci-app-openlist2.json
