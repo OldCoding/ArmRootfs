@@ -14,7 +14,6 @@ svn_export() {
 
 # 删除冲突软件和依赖
 rm -rf tools/libdeflate
-rm -rf package/feeds
 rm -rf package/lean/ddns-scripts_aliyun
 rm -rf package/lean/ddns-scripts_dnspod
 rm -rf feeds/packages/lang/golang
@@ -163,6 +162,7 @@ mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 # 安装插件
 ./scripts/feeds update -i
 ./scripts/feeds install -a
+rm -rf package/feeds
 
 # 调整菜单位置
 sed -i "s|services|nas|g" package/luci-app-openlist2/root/usr/share/luci/menu.d/luci-app-openlist2.json
