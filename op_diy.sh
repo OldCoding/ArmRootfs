@@ -36,7 +36,7 @@ rm -rf feeds/luci/themes/luci-theme-design
 rm -rf feeds/packages/net/{xray-core,v2ray-core,v2ray-geodata,sing-box}
 git clone --depth 1 https://github.com/sbwml/feeds_packages_net_aria2 feeds/packages/net/aria2
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
-git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
+#git clone https://github.com/sbwml/packages_lang_golang feeds/packages/lang/golang
 
 # 下载插件
 git clone --depth 1 https://github.com/zyqfork/luci-app-pushbot package/luci-app-pushbot
@@ -81,8 +81,8 @@ svn_export "master" "utils/dockerd" "feeds/packages/utils/dockerd" "https://gith
 svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/coolsnowwolf/packages"
 #svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
-svn_export "openwrt-25.12" "applications/luci-app-ddns-go" "applications/luci-app-ddns-go" "https://github.com/immortalwrt/luci"
-svn_export "openwrt-25.12" "net/ddns-go" "net/ddns-go" "https://github.com/immortalwrt/packages"
+svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/sirpdboy/luci-app-ddns-go"
+svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/sirpdboy/ddns-go"
 
 
 
