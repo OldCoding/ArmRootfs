@@ -147,8 +147,8 @@ svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://gith
 #svn_export "main" "general/golang" "feeds/packages/lang/golang" "https://github.com/breakings/OpenWrt"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
-svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/sirpdboy/luci-app-ddns-go"
-svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/sirpdboy/ddns-go"
+svn_export "master" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/sirpdboy/luci-app-ddns-go"
+svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/sirpdboy/ddns-go"
 
 #rm -rf package/openwrt_helloworld/shadowsocks-rust
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
@@ -198,7 +198,7 @@ cd package
 curl -sfL -o ./convert_translation.sh https://github.com/kenzok8/small-package/raw/main/.github/diy/convert_translation.sh
 chmod +x ./convert_translation.sh && bash ./convert_translation.sh
 # 更新passwall规则
-#curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt
+curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt
 # OpenClash
 cd ./luci-app-openclash/root/etc/openclash
 #CORE_VER=https://github.com/vernesong/OpenClash/raw/refs/heads/core/dev/core_version
