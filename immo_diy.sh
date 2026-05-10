@@ -79,7 +79,7 @@ svn_export "master" "net/cloudflared" "feeds/packages/net/cloudflared" "https://
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "master" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
-svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/ddns-go"
+svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest

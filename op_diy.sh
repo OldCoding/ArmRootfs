@@ -82,7 +82,7 @@ svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https:
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/coolsnowwolf/packages"
 #svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
-svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/ddns-go"
+svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 
 
 
