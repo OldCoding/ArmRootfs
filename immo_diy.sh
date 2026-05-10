@@ -107,7 +107,6 @@ sed -i "s|ARMv8|ARMv8-im|g" package/luci-app-amlogic/root/etc/config/amlogic
 sed -i "s|breakingbadboy|OldCoding|g" package/luci-app-amlogic/luasrc/model/cbi/amlogic/amlogic_config.lua
 sed -i "s|OpenWrt|openwrt_packit_arm|g" package/luci-app-amlogic/luasrc/model/cbi/amlogic/amlogic_config.lua
 sed -i "s|ARMv8|ARMv8-im|g" package/luci-app-amlogic/luasrc/model/cbi/amlogic/amlogic_config.lua
-rm -rf package/luci-app-netspeedtest/po/zh_Hans
 cd package
 # NTP服务器
 sed -i "s|\'time1\.apple\.com\'|\'0\.openwrt\.pool\.ntp\.org\'|g" base-files/files/bin/config_generate
