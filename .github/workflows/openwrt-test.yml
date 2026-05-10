@@ -305,6 +305,10 @@ jobs:
 
         # 必备软件包:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_php8=m
+        CONFIG_PHP8_LIBXML=y
+        CONFIG_PHP8_DOM=y
+        CONFIG_PHP8_GETTEXT=y
         CONFIG_PACKAGE_perl=y
         CONFIG_PACKAGE_perl-http-date=y
         CONFIG_PACKAGE_perlbase-file=y

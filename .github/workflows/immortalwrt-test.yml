@@ -334,6 +334,10 @@ jobs:
 
         # 可选软件包
         cat >> .config <<EOF
+        CONFIG_PACKAGE_php8=m
+        CONFIG_PHP8_LIBXML=y
+        CONFIG_PHP8_DOM=y
+        CONFIG_PHP8_GETTEXT=y
         CONFIG_PACKAGE_autocore-arm=y
         CONFIG_PACKAGE_automount=y
         CONFIG_PACKAGE_block-mount=y
