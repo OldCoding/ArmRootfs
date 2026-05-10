@@ -16,6 +16,7 @@ svn_export() {
 
 # 依赖和冲突
 #rm -rf feeds/packages/lang/golang
+rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/luci/applications/luci-app-cloudflared
 rm -rf feeds/luci/applications/luci-app-ddns-go
 rm -rf feeds/luci/applications/luci-app-openclash
