@@ -74,7 +74,7 @@ svn_export "master" "utils/docker" "feeds/packages/utils/docker" "https://github
 svn_export "master" "utils/dockerd" "feeds/packages/utils/dockerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/coolsnowwolf/packages"
-svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
+#svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "lang/php8-pecl-mcrypt" "feeds/packages/lang/php8-pecl-mcrypt" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "libs/libmcrypt" "feeds/packages/libs/libmcrypt" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "net/cloudflared" "feeds/packages/net/cloudflared" "https://github.com/openwrt/packages"
