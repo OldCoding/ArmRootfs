@@ -81,7 +81,8 @@ svn_export "master" "utils/dockerd" "feeds/packages/utils/dockerd" "https://gith
 svn_export "master" "utils/containerd" "feeds/packages/utils/containerd" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "lang/php8-pecl-mcrypt" "feeds/packages/lang/php8-pecl-mcrypt" "https://github.com/coolsnowwolf/packages"
-#svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
+svn_export "master" "libs/libmcrypt" "feeds/packages/libs/libmcrypt" "https://github.com/coolsnowwolf/packages"
+svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
 svn_export "master" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 
@@ -101,9 +102,6 @@ mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 
-#svn_export "master" "package/libs/mbedtls" "package/libs/mbedtls" "https://github.com/coolsnowwolf/lede"
-#svn_export "master" "package/libs/ustream-ssl" "package/libs/ustream-ssl" "https://github.com/coolsnowwolf/lede"
-#svn_export "master" "package/libs/uclient" "package/libs/uclient" "https://github.com/coolsnowwolf/lede"
 
 # turboacc 补丁
 #curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
