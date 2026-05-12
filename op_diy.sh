@@ -102,6 +102,8 @@ mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 
+rm -rf ./package/openwrt-passwall-packages/simple-obfs
+
 
 # turboacc 补丁
 #curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
