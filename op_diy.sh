@@ -83,8 +83,8 @@ svn_export "master" "utils/runc" "feeds/packages/utils/runc" "https://github.com
 #svn_export "package" "php8-pecl-mcrypt" "feeds/packages/lang/php8-pecl-mcrypt" "https://github.com/OldCoding/luci-app-kodexplorer"
 #svn_export "package" "libmcrypt" "feeds/packages/libs/libmcrypt" "https://github.com/OldCoding/luci-app-kodexplorer"
 #svn_export "master" "utils/cgroupfs-mount" "feeds/packages/utils/cgroupfs-mount" "https://github.com/coolsnowwolf/packages"
-svn_export "master" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
-svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
+svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
+svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 
 
 
