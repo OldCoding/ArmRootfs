@@ -35,7 +35,7 @@ rm -rf feeds/packages/utils/dockerd
 rm -rf feeds/packages/utils/containerd
 rm -rf feeds/packages/utils/runc
 rm -rf feeds/packages/net/aria2
-#rm -rf feeds/packages/net/ddns-go
+rm -rf feeds/packages/net/ddns-go
 rm -rf feeds/luci/themes/luci-theme-argon
 rm -rf feeds/luci/themes/luci-theme-design
 git clone --depth 1 https://github.com/jerrykuku/luci-theme-argon feeds/luci/themes/luci-theme-argon
