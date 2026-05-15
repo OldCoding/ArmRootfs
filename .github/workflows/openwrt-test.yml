@@ -243,6 +243,7 @@ jobs:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-amlogic=y
         CONFIG_PACKAGE_luci-app-samba4=y
+        CONFIG_PACKAGE_samba4-utils=y
         EOF
 
         # 
