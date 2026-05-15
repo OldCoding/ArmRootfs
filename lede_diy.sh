@@ -147,8 +147,8 @@ svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://gith
 #svn_export "main" "general/golang" "feeds/packages/lang/golang" "https://github.com/breakings/OpenWrt"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
-svn_export "master" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
-svn_export "master" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
+svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
+svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 
 #rm -rf package/openwrt_helloworld/shadowsocks-rust
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
