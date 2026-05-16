@@ -78,7 +78,7 @@ git clone --depth 1 https://github.com/sirpdboy/luci-app-adguardhome package/adg
 git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
-git clone --depth 1 https://github.com/sirpdboy/netspeedtest package/netspeedtest
+git clone --depth 1 https://github.com/OldCoding/netspeedtest package/netspeedtest
 #git clone --depth 1 https://github.com/UnblockNeteaseMusic/luci-app-unblockneteasemusic package/luci-app-unblockneteasemusic
 #git clone --depth 1 https://github.com/hudra0/luci-app-qosmate package/luci-app-qosmate
 #git clone --depth 1 https://github.com/hudra0/qosmate package/qosmate
