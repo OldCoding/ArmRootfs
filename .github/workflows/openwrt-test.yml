@@ -350,6 +350,7 @@ jobs:
         CONFIG_PACKAGE_block-mount=y
         CONFIG_PACKAGE_samba4-utils=y
         CONFIG_PACKAGE_wsdd2=y
+        CONFIG_PACKAGE_icu=y
         CONFIG_PACKAGE_htop=y
         CONFIG_PACKAGE_libsensors=y
         CONFIG_PACKAGE_ariang=y
