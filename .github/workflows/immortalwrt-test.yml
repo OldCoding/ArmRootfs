@@ -124,12 +124,14 @@ jobs:
         echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
+      run:  cd openwrt && ./scripts/feeds update -a
 
     - name: git clone packages
       run: |
         cd openwrt/package
         git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE
+		cd ..
+		./scripts/feeds install -a
 
     - name: Generate configuration file
       run: |
