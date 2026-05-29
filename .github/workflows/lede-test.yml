@@ -128,12 +128,14 @@ jobs:
         echo "VER=$VER" >> $GITHUB_ENV
 
     - name: Update feeds
-      run:  cd openwrt && ./scripts/feeds update -a && ./scripts/feeds install -a
+      run: cd openwrt && ./scripts/feeds update -a
 
     - name: git clone packages
       run: |
-        cd openwrt/package
-        git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE
+        cd openwrt
+        git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE package/luci-app-qBittorrent-EE
+		./scripts/feeds install -a
+
 
     - name: Generate configuration file
       run: |
