@@ -190,7 +190,7 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
-        CONFIG_PACKAGE_luci-app-qBittorrent-EE
+        CONFIG_PACKAGE_luci-app-qBittorrent-EE=y
         EOF
 
         # 
