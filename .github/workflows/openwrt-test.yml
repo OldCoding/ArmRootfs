@@ -125,7 +125,7 @@ jobs:
         sed -i 's|http.*org\/[a-z]*|https:\/\/github\.com\/openwrt|g' feeds.conf.default
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
+      run:  cd openwrt && ./scripts/feeds update -a
 
     - name: git clone packages
       run: |

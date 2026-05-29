@@ -124,7 +124,7 @@ jobs:
         echo "VER=R$(date +%Y.%m.%d)" >> $GITHUB_ENV
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
+      run:  cd openwrt && ./scripts/feeds update -a
 
     - name: git clone packages
       run: |
