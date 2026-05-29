@@ -127,11 +127,11 @@ jobs:
     - name: Update feeds
       run:  cd openwrt && ./scripts/feeds update -a
 
-    - name: git clone packages
+    - name: File Diy Patch
       run: |
+        chmod +x $DIY_SH
         cd openwrt
-        git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE package/luci-app-qBittorrent-EE
-		./scripts/feeds install -a
+        $GITHUB_WORKSPACE/$DIY_SH
 
     - name: Generate configuration file
       run: |
