@@ -40,7 +40,8 @@ svn_export() {
     fi
 }
 
-git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE package/luci-app-qBittorrent-EE
+git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE package/qbee
+mv package/qbee/* ./package/ && rm -rf package/qbee
 # 安装插件
 ./scripts/feeds update -i
 ./scripts/feeds install -a

@@ -42,7 +42,8 @@ svn_export() {
 
 # Rust编译错误-download-ci-llvm
 sed -i 's/download-ci-llvm=true/download-ci-llvm=false/g' feeds/packages/lang/rust/Makefile
-git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE package/luci-app-qBittorrent-EE
+git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-EE package/qbee
+mv package/qbee/* ./package/ && rm -rf package/qbee
 # 安装插件
 ./scripts/feeds update -i
 ./scripts/feeds install -a
