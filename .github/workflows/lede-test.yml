@@ -267,7 +267,7 @@ jobs:
         name: R${{ env.DATE }} for ${{ env.PRODUCT_NAME }}
         allowUpdates: true
         removeArtifacts: true
-        tag: ${{ env.FILE_NAME }}
+        tag: ${{ env.PRODUCT_NAME }}
         commit: main
         token: ${{ secrets.GITHUB_TOKEN }}
         body: |
