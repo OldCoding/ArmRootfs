@@ -40,8 +40,8 @@ svn_export() {
     fi
 }
 
-git clone --depth 1 https://github.com/OldCoding/luci-app-qBittorrent-enhanced.git package/luci-app-qBittorrent-enhanced
-git clone --depth 1 https://github.com/OldCoding/qBEE.git package/qBittorrent-EE
+git clone --depth 1 https://github.com/OldCoding/OpenWrt-qBittorrent-Enhanced-Edition package/qbee
+mv package/qbee package && rm -rf package/qbee
 
 sed -i "s/192.168.1.1/192.168.2.1/g" package/base-files/files/bin/config_generate
 # 安装插件

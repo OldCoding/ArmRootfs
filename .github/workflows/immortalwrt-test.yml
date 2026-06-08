@@ -188,8 +188,10 @@ jobs:
 
         # LuCI插件选择:
         cat >> .config <<EOF
+        CONFIG_PACKAGE_luci-compat=y
         CONFIG_PACKAGE_default-settings=y
-        CONFIG_PACKAGE_luci-app-qBittorrent-enhanced=y
+        CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
+        CONFIG_PACKAGE_luci-app-qBittorrent-EE=y
         EOF
 
         # 
