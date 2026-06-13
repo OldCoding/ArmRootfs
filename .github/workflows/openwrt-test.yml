@@ -27,7 +27,7 @@ env:
   UPLOAD_FIRMWARE: false
   UPLOAD_RELEASE: true
   SWAP: false
-  DIY_SH: op_diy.sh
+  DIY_SH: op_test_diy.sh
   TZ: Asia/Shanghai
   FILE_NAME: openwrt_armvirt
   PRODUCT_NAME: ARMv8-op
