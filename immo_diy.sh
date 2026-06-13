@@ -42,6 +42,7 @@ svn_export() {
 
 git clone --depth 1 https://github.com/OldCoding/OpenWrt-qBittorrent-Enhanced-Edition package/qbee
 mv package/qbee package && rm -rf package/qbee
+curl -o feeds/packages/net/aria2/patches/010-increase-max-connections-and-reduce-split-size.patch https://github.com/OldCoding/aria2-patch/raw/refs/heads/main/010-increase-max-connections-and-reduce-split-size.patch
 
 sed -i "s/192.168.1.1/192.168.2.1/g" package/base-files/files/bin/config_generate
 # 安装插件

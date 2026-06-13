@@ -189,9 +189,9 @@ jobs:
         # LuCI插件选择:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-compat=y
-        CONFIG_PACKAGE_default-settings=y
-        CONFIG_PACKAGE_luci-i18n-base-zh-cn=y
+        CONFIG_PACKAGE_default-settings-chn=y
         CONFIG_PACKAGE_luci-app-qBittorrent-EE=y
+        CONFIG_PACKAGE_luci-app-aria2=y
         EOF
 
         # 
