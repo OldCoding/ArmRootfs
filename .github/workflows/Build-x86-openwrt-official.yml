@@ -212,8 +212,6 @@ jobs:
 
         # 镜像设置
         cat >> .config <<EOF
-        # 镜像设置
-        cat >> .config <<EOF
         # Root filesystem archives
         #
         # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
