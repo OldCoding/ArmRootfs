@@ -182,8 +182,8 @@ jobs:
         CONFIG_TARGET_x86_64=y
         CONFIG_TARGET_x86_64_DEVICE_generic=y
         CONFIG_TARGET_ARCH_PACKAGES="x86_64"
-        CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe"
-        CONFIG_CPU_TYPE=" "
+        CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe -mcpu=generic"
+        CONFIG_CPU_TYPE="generic"
         EOF
         
         # USB2.0支持:
