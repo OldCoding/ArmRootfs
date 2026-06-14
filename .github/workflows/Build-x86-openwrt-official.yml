@@ -246,7 +246,6 @@ jobs:
         CONFIG_TARGET_SERIAL="ttyS0"
         CONFIG_TARGET_IMAGES_GZIP=y
         EOF
-        EOF
 
         # LuCI插件选择:
         cat >> .config <<EOF
