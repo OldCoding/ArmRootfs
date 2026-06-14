@@ -248,7 +248,6 @@ jobs:
         # LuCI插件选择:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
-        CONFIG_PACKAGE_luci-app-amlogic=y
         CONFIG_PACKAGE_luci-app-cloudflared=y
         CONFIG_PACKAGE_luci-app-openlist2=y
         CONFIG_PACKAGE_luci-app-diskman=y
@@ -317,13 +316,6 @@ jobs:
         CONFIG_PHP8_GETTEXT=y
         CONFIG_PHP8_INTL=y
         CONFIG_PHP8_SYSTEMTZDATA=y
-        CONFIG_PACKAGE_perl=y
-        CONFIG_PACKAGE_perl-http-date=y
-        CONFIG_PACKAGE_perlbase-file=y
-        CONFIG_PACKAGE_perlbase-getopt=y
-        CONFIG_PACKAGE_perlbase-time=y
-        CONFIG_PACKAGE_perlbase-unicode=y
-        CONFIG_PACKAGE_perlbase-utf8=y
         CONFIG_PACKAGE_blkid=y
         CONFIG_PACKAGE_fdisk=y
         CONFIG_PACKAGE_lsblk=y
