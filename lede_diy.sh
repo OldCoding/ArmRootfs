@@ -167,6 +167,8 @@ mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
 #make && sudo make install
 #popd
 
+sed -i "s/192.168.1.1/192.168.2.1/g" package/base-files/files/bin/config_generate
+
 # 安装插件
 ./scripts/feeds update -i
 ./scripts/feeds install -a
