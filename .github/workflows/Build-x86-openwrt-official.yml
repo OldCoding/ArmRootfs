@@ -245,6 +245,17 @@ jobs:
         CONFIG_TARGET_IMAGES_GZIP=y
         EOF
 
+        # 磁盘驱动
+        cat >> .config <<EOF
+        CONFIG_PACKAGE_kmod-ata-ahci=y
+        CONFIG_PACKAGE_kmod-ata-core=y
+        CONFIG_PACKAGE_kmod-ata-piix=y
+        CONFIG_PACKAGE_kmod-nvme=y
+        CONFIG_PACKAGE_kmod-scsi-core=y
+        CONFIG_PACKAGE_kmod-scsi-generic=y
+        # end of Block Devices
+        EOF
+
         # LuCI插件选择:
         cat >> .config <<EOF
         CONFIG_PACKAGE_luci-app-autoreboot=y
