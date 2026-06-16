@@ -100,7 +100,9 @@ svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://githu
 svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 
-git clone --depth 1 https://github.com/OldCoding/aria2-patch feeds/packages/net/aria2/patches
+# aria2补丁
+curl --create-dirs -o feeds/packages/net/aria2/patches/010-increase-max-connections-and-reduce-split-size.patch https://raw.githubusercontent.com/OldCoding/aria2-patch/main/010-increase-max-connections-and-reduce-split-size.patch
+curl --create-dirs -o feeds/packages/net/ariang/patches/020-adjust-ariang-options-limits.patch https://raw.githubusercontent.com/OldCoding/aria2-patch/main/020-adjust-ariang-options-limits.patch
 
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
