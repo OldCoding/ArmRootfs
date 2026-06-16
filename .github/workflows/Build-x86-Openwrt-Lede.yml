@@ -181,9 +181,6 @@ jobs:
         CONFIG_TARGET_x86=y
         CONFIG_TARGET_x86_64=y
         CONFIG_TARGET_x86_64_DEVICE_generic=y
-        CONFIG_TARGET_ARCH_PACKAGES="x86_64"
-        CONFIG_DEFAULT_TARGET_OPTIMIZATION="-Os -pipe -mcpu=generic"
-        CONFIG_CPU_TYPE="generic"
         EOF
         
         # USB2.0支持:
@@ -212,10 +209,16 @@ jobs:
 
         # 镜像设置
         cat >> .config <<EOF
+        #
+        # Target Images
+        #
+        # CONFIG_TARGET_ROOTFS_INITRAMFS is not set
+        CONFIG_EXTERNAL_CPIO=""
+
         # Root filesystem archives
         #
         # CONFIG_TARGET_ROOTFS_CPIOGZ is not set
-        # CONFIG_TARGET_ROOTFS_TARGZ is not set
+        CONFIG_TARGET_ROOTFS_TARGZ=y
         
         #
         # Root filesystem images
@@ -235,25 +238,24 @@ jobs:
         # CONFIG_GRUB_FLOWCONTROL is not set
         CONFIG_GRUB_BOOTOPTS=""
         CONFIG_GRUB_TIMEOUT="0"
-        CONFIG_GRUB_TITLE="LEDE"
+        CONFIG_GRUB_TITLE="ImmortalWrt"
         # CONFIG_ISO_IMAGES is not set
-        # CONFIG_QCOW2_IMAGES is not set
-        # CONFIG_VDI_IMAGES is not set
+        CONFIG_QCOW2_IMAGES=y
+        CONFIG_VDI_IMAGES=y
         CONFIG_VMDK_IMAGES=y
-        # CONFIG_VHDX_IMAGES is not set
+        CONFIG_VHDX_IMAGES=y
         CONFIG_TARGET_SERIAL="ttyS0"
         CONFIG_TARGET_IMAGES_GZIP=y
         EOF
 
         # 磁盘驱动
         cat >> .config <<EOF
-        CONFIG_PACKAGE_kmod-ata-ahci=y
-        CONFIG_PACKAGE_kmod-ata-core=y
-        CONFIG_PACKAGE_kmod-ata-piix=y
+        CONFIG_PACKAGE_kmod-dax=y
+        CONFIG_PACKAGE_kmod-dm=y
         CONFIG_PACKAGE_kmod-nvme=y
         CONFIG_PACKAGE_kmod-scsi-core=y
         CONFIG_PACKAGE_kmod-scsi-generic=y
-        # end of Block Devices
+        CONFIG_PACKAGE_kmod-scsi-tape=y
         EOF
 
         # LuCI插件选择:
@@ -416,6 +418,7 @@ jobs:
         echo "开始清理空间"
         sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT
+
     - name: Organize files
       id: organize
       if: steps.compile.outputs.status == 'success' && !cancelled()
@@ -424,9 +427,11 @@ jobs:
         tar -zcvf Packages.tar.gz openwrt/bin/packages
         cp Packages.tar.gz openwrt/bin/targets/*/*
         cd openwrt/bin/targets/*/*
+        cp cp $GITHUB_WORKSPACE/openwrt/bin/config ./immo-config.txt
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> ${GITHUB_OUTPUT}
+
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: env.UPLOAD_FIRMWARE == 'true' && steps.organize.outputs.status == 'success' && !cancelled()
