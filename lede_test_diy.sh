@@ -156,7 +156,7 @@ svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci
 
 # aria2补丁
 curl --create-dirs -o feeds/packages/net/aria2/patches/010-increase-max-connections-and-reduce-split-size.patch https://raw.githubusercontent.com/OldCoding/aria2-patch/main/010-increase-max-connections-and-reduce-split-size.patch
-curl --create-dirs -o feeds/packages/net/ariang/patches/020-adjust-ariang-options-limits.patch https://raw.githubusercontent.com/OldCoding/aria2-patch/main/020-adjust-ariang-options-limits.patch
+curl -o feeds/packages/net/ariang/Makefile https://raw.githubusercontent.com/OldCoding/aria2-patch/main/Makefile
 
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
