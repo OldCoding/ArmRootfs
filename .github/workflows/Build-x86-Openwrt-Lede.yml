@@ -419,7 +419,7 @@ jobs:
       run: |
         df -hT
         cd openwrt
-        cp -f .config bin/targets/*/*/lede-config.txt
+        sudo cp -f .config bin/targets/*/*/lede-config.txt
         echo "开始清理空间"
         sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT
