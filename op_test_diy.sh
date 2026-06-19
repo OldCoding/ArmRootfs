@@ -47,6 +47,7 @@ find ./ | grep Makefile | grep mosdns | xargs rm -f
 sed -i 's/download-ci-llvm=true/download-ci-llvm=false/g' feeds/packages/lang/rust/Makefile
 # 删除冲突软件和依赖
 #rm -rf feeds/packages/lang/golang
+rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/luci/applications/luci-app-dockerman
 rm -rf feeds/luci/applications/luci-app-nlbwmon
 rm -rf feeds/packages/utils/docker
@@ -112,10 +113,6 @@ mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
-
-
-rm -rf ./package/helloworld/simple-obfs
-
 
 # turboacc 补丁
 curl -sSL https://raw.githubusercontent.com/chenmozhijin/turboacc/luci/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh
