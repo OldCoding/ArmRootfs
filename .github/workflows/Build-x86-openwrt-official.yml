@@ -421,7 +421,7 @@ jobs:
       run: |
         df -hT
         cd openwrt
-        sudo cp -f .config bin/targets/*/*/op-config.txt
+        sudo cp -f .config bin/targets/x86/64/op-config.txt
         echo "开始清理空间"
         sudo rm -rf $(ls . | grep -v "^bin$" | xargs) 2>/dev/null
         df -hT
