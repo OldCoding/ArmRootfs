@@ -60,6 +60,7 @@ curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/
 curl -o feeds/packages/net/aria2/patches/010-increase-max-connections-and-reduce-split-size.patch https://github.com/OldCoding/aria2-patch/raw/refs/heads/main/010-increase-max-connections-and-reduce-split-size.patch
 
 # 下载插件
+git clone --depth 1 https://github.com/immortalwrt/homeproxy package/luci-app-homeproxy
 git clone --depth 1 https://github.com/zyqfork/luci-app-pushbot package/luci-app-pushbot
 git clone --depth 1 https://github.com/OldCoding/luci-app-kodexplorer package/luci-app-kodexplorer
 git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist
