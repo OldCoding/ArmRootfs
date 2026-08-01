@@ -286,13 +286,14 @@ jobs:
         CONFIG_PACKAGE_luci-app-adguardhome=y
         CONFIG_PACKAGE_luci-app-sqm=y
         CONFIG_PACKAGE_luci-app-turboacc=y
-        CONFIG_PACKAGE_luci-app-tailscale=y
+        CONFIG_PACKAGE_luci-app-tailscale-community=y
         CONFIG_PACKAGE_luci-app-qBittorrent-EE=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
         CONFIG_PACKAGE_luci-app-aria2=y
         CONFIG_PACKAGE_luci-app-filebrowser=y
         CONFIG_PACKAGE_luci-app-kodexplorer=y
         CONFIG_PACKAGE_luci-app-openclash=y
+        CONFIG_PACKAGE_luci-app-oxidns=y
         EOF
 
         # LuCI主题:
@@ -300,7 +301,7 @@ jobs:
         CONFIG_PACKAGE_luci-theme-argon=y
         CONFIG_PACKAGE_luci-app-argon-config=y
         CONFIG_PACKAGE_luci-theme-design=y
-        CONFIG_PACKAGE_luci-theme-glass=y
+        CONFIG_PACKAGE_luci-theme-fluent=y
         EOF
 
         # 必备软件包:
