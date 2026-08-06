@@ -155,6 +155,13 @@ curl -sfL -o ./convert_translation.sh https://github.com/kenzok8/small-package/r
 chmod +x ./convert_translation.sh && bash ./convert_translation.sh
 # 更新passwall规则
 curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/gfw.txt
+# oxidns
+mkdir -p luci-app-oxidns/root/usr/bin luci-app-oxidns/root/etc/oxidns /tmp/oxidns
+OXI_VER=$(curl -sfL https://api.github.com/repos/svenshi/oxidns/releases/latest 2>/dev/null | grep 'tag_name' | egrep -o "v[0-9\.]+")
+curl -sfL -o /tmp/oxidns_linux.tar.gz https://github.com/svenshi/oxidns/releases/download/${OXI_VER}/oxidns-aarch64-unknown-linux-musl.tar.gz
+tar -zxf /tmp/oxidns_linux.tar.gz -C /tmp/oxidns && chmod +x /tmp/oxidns/oxidns
+mv /tmp/oxidns/oxidns ./luci-app-oxidns/root/usr/bin && mv /tmp/oxidns/webui ./luci-app-oxidns/usr/share/oxidns
+mv /tmp/oxidns/config.yaml ./luci-app-oxidns/root/etc/oxidns && rm -rf /tmp/oxidns
 # OpenClash
 cd ./luci-app-openclash/root/etc/openclash
 CORE_MATE=https://github.com/vernesong/OpenClash/raw/refs/heads/core/dev/smart/clash-linux-arm64.tar.gz
