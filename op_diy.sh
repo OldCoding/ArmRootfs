@@ -161,7 +161,7 @@ curl -sfL -o ./luci-app-passwall/root/usr/share/passwall/rules/gfwlist https://r
 # oxidns
 mkdir -p luci-app-oxidns/root/usr/bin luci-app-oxidns/root/etc/oxidns /tmp/oxidns
 OXI_VER=$(curl -sfL https://api.github.com/repos/svenshi/oxidns/releases/latest 2>/dev/null | grep 'tag_name' | egrep -o "v[0-9\.]+")
-curl -sfL -o /tmp/oxidns_linux.tar.gz https://github.com/svenshi/oxidns/releases/download/${OXI_VER}/oxidns-aarch64-unknown-linux-musl.tar.gz
+curl -sfL -o /tmp/oxidns_linux.tar.gz https://github.com/svenshi/oxidns/releases/download/${OXI_VER}/oxidns-x86_64-unknown-linux-musl.tar.gz
 tar -zxf /tmp/oxidns_linux.tar.gz -C /tmp/oxidns && chmod +x /tmp/oxidns/oxidns
 mv /tmp/oxidns/oxidns ./luci-app-oxidns/root/usr/bin && mv /tmp/oxidns/webui ./luci-app-oxidns/usr/share/oxidns
 mv /tmp/oxidns/config.yaml ./luci-app-oxidns/root/etc/oxidns && rm -rf /tmp/oxidns
