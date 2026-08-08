@@ -57,6 +57,7 @@ rm -rf feeds/packages/utils/runc
 rm -rf feeds/packages/libs/libtorrent-rasterbar
 rm -rf feeds/luci/themes/luci-theme-design
 rm -rf feeds/packages/net/{xray-core,v2ray-core,v2ray-geodata,sing-box}
+rm -rf package/libs/libnftnl
 curl -sfL https://github.com/immortalwrt/luci/raw/master/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json > feeds/luci/modules/luci-base/root/usr/share/luci/menu.d/luci-base.json
 
 # 下载插件
@@ -85,6 +86,10 @@ svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://githu
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/Openwrt-Passwall/openwrt-passwall2"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
+svn_export "master" "package/libs/libnftnl" "package/libs/libnftnl" "https://github.com/immortalwrt/immortalwrt"
+svn_export "master" "package/network/utils/fullconenat-nft" "package/network/utils/fullconenat-nft" "https://github.com/immortalwrt/immortalwrt"
+svn_export "master" "package/libs/fullconenat" "package/libs/fullconenat" "https://github.com/immortalwrt/immortalwrt"
+svn_export "master" "package/libs/nftables" "package/libs/nftables" "https://github.com/immortalwrt/immortalwrt"
 svn_export "master" "applications/luci-app-wechatpush" "feeds/luci/applications/luci-app-wechatpush" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-ramfree" "feeds/luci/applications/luci-app-ramfree" "https://github.com/immortalwrt/luci"
 svn_export "master" "applications/luci-app-zerotier" "feeds/luci/applications/luci-app-zerotier" "https://github.com/immortalwrt/luci"
