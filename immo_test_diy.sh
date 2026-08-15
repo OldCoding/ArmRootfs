@@ -84,6 +84,9 @@ git clone --depth 1 https://github.com/sbwml/packages_utils_dockerd feeds/packag
 git clone --depth 1 https://github.com/sbwml/packages_utils_containerd feeds/packages/utils/containerd
 git clone --depth 1 https://github.com/sbwml/packages_utils_runc feeds/packages/utils/runc
 git clone --depth 1 https://github.com/svenshi/luci-app-oxidns package/luci-app-oxidns
+git clone --depth 1 https://github.com/gSpotx2f/luci-app-temp-status package/luci-app-temp-status
+git clone --depth 1 https://github.com/gSpotx2f/luci-app-cpu-status package/luci-app-cpu-status
+git clone --depth 1 https://github.com/gSpotx2f/luci-app-disks-info package/luci-app-disks-info
 svn_export "master" "luci-app-tailscale-community" "package/luci-app-tailscale-community" "https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community"
 svn_export "master" "applications/luci-app-cloudflared" "feeds/luci/applications/luci-app-cloudflared" "https://github.com/openwrt/luci"
 svn_export "main" "luci-app-bandix" "package/luci-app-bandix" "https://github.com/timsaya/luci-app-bandix"
