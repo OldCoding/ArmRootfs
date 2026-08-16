@@ -1,0 +1,13 @@
+diff --git a/hack/make/binary-daemon b/hack/make/binary-daemon
+index 63a5153..1b80ed3 100644
+--- a/hack/make/binary-daemon
++++ b/hack/make/binary-daemon
+@@ -15,6 +15,8 @@ copy_binaries() {
+ 	fi
+ 	echo "Copying nested executables into $dir"
+ 	for file in containerd containerd-shim-runc-v2 ctr runc docker-init rootlesskit dockerd-rootless.sh dockerd-rootless-setuptool.sh; do
++		echo "========= checking $file ========="
++		command -v "$file" || true
+ 		cp -f "$(command -v "$file")" "$dir/"
+ 	done
+ }

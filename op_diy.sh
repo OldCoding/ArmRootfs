@@ -124,6 +124,8 @@ mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
 
 sed -i 's/7a0154d2de18373e52783d1b64cf5204471049c2d2c64f0b3323d7f430aa4275/da5af052265fbfba7a11ee4195257f9bc13f44d054d8fdcbace0639360870035/g' package/helloworld/simple-obfs/Makefile
 
+mkdir feeds/packages/utils/dockerd/patches
+cp -rf $GITHUB_WORKSPACE/001-error-print.patch feeds/packages/utils/dockerd/patches
 
 # turboacc 补丁
 curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh

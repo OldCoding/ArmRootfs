@@ -170,6 +170,9 @@ mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
 
+mkdir feeds/packages/utils/dockerd/patches
+cp -rf $GITHUB_WORKSPACE/001-error-print.patch feeds/packages/utils/dockerd/patches
+
 # 编译 po2lmo (如果有po2lmo可跳过)
 #pushd package/luci-app-openclash/tools/po2lmo
 #make && sudo make install
