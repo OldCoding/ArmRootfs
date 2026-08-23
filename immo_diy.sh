@@ -155,7 +155,7 @@ mv /tmp/oxidns/oxidns ./luci-app-oxidns/root/usr/bin && mv /tmp/oxidns/webui ./l
 mv /tmp/oxidns/config.yaml ./luci-app-oxidns/root/etc/oxidns && rm -rf /tmp/oxidns
 # OpenClash
 cd ./luci-app-openclash/root/etc/openclash
-CORE_MATE=https://github.com/vernesong/OpenClash/raw/refs/heads/core/dev/smart/clash-linux-arm64.tar.gz
+CORE_MATE=https://github.com/vernesong/OpenClash/raw/refs/heads/core/dev/smart/clash-linux-amd64.tar.gz
 curl -sfL -o ./Country.mmdb https://github.com/alecthw/mmdb_china_ip_list/raw/release/Country.mmdb
 curl -sfL -o ./GeoSite.dat https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geosite.dat
 curl -sfL -o ./GeoIP.dat https://github.com/Loyalsoldier/v2ray-rules-dat/raw/release/geoip.dat
