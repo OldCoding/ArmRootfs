@@ -88,6 +88,7 @@ git clone --depth 1 https://github.com/svenshi/luci-app-oxidns package/luci-app-
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-temp-status package/luci-app-temp-status
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-cpu-status package/luci-app-cpu-status
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-disks-info package/luci-app-disks-info
+git clone --depth 1 https://github.com/sbwml/luci-app-mosdns package/openwrt-mosdns
 svn_export "master" "luci-app-tailscale-community" "package/luci-app-tailscale-community" "https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community"
 svn_export "master" "applications/luci-app-cloudflared" "feeds/luci/applications/luci-app-cloudflared" "https://github.com/openwrt/luci"
 svn_export "main" "luci-app-bandix" "package/luci-app-bandix" "https://github.com/timsaya/luci-app-bandix"
@@ -95,9 +96,6 @@ svn_export "main" "openwrt-bandix" "package/openwrt-bandix" "https://github.com/
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/Openwrt-Passwall/openwrt-passwall2"
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/Openwrt-Passwall/openwrt-passwall"
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
-svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "master" "net/cloudflared" "feeds/packages/net/cloudflared" "https://github.com/openwrt/packages"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
@@ -114,9 +112,6 @@ mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/netdata/luci-app-netdata ./package/ && rm -rf ./package/netdata
 mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
-
-mkdir feeds/packages/utils/dockerd/patches
-cp -rf $GITHUB_WORKSPACE/001-error-print.patch feeds/packages/utils/dockerd/patches
 
 # turboacc 补丁
 curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh

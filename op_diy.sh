@@ -84,6 +84,7 @@ git clone --depth 1 https://github.com/svenshi/luci-app-oxidns package/luci-app-
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-temp-status package/luci-app-temp-status
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-cpu-status package/luci-app-cpu-status
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-disks-info package/luci-app-disks-info
+git clone --depth 1 https://github.com/sbwml/luci-app-mosdns package/openwrt-mosdns
 svn_export "master" "luci-app-tailscale-community" "package/luci-app-tailscale-community" "https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community"
 svn_export "main" "luci-app-passwall" "package/luci-app-passwall" "https://github.com/Openwrt-Passwall/openwrt-passwall"
 svn_export "main" "luci-app-passwall2" "package/luci-app-passwall2" "https://github.com/Openwrt-Passwall/openwrt-passwall2"
@@ -105,9 +106,6 @@ svn_export "master" "libs/libdouble-conversion" "feeds/packages/libs/libdouble-c
 svn_export "master" "utils/qt6tools" "feeds/packages/utils/qt6tools" "https://github.com/immortalwrt/packages"
 svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
-svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "master" "package/emortal" "package/emortal" "https://github.com/immortalwrt/immortalwrt"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
@@ -123,9 +121,6 @@ mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
 
 sed -i 's/7a0154d2de18373e52783d1b64cf5204471049c2d2c64f0b3323d7f430aa4275/da5af052265fbfba7a11ee4195257f9bc13f44d054d8fdcbace0639360870035/g' package/helloworld/simple-obfs/Makefile
-
-mkdir feeds/packages/utils/dockerd/patches
-cp -rf $GITHUB_WORKSPACE/001-error-print.patch feeds/packages/utils/dockerd/patches
 
 # turboacc 补丁
 curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh

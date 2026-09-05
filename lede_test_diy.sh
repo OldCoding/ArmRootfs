@@ -116,6 +116,7 @@ git clone --depth 1 https://github.com/svenshi/luci-app-oxidns package/luci-app-
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-temp-status package/luci-app-temp-status
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-cpu-status package/luci-app-cpu-status
 git clone --depth 1 https://github.com/gSpotx2f/luci-app-disks-info package/luci-app-disks-info
+git clone --depth 1 https://github.com/sbwml/luci-app-mosdns package/openwrt-mosdns
 svn_export "master" "luci-app-tailscale-community" "package/luci-app-tailscale-community" "https://github.com/Tokisaki-Galaxy/luci-app-tailscale-community"
 svn_export "master" "tools/libdeflate" "tools/libdeflate" "https://github.com/immortalwrt/immortalwrt"
 svn_export "master" "libs/libdeflate" "feeds/packages/libs/libdeflate" "https://github.com/immortalwrt/packages"
@@ -149,9 +150,6 @@ svn_export "master" "utils/btrfs-progs" "feeds/packages/utils/btrfs-progs" "http
 svn_export "master" "utils/ttyd" "feeds/packages/utils/ttyd" "https://github.com/immortalwrt/packages"
 svn_export "master" "utils/smartmontools" "feeds/packages/utils/smartmontools" "https://github.com/immortalwrt/packages"
 svn_export "main" "luci-app-amlogic" "package/luci-app-amlogic" "https://github.com/ophub/luci-app-amlogic"
-svn_export "v5" "luci-app-mosdns" "package/luci-app-mosdns" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "v5" "mosdns" "package/mosdns" "https://github.com/sbwml/luci-app-mosdns"
-svn_export "v5" "v2dat" "package/v2dat" "https://github.com/sbwml/luci-app-mosdns"
 svn_export "dev" "luci-app-openclash" "package/luci-app-openclash" "https://github.com/vernesong/OpenClash"
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
