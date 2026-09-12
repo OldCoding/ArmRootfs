@@ -110,6 +110,11 @@ svn_export "master" "package/emortal" "package/emortal" "https://github.com/immo
 svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
 
+rm -rf package/openwrt-passwall-packages/simple-obfs
+rm -rf package/helloworld/mosdns
+
+sed -i "s/_HASH:=.*/_HASH:=skip/g" package/helloworld/simple-obfs/Makefile
+
 # aria2补丁
 curl --create-dirs -o feeds/packages/net/aria2/patches/010-increase-max-connections-and-reduce-split-size.patch https://raw.githubusercontent.com/OldCoding/aria2-patch/main/010-increase-max-connections-and-reduce-split-size.patch
 curl -o feeds/packages/net/ariang/Makefile https://raw.githubusercontent.com/OldCoding/aria2-patch/main/Makefile
@@ -119,8 +124,6 @@ mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
 mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
-
-sed -i 's/7a0154d2de18373e52783d1b64cf5204471049c2d2c64f0b3323d7f430aa4275/be5d0534ee8d373b741c9d543ecadfa79662ade5626c5d3ab33e804a60836950/g' package/helloworld/simple-obfs/Makefile
 
 # turboacc 补丁
 curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.sh -o add_turboacc.sh && bash add_turboacc.sh

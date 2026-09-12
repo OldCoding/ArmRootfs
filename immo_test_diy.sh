@@ -54,6 +54,7 @@ rm -rf feeds/packages/utils/filebrowser
 rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf feeds/packages/net/v2ray-geodata
 rm -rf feeds/packages/net/mosdns
+rm -rf feeds/packages/net/simple-obfs
 rm -rf feeds/packages/net/speedtest-cli
 rm -rf feeds/packages/net/ddns-go
 rm -rf feeds/packages/utils/docker
@@ -101,6 +102,11 @@ svn_export "main" "easytier" "package/easytier" "https://github.com/EasyTier/luc
 svn_export "main" "luci-app-easytier" "package/luci-app-easytier" "https://github.com/EasyTier/luci-app-easytier"
 svn_export "main" "luci-app-ddns-go" "package/luci-app-ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
 svn_export "main" "ddns-go" "package/ddns-go" "https://github.com/OldCoding/luci-app-ddns-go"
+
+rm -rf package/openwrt-passwall-packages/simple-obfs
+rm -rf package/helloworld/mosdns
+
+sed -i "s/_HASH:=.*/_HASH:=skip/g" package/helloworld/simple-obfs/Makefile
 
 # aria2补丁
 curl --create-dirs -o feeds/packages/net/aria2/patches/010-increase-max-connections-and-reduce-split-size.patch https://raw.githubusercontent.com/OldCoding/aria2-patch/main/010-increase-max-connections-and-reduce-split-size.patch
