@@ -443,7 +443,7 @@ jobs:
         openwrt_path: openwrt/bin/targets/*/*/*.tar.gz
         kernel_usage: stable
         openwrt_board: s905x3_s905d_wxy-oect
-        kernel_repo: OldCoding/openwrt_packit_arm
+        kernel_repo: OldCoding/kernel
         openwrt_kernel: ${{ env.KERNEL_VER }}
         auto_kernel: true
         builder_name: Wing
