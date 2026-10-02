@@ -252,9 +252,11 @@ jobs:
         CONFIG_PACKAGE_luci-app-filebrowser=y
         CONFIG_PACKAGE_luci-app-firewall=y
         CONFIG_PACKAGE_luci-app-hd-idle=y
+        CONFIG_PACKAGE_luci-app-homeproxy=y
         CONFIG_PACKAGE_luci-app-kodexplorer=y
         CONFIG_PACKAGE_luci-app-mosdns=y
         CONFIG_PACKAGE_luci-app-netspeedtest=y
+        CONFIG_PACKAGE_luci-app-nikki=y
         CONFIG_PACKAGE_luci-app-openclash=y
         CONFIG_PACKAGE_luci-app-openlist2=y
         CONFIG_PACKAGE_luci-app-oxidns=y

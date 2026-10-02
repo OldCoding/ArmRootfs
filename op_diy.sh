@@ -74,6 +74,8 @@ git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone --depth 1 https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
 git clone --depth 1 https://github.com/OldCoding/netspeedtest package/netspeedtest
 git clone --depth 1 https://github.com/papagaye744/luci-theme-design package/luci-theme-design
+git clone --depth 1 https://github.com/immortalwrt/homeproxy package/luci-app-homeproxy
+git clone --depth 1 https://github.com/nikkinikki-org/OpenWrt-nikki package/OpenWrt-nikki
 git clone --depth 1 https://github.com/sbwml/luci-app-dockerman feeds/luci/applications/luci-app-dockerman
 git clone --depth 1 https://github.com/OldCoding/OpenWrt-qBittorrent-Enhanced-Edition package/openwrt-qbee
 git clone --depth 1 https://github.com/sbwml/packages_utils_docker feeds/packages/utils/docker
