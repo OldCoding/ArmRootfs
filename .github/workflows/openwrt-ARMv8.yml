@@ -347,6 +347,7 @@ jobs:
         CONFIG_PACKAGE_losetup=y
         CONFIG_PACKAGE_tar=y
         CONFIG_PACKAGE_uuidgen=y
+        CONFIG_PACKAGE_xz-utils=y
         EOF
 
         # 可选软件包
