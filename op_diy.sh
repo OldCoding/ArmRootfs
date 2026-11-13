@@ -69,7 +69,7 @@ git clone --depth 1 https://github.com/LazuliKao/luci-theme-fluent feeds/luci/th
 git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
-git clone --depth 1 https://github.com/OldCoding/luci-app-adguardhome package/adguardhome
+git clone --depth 1 https://github.com/OldCoding/luci-app-adguardhome package/luci-app-adguardhome-tk
 git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone --depth 1 https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
 git clone --depth 1 https://github.com/OldCoding/netspeedtest package/netspeedtest
@@ -124,7 +124,6 @@ curl -o feeds/packages/net/ariang/Makefile https://raw.githubusercontent.com/Old
 sed -i "/mediaurlbase/d" package/luci-theme-design/root/etc/uci-defaults/30_luci-theme-design
 mv ./package/netspeedtest/* ./package/ && rm -rf ./package/netspeedtest
 mv ./package/openlist/* ./package/ && rm -rf ./package/openlist
-mv ./package/adguardhome/* ./package/ && rm -rf ./package/adguardhome
 mv ./package/openwrt-qbee/* ./package/ && rm -rf ./package/openwrt-qbee
 
 # turboacc 补丁
@@ -141,10 +140,6 @@ curl -sSL https://raw.githubusercontent.com/mufeng05/turboacc/main/add_turboacc.
 #popd
 
 sed -i "s/192.168.1.1/192.168.2.1/g" package/base-files/files/bin/config_generate
-
-# adguardhome
-#VER=$(grep PKG_VERSION package/luci-app-adguardhome/Makefile | sed 's/-/\./g')
-#sed -i "s/PKG_VERSION:=.*/$VER/g" package/luci-app-adguardhome/Makefile
 
 # 调整菜单位置
 sed -i "s|services|nas|g" package/luci-app-openlist2/root/usr/share/luci/menu.d/luci-app-openlist2.json

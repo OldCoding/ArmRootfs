@@ -42,7 +42,6 @@ svn_export() {
 
 
 # 依赖和冲突
-rm -rf feeds/luci/applications/luci-app-adguardhome
 rm -rf feeds/luci/applications/luci-app-cloudflared
 rm -rf feeds/luci/applications/luci-app-dockerman
 rm -rf feeds/luci/applications/luci-app-ddns-go
@@ -73,7 +72,7 @@ git clone --depth 1 https://github.com/zzsj0928/luci-app-pushbot package/luci-ap
 git clone --depth 1 https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
 git clone --depth 1 https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 git clone --depth 1 https://github.com/fw876/helloworld package/helloworld
-git clone --depth 1 https://github.com/OldCoding/luci-app-adguardhome package/adguardhome
+git clone --depth 1 https://github.com/w9315273/luci-app-adguardhome package/luci-app-adguardhome-tk
 git clone --depth 1 https://github.com/sbwml/luci-app-openlist2 package/openlist
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/openwrt-passwall-packages
 git clone --depth 1 https://github.com/OldCoding/luci-app-filebrowser package/luci-app-filebrowser
